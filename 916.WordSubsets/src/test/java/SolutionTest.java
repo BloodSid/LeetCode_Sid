@@ -32,6 +32,7 @@ public class SolutionTest {
         assertEquals(true, listEquls(actual,expected));
 
     }
+    @Test
     public void wordSubsetsTest2() {
         List<String> actual = solution.wordSubsets(
                 new String[]{"amazon", "apple", "facebook", "google", "leetcode"},
@@ -45,6 +46,7 @@ public class SolutionTest {
         assertEquals(true, listEquls(actual,expected));
 
     }
+    @Test
     public void wordSubsetsTest3() {
         List<String> actual = solution.wordSubsets(
                 new String[]{"amazon", "apple", "facebook", "google", "leetcode"},
@@ -58,6 +60,7 @@ public class SolutionTest {
         assertEquals(true, listEquls(actual,expected));
 
     }
+    @Test
     public void wordSubsetsTest4() {
         List<String> actual = solution.wordSubsets(
                 new String[]{"amazon", "apple", "facebook", "google", "leetcode"},
@@ -71,6 +74,7 @@ public class SolutionTest {
         assertEquals(true, listEquls(actual,expected));
 
     }
+    @Test
     public void wordSubsetsTest5() {
         List<String> actual = solution.wordSubsets(
                 new String[]{"amazon", "apple", "facebook", "google", "leetcode"},
