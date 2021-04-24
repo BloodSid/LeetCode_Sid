@@ -11,7 +11,6 @@
     <modules>
         <module>35.SearchInsertPosition</module>
         <module>916.WordSubsets</module>
-        <module>000.test</module>
     </modules>
 
     <properties>

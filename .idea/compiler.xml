@@ -7,9 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="35.SearchInsertPosition" />
-        <module name="000.test" />
         <module name="916.WordSubsets" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="000.test" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
