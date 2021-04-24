@@ -11,6 +11,6 @@ public class Solution {
                 return index;
             }else return index--;
         }
-        return 0;
+        return nums.length;
     }
 }
