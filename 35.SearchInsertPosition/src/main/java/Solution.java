@@ -5,11 +5,10 @@
 public class Solution {
     public int searchInsert(int[] nums, int target){
         for (int index = 0; index < nums.length-1; index++) {
-            if(nums[index]>target){
-                index++;
-            }else if(nums[index]==target){
+            if(target>nums[index]){
+
+            }else
                 return index;
-            }else return index--;
         }
         return nums.length;
     }
