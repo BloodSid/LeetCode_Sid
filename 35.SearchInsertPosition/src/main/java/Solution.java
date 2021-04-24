@@ -4,7 +4,7 @@
  */
 public class Solution {
     public int searchInsert(int[] nums, int target){
-        for (int index = 0; index < nums.length-1; index++) {
+        for (int index = 0; index < nums.length; index++) {
             if(target>nums[index]){
 
             }else

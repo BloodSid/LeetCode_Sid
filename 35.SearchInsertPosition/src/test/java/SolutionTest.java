@@ -24,4 +24,8 @@ public class SolutionTest {
     public void searchInsert4() {
         assertEquals(0,solution.searchInsert(new int[]{1,3,5,6},0));
     }
+    @Test
+    public void searchInsert5() {
+        assertEquals(0,solution.searchInsert(new int[]{1},0));
+    }
 }
