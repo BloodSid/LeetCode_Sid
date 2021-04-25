@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -9,11 +8,6 @@ import java.util.List;
 
 public class Solution {
     public List<String> wordSubsets(String[] A, String[] B) {
-        //TODO
         return null;
-    }
-
-    public static void main(String[] args) {
-        String[] a =new String[]{};
     }
 }
