@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -8,11 +9,11 @@ import java.util.List;
 
 public class Solution {
     public List<String> wordSubsets(String[] A, String[] B) {
-        List<String> expected=new ArrayList<>();
-        String[] exp = new String[]{"facebook","google","leetcode"};
-        for (int i = 0; i < exp.length; i++) {
-            expected.add(exp[i]);
-        }
-        return expected;
+        //TODO
+        return null;
+    }
+
+    public static void main(String[] args) {
+        String[] a =new String[]{};
     }
 }
