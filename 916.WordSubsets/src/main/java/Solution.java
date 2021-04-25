@@ -17,21 +17,26 @@ public class Solution {
         List<String> uniWords = new ArrayList<>(Arrays.asList(A));
         //用每一个b去遍历检查A中的所有a
         for (int i = 0; i < B.length; i++) {
-            for (String aWord : uniWords) {
+            if(uniWords.isEmpty()) return uniWords;
+            int indexOfA = 0;
+            while(!uniWords.isEmpty()&&indexOfA<uniWords.size()){
                 //检查B[i]是不是aword的子集
+                String aWord = uniWords.get(indexOfA);
+                char[] charOfaWord = aWord.toCharArray();
                 for (int j = 0; j < B[i].length(); j++) {
-                    char[] charOfaWord = aWord.toCharArray();
                     boolean isb_jINa = false;
-                    for (char chr :
-                            charOfaWord) {
-                        if (chr == B[i].charAt(j)) {
-                            chr = '0';
+                    for (int k = 0; k < charOfaWord.length; k++) {
+                        if (charOfaWord[k] == B[i].charAt(j)) {
+                            charOfaWord[k] = '0';
                             isb_jINa = true;
                             break;
                         }
                     }
-                    if(isb_jINa=false){
+                    if(!isb_jINa){
                         uniWords.remove(aWord);
+                        break;
+                    }else if (j == B[i].length() - 1) {
+                        indexOfA++;
                     }
                 }
             }
@@ -40,7 +45,10 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-
+        String a = new String("Str");
+        String b = new String("Str");
+        System.out.println(a==b);
+        System.out.println(a.equals(b));
 
     }
 
