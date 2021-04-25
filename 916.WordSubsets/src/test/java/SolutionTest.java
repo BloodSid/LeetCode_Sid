@@ -80,7 +80,7 @@ public class SolutionTest {
                 new String[]{"ec", "oc", "ceo"});
         List<String> expected = new ArrayList<>();
         String[] exp =
-                new String[]{"ec", "oc", "ceo"};
+                new String[]{"facebook","leetcode"};
         for (int i = 0; i < exp.length; i++) {
             expected.add(exp[i]);
         }
