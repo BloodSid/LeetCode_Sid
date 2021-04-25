@@ -12,7 +12,7 @@ public class SolutionTest {
     public static Solution solution = new Solution();
 
     private static boolean listEquls(List a, List b) {
-        return a.containsAll(b);
+        return a.containsAll(b)&&b.containsAll(a);
     }
 
     @Test
