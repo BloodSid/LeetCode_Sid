@@ -13,7 +13,7 @@ public class Solution {
         if (A == null||B == null) return new ArrayList<String>();
         if(A.length==0) return new ArrayList<String>();
         if(B.length==0) return Arrays.asList(A);
-
+    //TODO 将b合并成一个单词再去遍历a
         List<String> uniWords = new ArrayList<>(Arrays.asList(A));
         //用每一个b去遍历检查A中的所有a
         for (int i = 0; i < B.length; i++) {
