@@ -5,24 +5,6 @@
 public class BinaryTree {
 
     //Definition for a binary tree node.
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
-        }
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
-        }
-    }
 
     /**
      * This method generates a new binary tree with a string.
@@ -34,3 +16,4 @@ public class BinaryTree {
         return null;
     }
 }
+
