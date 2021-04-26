@@ -17,8 +17,8 @@ public class Solution {
         for (String b :
                 B) {
             int[] bChar = new int[26];
-            for (int i = 0; i < b.length(); i++) {
-                bChar[b.charAt(i) - 97]++;
+            for (char chr : b.toCharArray()) {
+                bChar[chr - 97]++;
             }
             for (int i = 0; i < 26; i++) {
                 bmaxChar[i] = Math.max(bmaxChar[i], bChar[i]);
@@ -29,8 +29,8 @@ public class Solution {
         for (String a :
                 A) {
             int[] aChar = new int[26];
-            for (int i = 0; i < a.length(); i++) {
-                aChar[a.charAt(i) - 97]++;
+            for (char chr: a.toCharArray()) {
+                aChar[chr - 97]++;
             }
             //若a符合条件，则必有a[i]>=bmax[i]
             for (int i = 0; i < 26; i++) {
