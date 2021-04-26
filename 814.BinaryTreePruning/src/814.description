@@ -1,0 +1,14 @@
+We are given the head node root of a binary tree, where additionally every node's value is either a 0 or a 1.
+
+Return the same tree where every subtree (of the given tree) not containing a 1 has been removed.
+
+(Recall that the subtree of a node X is X, plus every node that is a descendant of X.)
+
+Note:
+
+The binary tree will have at most 200 nodes.
+The value of each node will only be 0 or 1.
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/binary-tree-pruning
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。

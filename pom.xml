@@ -11,6 +11,8 @@
     <modules>
         <module>35.SearchInsertPosition</module>
         <module>916.WordSubsets</module>
+        <module>814.BinaryTreePruning</module>
+        <module>BinaryTree</module>
     </modules>
 
     <properties>

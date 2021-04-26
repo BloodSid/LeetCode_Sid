@@ -15,5 +15,9 @@ public class BinaryTree {
         //TODO code this method
         return null;
     }
+    public String toString(TreeNode root){
+        //TODO code this method
+        return root.toString();
+    }
 }
 
