@@ -8,12 +8,13 @@ import static org.junit.Assert.*;
  */
 public class SolutionTest {
 public static Solution solution = new Solution();
+private static final BinaryTree bTree = new BinaryTree();
 
     @Test
     public void pruneTreeTest1() {
         String input="1,null,0,null,null,0,1";
         String output="1,null,0,null,null,null,1";
-        String actualOutput = new BinaryTree().toString(solution.pruneTree(new BinaryTree().stringToBinaryTree("input")));
+        String actualOutput = bTree.toString(solution.pruneTree(bTree.stringToBinaryTree(input)));
         assertTrue(output.equals(actualOutput));
     }
     @Test
