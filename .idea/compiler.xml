@@ -9,6 +9,7 @@
         <module name="BinaryTree" />
         <module name="35.SearchInsertPosition" />
         <module name="814.BinaryTreePruning" />
+        <module name="1162.AsFarFromLandAsPossible" />
         <module name="916.WordSubsets" />
       </profile>
     </annotationProcessing>

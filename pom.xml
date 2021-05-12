@@ -13,6 +13,7 @@
         <module>916.WordSubsets</module>
         <module>814.BinaryTreePruning</module>
         <module>BinaryTree</module>
+        <module>1162.AsFarFromLandAsPossible</module>
     </modules>
 
     <properties>
