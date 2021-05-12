@@ -12,24 +12,24 @@ private static final BinaryTree bTree = new BinaryTree();
 
     @Test
     public void pruneTreeTest1() {
-        String input="1,null,0,null,null,0,1";
-        String output="1,null,0,null,null,null,1";
+        String input="1,null,0,0,1";
+        String output="1,null,0,null,1";
         String actualOutput = bTree.toString(solution.pruneTree(bTree.stringToBinaryTree(input)));
-        assertTrue(output.equals(actualOutput));
+        assertEquals(output, actualOutput);
     }
     @Test
     public void pruneTreeTest2() {
         String input="1,0,1,0,0,0,1";
-        String output="1,null,1,null,null,null,1";
-        String actualOutput = new BinaryTree().toString(solution.pruneTree(new BinaryTree().stringToBinaryTree("input")));
-        assertTrue(output.equals(actualOutput));
+        String output="1,null,1,null,1";
+        String actualOutput = bTree.toString(solution.pruneTree(bTree.stringToBinaryTree(input)));
+        assertEquals(output, actualOutput);
     }
     @Test
     public void pruneTreeTest3() {
         String input="1,1,0,1,1,0,1,0";
         String output="1,1,0,1,1,null,1";
-        String actualOutput = new BinaryTree().toString(solution.pruneTree(new BinaryTree().stringToBinaryTree("input")));
-        assertTrue(output.equals(actualOutput));
+        String actualOutput = bTree.toString(solution.pruneTree(bTree.stringToBinaryTree(input)));
+        assertEquals(output, actualOutput);
     }
 
 
