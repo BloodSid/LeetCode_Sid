@@ -11,6 +11,7 @@
         <module name="814.BinaryTreePruning" />
         <module name="1162.AsFarFromLandAsPossible" />
         <module name="916.WordSubsets" />
+        <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

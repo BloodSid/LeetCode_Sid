@@ -14,6 +14,7 @@
         <module>814.BinaryTreePruning</module>
         <module>BinaryTree</module>
         <module>1162.AsFarFromLandAsPossible</module>
+        <module>1417.ReformatTheString</module>
     </modules>
 
     <properties>
