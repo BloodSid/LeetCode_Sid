@@ -6,6 +6,12 @@ import java.util.Arrays;
  */
 public class Solution {
     public String reformat(String s) {
+        if (s == null) {
+            return null;
+        }
+        if(s.length()<2){
+            return s;
+        }
         char[] chars = s.toCharArray();
         Arrays.sort(chars);
         int halfLength = chars.length / 2;

@@ -60,5 +60,11 @@ public class SolutionTest {
         String actual = solution.reformat("1229857369");
         assertEquals("", actual);
     }
+    @Test
+    public void reformatTest4() {
+        String actual = solution.reformat("j");
+        assertEquals("j", actual);
+    }
+
 
 }
