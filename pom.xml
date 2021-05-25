@@ -15,6 +15,7 @@
         <module>BinaryTree</module>
         <module>1162.AsFarFromLandAsPossible</module>
         <module>1417.ReformatTheString</module>
+        <module>HJ16</module>
     </modules>
 
     <properties>

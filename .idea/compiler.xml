@@ -6,11 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="BinaryTree" />
-        <module name="35.SearchInsertPosition" />
         <module name="814.BinaryTreePruning" />
         <module name="1162.AsFarFromLandAsPossible" />
         <module name="916.WordSubsets" />
+        <module name="HJ16" />
+        <module name="BinaryTree" />
+        <module name="35.SearchInsertPosition" />
         <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>
