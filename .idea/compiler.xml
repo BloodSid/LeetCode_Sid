@@ -12,6 +12,7 @@
         <module name="HJ16" />
         <module name="BinaryTree" />
         <module name="35.SearchInsertPosition" />
+        <module name="887.SuperEggDrop" />
         <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>
