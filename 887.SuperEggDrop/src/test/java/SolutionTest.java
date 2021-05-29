@@ -50,6 +50,13 @@ public class SolutionTest {
         assertEquals(expected,actual);
 
     }
+    @Test
+    public void superEggDropTest7() {
+        int actual = solution.superEggDrop(11, 8178);
+        int expected =14;
+        assertEquals(expected,actual);
+
+    }
 
 
 

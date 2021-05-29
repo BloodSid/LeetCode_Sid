@@ -13,23 +13,36 @@ public class Solution {
         }
         for (int i = 2; i <= k; i++) {
             for (int j = 2; j <= n; j++) {
-                int dp_i_j = n;
-                for (int x = 1; x <= j; x++) {
-                    int temp = Math.max(dp[i - 1][x - 1], dp[i][j - x]);
-//                    System.out.println("k:" + i + " n:" + j + " x:" + (x) + " dp:" + (temp + 1));
-                    if (temp <= dp_i_j) {
-                        dp_i_j = temp;
-//                        if (x == j)
-//                            System.out.println("k:"+i+" n:"+j +" x:"+(x)+" dp:"+ (dp_i_j+1));
-                    } else {
-//                        System.out.println("k:"+i+" n:"+j +" x:"+(x-1)+" dp:"+ (dp_i_j+1));
-                        break;
+                //dp[i - 1][x - 1] 递增 dp[i][j - x]递减 找出两者相等的点,
+                //即是max(dp[i - 1][x - 1], dp[i][j - x])的最小点
+                int front = 1;
+                int behind = j;
+                int x = (front + behind) / 2;
+                while (front < behind - 1) {
+                    int t1 = dp[i - 1][x - 1];
+                    int t2 = dp[i][j - x];
+                    if(t1<t2){
+                        front=x;
                     }
+                    if(t1>t2){
+                        behind=x;
+                    }
+                    if(t1==t2){
+                        front=behind=x;
+                    }
+                    x = (front + behind) / 2;
                 }
-                dp[i][j] = dp_i_j + 1;
+                dp[i][j] =Math.min(Math.max(dp[i - 1][x - 1], dp[i][j - x]),
+                                    Math.max(dp[i - 1][x], dp[i][j - x - 1])
+                ) + 1;
             }
         }
         return dp[k][n];
+
+    }
+
+    public static void main(String[] args) {
+
 
     }
 
