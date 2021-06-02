@@ -26,6 +26,8 @@
         <module>1417.ReformatTheString</module>
         <module>HJ16</module>
         <module>887.SuperEggDrop</module>
+        <module>Sort</module>
+        <module>HJ28</module>
     </modules>
 
     <properties>
