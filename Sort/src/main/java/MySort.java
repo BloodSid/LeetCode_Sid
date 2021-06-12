@@ -1,7 +1,4 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * @author IronSid
@@ -130,8 +127,8 @@ public class MySort {
 
 
     //简单的递归排序
-    //桶排序
-    public static void bucketSort(int[] a){
+    //计数排序
+    public static void countingSort(int[] a){
         int min=a[0],max=a[0];
         for (int i = 1; i < a.length; i++) {
             min=Math.min(min,a[i]);
@@ -166,7 +163,7 @@ public class MySort {
 
 
 //        quickSort2(a,0,a.length-1);
-        bucketSort(a);
+
         System.out.println(Arrays.toString(a));
         for (int i = 0; i < a.length; i++) {
             if (a[i] != b[i]) {
