@@ -7,14 +7,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="814.BinaryTreePruning" />
-        <module name="1162.AsFarFromLandAsPossible" />
-        <module name="916.WordSubsets" />
+        <module name="HJ45" />
         <module name="HJ16" />
         <module name="BinaryTree" />
-        <module name="Sort" />
         <module name="HJ28" />
-        <module name="35.SearchInsertPosition" />
+        <module name="HJ43_BFS" />
         <module name="887.SuperEggDrop" />
+        <module name="1162.AsFarFromLandAsPossible" />
+        <module name="916.WordSubsets" />
+        <module name="HJ44_Sudoku" />
+        <module name="Sort" />
+        <module name="35.SearchInsertPosition" />
         <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>

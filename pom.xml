@@ -28,6 +28,9 @@
         <module>887.SuperEggDrop</module>
         <module>Sort</module>
         <module>HJ28</module>
+        <module>HJ43_BFS</module>
+        <module>HJ44_Sudoku</module>
+        <module>HJ45</module>
     </modules>
 
     <properties>
