@@ -8,6 +8,7 @@ public class Main {
     static int[][] s;//Sokudo
     static List<Integer>[][] l;
     static Queue<Integer> queue;
+    static List<Integer> lastNums;
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -35,20 +36,21 @@ public class Main {
                 }
             }
             //通过排除法进行填数
-//            while (!queue.isEmpty()) {
-//                Integer block = queue.poll();
-//                int x = block / 9;
-//                int y = block % 9;
-//                writeNum(x, y, l[x][y].get(0));
-//            }
+            while (!queue.isEmpty()) {
+                Integer block = queue.poll();
+                int x = block / 9;
+                int y = block % 9;
+                writeNum(x, y, l[x][y].get(0));
+            }
             //找出排除法无法确定的位置
-//            for (int i = 0; i < 9; i++) {
-//                for (int j = 0; j < 9; j++) {
-//                    if (s[i][j]==0) {
-//                        queue.offer(i*9+j);
-//                    }
-//                }
-//            }
+            lastNums=new ArrayList<>();
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    if (s[i][j] == 0) {
+                        lastNums.add(i * 9 + j);
+                    }
+                }
+            }
             //深度优先搜索
             dfsWrite(0);
 
@@ -109,23 +111,24 @@ public class Main {
         }
         return true;
     }
+
     //true 表示不会产生矛盾 false 表示会产生矛盾
-    static boolean check(int index){
-        int x = index/9, y= index % 9;
+    static boolean check(int index) {
+        int x = index / 9, y = index % 9;
         for (int i = 0; i < 9; i++) {
-            if (i != y && s[x][i]==s[x][y]) {
+            if (i != y && s[x][i] == s[x][y]) {
                 return false;
             }
         }
         for (int i = 0; i < 9; i++) {
-            if (i != x && s[i][y]==s[x][y]) {
+            if (i != x && s[i][y] == s[x][y]) {
                 return false;
             }
         }
         for (int i = x / 3 * 3; i < x / 3 * 3 + 3; i++) {
             for (int j = y / 3 * 3; j < y / 3 * 3 + 3; j++) {
-                if (i != x || j != y ) {
-                    if (s[i][j]==s[x][y]) {
+                if (i != x || j != y) {
+                    if (s[i][j] == s[x][y]) {
                         return false;
                     }
                 }
@@ -133,21 +136,22 @@ public class Main {
         }
         return true;
     }
-    //dfs写数字
-    static boolean dfsWrite(int index){
-        //递归终止标记
-        if(index==81) return true;
 
-        int x = index/9, y= index % 9;
+    //dfs写数字
+    static boolean dfsWrite(int index) {
+        //递归终止标记
+        if (index == lastNums.size()) return true;
+
+        int x = lastNums.get(index) / 9, y = lastNums.get(index) % 9;
         //若该格子已填则跳过
-        if(s[x][y]!=0) return dfsWrite(index+1);
+        //if (s[x][y] != 0) return dfsWrite(index + 1);
 
         //若未填则遍历该格子的列表
         List<Integer> list = l[x][y];
 
         for (Integer num : list) {
-            s[x][y]=num;
-            if(check(index)&&dfsWrite(index+1))
+            s[x][y] = num;
+            if (check(lastNums.get(index)) && dfsWrite(index + 1))
                 return true;
             else
                 s[x][y] = 0;
