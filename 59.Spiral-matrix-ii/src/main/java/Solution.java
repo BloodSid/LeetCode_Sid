@@ -8,7 +8,7 @@ public class Solution {
     public int[][] generateMatrix(int n) {
         int[][] result = new int[n][n];
         int xMin=0,yMin=0;
-        int xMax=result[0].length-1,yMax=result.length-1;
+        int xMax=result.length-1,yMax=result[0].length-1;
         int tem = 1;
         while(xMax>=xMin){
             for (int i = yMin; i <= yMax; i++) {

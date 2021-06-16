@@ -32,6 +32,7 @@
         <module>HJ44_Sudoku</module>
         <module>HJ45</module>
         <module>59.spiral-matrix-ii</module>
+        <module>54.SpiralMatrix</module>
     </modules>
 
     <properties>
