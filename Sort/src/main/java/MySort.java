@@ -27,6 +27,26 @@ public class MySort {
             a[j] = tmp;
         }
     }
+
+    /**
+     * 对指定数组进行冒泡排序
+     *
+     * @param a the array to be sorted
+     */
+    public static void bubbleSort(int[] a) {
+        for (int i = 0; i < a.length - 1; i++) {
+            boolean flag = true;
+            for (int j = 0; j < a.length - i - 1; j++) {
+                if (a[j] > a[j + 1]) {
+                    flag = false;
+                    int temp = a[j];
+                    a[j] = a[j + 1];
+                    a[j + 1] = temp;
+                }
+            }
+            if (flag) break;
+        }
+    }
     //希尔排序
 
     //堆排序
@@ -128,20 +148,20 @@ public class MySort {
 
     //简单的递归排序
     //计数排序
-    public static void countingSort(int[] a){
-        int min=a[0],max=a[0];
+    public static void countingSort(int[] a) {
+        int min = a[0], max = a[0];
         for (int i = 1; i < a.length; i++) {
-            min=Math.min(min,a[i]);
-            max=Math.max(max,a[i]);
+            min = Math.min(min, a[i]);
+            max = Math.max(max, a[i]);
         }
-        int[] count=new int[max-min+1];
+        int[] count = new int[max - min + 1];
         for (int n : a) {
-            count[n-min]++;//count 数组统计数字出现频率
+            count[n - min]++;//count 数组统计数字出现频率
         }
-        int num=0;//count 数组的指针
+        int num = 0;//count 数组的指针
         for (int i = 0; i < a.length; i++) {
-            while(count[num]==0) num++;
-            a[i]=min+num;
+            while (count[num] == 0) num++;
+            a[i] = min + num;
             count[num]--;
         }
 
