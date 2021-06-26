@@ -34,6 +34,8 @@
         <module>59.spiral-matrix-ii</module>
         <module>54.SpiralMatrix</module>
         <module>877.StoneGame</module>
+        <module>LargestIntArray</module>
+        <module>273.IntegerToEnglishWords</module>
     </modules>
 
     <properties>

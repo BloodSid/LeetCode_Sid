@@ -12,6 +12,7 @@
         <module name="BinaryTree" />
         <module name="HJ28" />
         <module name="HJ43_BFS" />
+        <module name="273.IntegerToEnglishWords" />
         <module name="54.SpiralMatrix" />
         <module name="887.SuperEggDrop" />
         <module name="1162.AsFarFromLandAsPossible" />
@@ -21,11 +22,9 @@
         <module name="35.SearchInsertPosition" />
         <module name="877.StoneGame" />
         <module name="59.Spiral-matrix-ii" />
+        <module name="LargestIntArray" />
         <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="000.test" target="8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
