@@ -21,6 +21,7 @@
         <module name="Sort" />
         <module name="35.SearchInsertPosition" />
         <module name="877.StoneGame" />
+        <module name="767.ReorganizeString" />
         <module name="59.Spiral-matrix-ii" />
         <module name="LargestIntArray" />
         <module name="1417.ReformatTheString" />

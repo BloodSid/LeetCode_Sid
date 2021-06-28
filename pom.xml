@@ -36,6 +36,7 @@
         <module>877.StoneGame</module>
         <module>LargestIntArray</module>
         <module>273.IntegerToEnglishWords</module>
+        <module>767.ReorganizeString</module>
     </modules>
 
     <properties>
