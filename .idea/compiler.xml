@@ -10,6 +10,7 @@
         <module name="HJ45" />
         <module name="HJ16" />
         <module name="BinaryTree" />
+        <module name="HJ95_DoubleTORMB" />
         <module name="HJ28" />
         <module name="HJ43_BFS" />
         <module name="273.IntegerToEnglishWords" />

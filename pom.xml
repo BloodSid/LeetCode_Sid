@@ -37,6 +37,7 @@
         <module>LargestIntArray</module>
         <module>273.IntegerToEnglishWords</module>
         <module>767.ReorganizeString</module>
+        <module>HJ95_DoubleTORMB</module>
     </modules>
 
     <properties>
