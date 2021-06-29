@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="814.BinaryTreePruning" />
         <module name="HJ45" />
+        <module name="647.PalindromicSubstrings" />
         <module name="HJ16" />
         <module name="BinaryTree" />
         <module name="HJ95_DoubleTORMB" />
@@ -16,6 +17,7 @@
         <module name="273.IntegerToEnglishWords" />
         <module name="54.SpiralMatrix" />
         <module name="887.SuperEggDrop" />
+        <module name="5.LongestPalindromicSubstring" />
         <module name="1162.AsFarFromLandAsPossible" />
         <module name="916.WordSubsets" />
         <module name="HJ44_Sudoku" />

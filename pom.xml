@@ -38,6 +38,8 @@
         <module>273.IntegerToEnglishWords</module>
         <module>767.ReorganizeString</module>
         <module>HJ95_DoubleTORMB</module>
+        <module>647.PalindromicSubstrings</module>
+        <module>5.LongestPalindromicSubstring</module>
     </modules>
 
     <properties>
