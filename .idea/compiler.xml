@@ -27,6 +27,7 @@
         <module name="767.ReorganizeString" />
         <module name="59.Spiral-matrix-ii" />
         <module name="LargestIntArray" />
+        <module name="37.SudokuSolver" />
         <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>
