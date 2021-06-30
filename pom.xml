@@ -41,6 +41,7 @@
         <module>647.PalindromicSubstrings</module>
         <module>5.LongestPalindromicSubstring</module>
         <module>37.SudokuSolver</module>
+        <module>36.ValidSudoku</module>
     </modules>
 
     <properties>

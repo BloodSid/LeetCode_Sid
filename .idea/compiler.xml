@@ -22,6 +22,7 @@
         <module name="916.WordSubsets" />
         <module name="HJ44_Sudoku" />
         <module name="Sort" />
+        <module name="36.ValidSudoku" />
         <module name="35.SearchInsertPosition" />
         <module name="877.StoneGame" />
         <module name="767.ReorganizeString" />
