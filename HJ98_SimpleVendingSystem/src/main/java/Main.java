@@ -60,7 +60,7 @@ public class Main {
             }
         }
     }
-
+    //1.初始化
     void initializate(String command) {
         String[] number = command.split("[- ]");
         int[] cost = {2, 3, 4, 5, 8, 6};
@@ -73,6 +73,7 @@ public class Main {
         out.println("S001:Initialization is successful");
     }
 
+    //2.投币
     void pay(String command) {
         int paid = parseInt(command);
         int index = 0;
@@ -101,6 +102,7 @@ public class Main {
         out.println("S002:Pay success,balance=" + balance);
     }
 
+    //3.购买商品
     void buy(String name) {
         Commodity c = getCommdity(name, commodities);
         if (c == null) {
@@ -121,13 +123,8 @@ public class Main {
         out.println("S003:Buy success,balance=" + balance);
     }
 
-    /*
-    3. 退币原则 ：
-    1) 根据系统存钱盒内钱币的 信息 ，按钱币总张数最少的原则进行退币。
-    2) 如果因零钱不足导致不能退币，则尽最大可能退币，以减少用户损失。
-    例如：假设存钱盒内只有4张2元，无其它面额钱币。如果需要退币7元，
-    系统因零钱不足无法退币，则继续尝试退币6元，最终系统成功退币3张2元,用户损失1元钱币。
-     */
+
+    //4.退币
     void refund() {
         if (balance == 0) {
             out.println("E009:Work failure");
@@ -154,10 +151,11 @@ public class Main {
             out.println(denomination[i] + " yuan coin number=" + refundCashs[i]);
         }
     }
-
+    //5.查询
     void quiry(String command) {
         switch (command) {
             case "q 0":
+                //商品排序
                 sort(commodities);
                 for (Commodity commodity : commodities) {
                     out.println(commodity.toString());
@@ -173,6 +171,7 @@ public class Main {
         }
     }
 
+    //商品排序
     void sort(Commodity[] c) {
         for (int i = 0; i < c.length - 1; i++) {
             boolean flag = true;
@@ -188,6 +187,7 @@ public class Main {
         }
     }
 
+    //比较器
     int compare(Commodity a, Commodity b) {
         //比较number,若number相等，则比较商品的字典顺序
         if (a.number != b.number)
@@ -196,6 +196,7 @@ public class Main {
         return a.name.compareTo(b.name);
     }
 
+    //若所有商品都卖空，则返回true
     boolean isSoldOut(Commodity[] c) {
         for (Commodity commodity : c) {
             if (commodity.number != 0)
@@ -220,6 +221,7 @@ public class Main {
     }
 }
 
+//商品类
 class Commodity {
     String name;
     int number;
