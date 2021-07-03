@@ -30,6 +30,7 @@
         <module name="LargestIntArray" />
         <module name="37.SudokuSolver" />
         <module name="1417.ReformatTheString" />
+        <module name="HJ98_SimpleVendingSystem" />
       </profile>
     </annotationProcessing>
   </component>

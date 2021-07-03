@@ -42,6 +42,7 @@
         <module>5.LongestPalindromicSubstring</module>
         <module>37.SudokuSolver</module>
         <module>36.ValidSudoku</module>
+        <module>HJ98_SimpleVendingSystem</module>
     </modules>
 
     <properties>
