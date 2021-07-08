@@ -7,20 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="814.BinaryTreePruning" />
-        <module name="HJ45" />
         <module name="647.PalindromicSubstrings" />
         <module name="HJ16" />
         <module name="BinaryTree" />
-        <module name="HJ95_DoubleTORMB" />
-        <module name="HJ28" />
         <module name="HJ43_BFS" />
         <module name="273.IntegerToEnglishWords" />
         <module name="54.SpiralMatrix" />
-        <module name="887.SuperEggDrop" />
         <module name="5.LongestPalindromicSubstring" />
-        <module name="1162.AsFarFromLandAsPossible" />
-        <module name="916.WordSubsets" />
-        <module name="HJ44_Sudoku" />
         <module name="Sort" />
         <module name="36.ValidSudoku" />
         <module name="35.SearchInsertPosition" />
@@ -29,8 +22,17 @@
         <module name="59.Spiral-matrix-ii" />
         <module name="LargestIntArray" />
         <module name="37.SudokuSolver" />
-        <module name="1417.ReformatTheString" />
+        <module name="HJ45" />
+        <module name="322.CoinChange" />
+        <module name="HJ95_DoubleTORMB" />
+        <module name="HJ28" />
+        <module name="3.LongestSubstringWithoutRepeatingCharacters" />
+        <module name="887.SuperEggDrop" />
+        <module name="1162.AsFarFromLandAsPossible" />
+        <module name="916.WordSubsets" />
+        <module name="HJ44_Sudoku" />
         <module name="HJ98_SimpleVendingSystem" />
+        <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>
   </component>

@@ -43,6 +43,8 @@
         <module>37.SudokuSolver</module>
         <module>36.ValidSudoku</module>
         <module>HJ98_SimpleVendingSystem</module>
+        <module>3.LongestSubstringWithoutRepeatingCharacters</module>
+        <module>322.CoinChange</module>
     </modules>
 
     <properties>
