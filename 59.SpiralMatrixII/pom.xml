@@ -9,9 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>59.Spiral-matrix-ii</artifactId>
-
-
+    <artifactId>59.SpiralMatrixII</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
