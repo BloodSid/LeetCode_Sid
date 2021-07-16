@@ -9,17 +9,14 @@ import static java.lang.Math.*;
 import static java.lang.System.*;
 
 /**
-* ${question.title}
-*
-* @author IronSid
-* @since $!velocityTool.date() $!velocityTool.time()
-* @version 1.0
-*/
+ * ${question.title}
+ *
+ * @author IronSid
+ * @since $!velocityTool.date() $!velocityTool.time()
+ * @version 1.0
+ */
 public class $!velocityTool.camelCaseName(${question.titleSlug})Solution {
-    public static void main(String[] args) {
-        //ctrl+alt+a 加入版本控制
-        Solution solution = new $!velocityTool.camelCaseName(${question.titleSlug})Solution().new Solution();
-    }
+    //ctrl+alt+a 加入版本控制
 
 ${question.code}
 }

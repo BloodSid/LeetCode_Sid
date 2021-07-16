@@ -35,17 +35,17 @@ import org.junit.After;
 import static org.junit.Assert.*;
 
 /**
-* ${entry.className} Tester.
-*
-* @author IronSid
-* @since $today
-* @version 1.0
-*/
+ * ${entry.className} Tester.
+ *
+ * @author IronSid
+ * @since $today
+ * @version 1.0
+ */
 public class $testClass {
-
+    ${entry.className}.Solution solution = new ${entry.className}().new Solution();
     @Before
     public void before() throws Exception {
-        ${entry.className}.Solution solution = new ${entry.className}().new Solution();
+
     }
 
     @After
@@ -62,7 +62,7 @@ public class $testClass {
         //int input = ;
         //int expected = ,
         //actual =
-        solution.${method.name}();
+        //solution.${method.name}(input);
         //assertEquals(expected, actual);
     }
 
