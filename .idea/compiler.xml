@@ -11,6 +11,7 @@
         <module name="HJ16" />
         <module name="BinaryTree" />
         <module name="HJ43_BFS" />
+        <module name="59.SpiralMatrixII" />
         <module name="273.IntegerToEnglishWords" />
         <module name="54.SpiralMatrix" />
         <module name="5.LongestPalindromicSubstring" />
@@ -19,13 +20,13 @@
         <module name="35.SearchInsertPosition" />
         <module name="877.StoneGame" />
         <module name="767.ReorganizeString" />
-        <module name="59.Spiral-matrix-ii" />
         <module name="LargestIntArray" />
         <module name="37.SudokuSolver" />
         <module name="HJ45" />
         <module name="322.CoinChange" />
         <module name="HJ95_DoubleTORMB" />
         <module name="HJ28" />
+        <module name="leetcodeEditor" />
         <module name="3.LongestSubstringWithoutRepeatingCharacters" />
         <module name="887.SuperEggDrop" />
         <module name="1162.AsFarFromLandAsPossible" />
