@@ -79,50 +79,41 @@ public class CircularArrayLoopSolution {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
+        int[] nums;
+
         public boolean circularArrayLoop(int[] nums) {
+            this.nums = nums;
             int len = nums.length;
-            int[] clr = new int[len];
-            List<Integer> visit = new ArrayList<>();
-            for (int i = 0; i < nums.length; i++) {
-                if (clr[i] == 0) {
-                    int curr = i;
-                    // 遍历子节点，遍历的点都染成1
-                    while (clr[curr] == 0) {
-                        clr[curr] = 1;
-                        visit.add(curr);
-                        curr = getSon(nums, curr);
-                    }
-                    // 遇到本次遍历的节点,则判断是不是循环; 遇到的不是本次遍历的点则直接染色2
-                    if (clr[curr] == 1) {
-                        // 不是自环，则遍历环上的点，若正负都一致返回true, 否则继续
-                        if (nums[curr] % len != 0) {
-                            int head = curr;
-                            curr = getSon(nums, curr);
-                            boolean flag = true;
-                            while (curr != head) {
-                                if (nums[head] > 0 != nums[curr] > 0) {
-                                    flag = false;
-                                    break;
-                                }
-                                curr = getSon(nums, curr);
-                            }
-                            if (flag) {
-                                return true;
-                            }
+            for (int i = 0; i < len; i++) {
+                if (nums[i] == 0) {
+                    continue;
+                }
+                int slow = i;
+                int fast = next(i);
+                loop:
+                while (slow != fast) {
+                    slow = next(slow);
+                    for (int j = 0; j < 2; j++) {
+                        fast = next(fast);
+                        if (nums[fast] == 0 || (nums[fast] > 0 != nums[slow] > 0)) {
+                            break loop;
                         }
                     }
-                    // 把本次遍历的点都染成2
-                    for (Integer i1 : visit) {
-                        clr[i1] = 2;
-                    }
-                    visit.clear();
+                }
+                if (slow==fast&&nums[slow] % len != 0) {
+                    return true;
+                }
+                int head = i;
+                while (nums[head] != 0 && (nums[next(head)] > 0 == nums[head] > 0)) {
+                    nums[head] = 0;
+                    head = next(head);
                 }
             }
             return false;
         }
 
-        int getSon(int[] nums, int parent) {
-            int son = (parent + nums[parent]) % nums.length;
+        int next(int n) {
+            int son = (n + nums[n]) % nums.length;
             if (son < 0) {
                 son += nums.length;
             }
