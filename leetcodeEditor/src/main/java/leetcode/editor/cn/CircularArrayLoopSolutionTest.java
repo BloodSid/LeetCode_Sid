@@ -57,6 +57,16 @@ public class CircularArrayLoopSolutionTest {
                 solution.circularArrayLoop(nums);
         assertEquals(false, actual);
     }
+    /**
+     * Method: circularArrayLoop(int[] nums)
+     */
+    @Test
+    public void testCircularArrayLoop4() throws Exception {
+        int[] nums = {-1,-2,-3,-4,-5};
+        boolean actual =
+                solution.circularArrayLoop(nums);
+        assertEquals(false, actual);
+    }
 
 
 }

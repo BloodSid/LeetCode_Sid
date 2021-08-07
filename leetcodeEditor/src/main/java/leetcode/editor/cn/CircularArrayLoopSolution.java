@@ -103,10 +103,12 @@ public class CircularArrayLoopSolution {
                 if (slow==fast&&nums[slow] % len != 0) {
                     return true;
                 }
-                int head = i;
-                while (nums[head] != 0 && (nums[next(head)] > 0 == nums[head] > 0)) {
-                    nums[head] = 0;
-                    head = next(head);
+                int rm = i;
+                while (nums[rm] != 0 && (nums[next(rm)] > 0 == nums[rm] > 0)) {
+                    // 这里next函数实际上用到nums数组，所以一定要先next操作再修改nums数组
+                    int temp = rm;
+                    rm = next(rm);
+                    nums[temp] = 0;
                 }
             }
             return false;
