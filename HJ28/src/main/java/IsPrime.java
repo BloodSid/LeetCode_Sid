@@ -12,6 +12,8 @@ public class IsPrime {
             int a = in.nextInt();
             if(!isPrime(a)){
                 System.out.println("false");
+            }else{
+                System.out.println("true");
             }
         }
     }
