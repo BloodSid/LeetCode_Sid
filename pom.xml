@@ -47,6 +47,7 @@
         <module>322.CoinChange</module>
         <module>leetcodeEditor</module>
         <module>59.SpiralMatrixII</module>
+        <module>LinkedList</module>
     </modules>
 
     <properties>

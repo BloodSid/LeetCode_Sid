@@ -29,6 +29,7 @@
         <module name="leetcodeEditor" />
         <module name="3.LongestSubstringWithoutRepeatingCharacters" />
         <module name="887.SuperEggDrop" />
+        <module name="LinkedList" />
         <module name="1162.AsFarFromLandAsPossible" />
         <module name="916.WordSubsets" />
         <module name="HJ44_Sudoku" />
