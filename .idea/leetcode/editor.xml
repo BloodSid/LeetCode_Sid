@@ -21,6 +21,15 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SumOfAllOddLengthSubarraysSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/doc/content/SumOfAllOddLengthSubarraysSolution.md" />
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SumOfAllOddLengthSubarraysSolution.java" />
+              <option name="questionId" value="1588" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
       </map>
     </option>
   </component>
