@@ -6,16 +6,22 @@
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/BoatsToSavePeopleSolution.java">
           <value>
             <LeetcodeEditor>
-              <option name="contentPath" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/doc/content/BoatsToSavePeopleSolution.md" />
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/BoatsToSavePeopleSolution.java" />
               <option name="questionId" value="881" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/FeiBoNaQiShuLieLcofSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/FeiBoNaQiShuLieLcofSolution.java" />
+              <option name="questionId" value="100274" />
             </LeetcodeEditor>
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/RunningSumOf1dArraySolution.java">
           <value>
             <LeetcodeEditor>
-              <option name="contentPath" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/doc/content/RunningSumOf1dArraySolution.md" />
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/RunningSumOf1dArraySolution.java" />
               <option name="questionId" value="1480" />
             </LeetcodeEditor>
@@ -24,7 +30,6 @@
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SumOfAllOddLengthSubarraysSolution.java">
           <value>
             <LeetcodeEditor>
-              <option name="contentPath" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/doc/content/SumOfAllOddLengthSubarraysSolution.md" />
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SumOfAllOddLengthSubarraysSolution.java" />
               <option name="questionId" value="1588" />
             </LeetcodeEditor>
