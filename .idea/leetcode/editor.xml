@@ -19,6 +19,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/EditDistanceSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/EditDistanceSolution.java" />
+              <option name="questionId" value="72" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/FeiBoNaQiShuLieLcofSolution.java">
           <value>
             <LeetcodeEditor>
@@ -35,11 +43,51 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/FindPeakElementSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/FindPeakElementSolution.java" />
+              <option name="questionId" value="162" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ImplementRand10UsingRand7Solution.java">
           <value>
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ImplementRand10UsingRand7Solution.java" />
               <option name="questionId" value="903" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LengthOfLastWordSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LengthOfLastWordSolution.java" />
+              <option name="questionId" value="58" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MedianOfTwoSortedArraysSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MedianOfTwoSortedArraysSolution.java" />
+              <option name="questionId" value="4" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/NumberOfIslandsSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/NumberOfIslandsSolution.java" />
+              <option name="questionId" value="200" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/NumberOfLongestIncreasingSubsequenceSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/NumberOfLongestIncreasingSubsequenceSolution.java" />
+              <option name="questionId" value="673" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -67,11 +115,27 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/TwoKeysKeyboardSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/TwoKeysKeyboardSolution.java" />
+              <option name="questionId" value="650" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ValidParenthesisStringSolution.java">
           <value>
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ValidParenthesisStringSolution.java" />
               <option name="questionId" value="678" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/WordSearchIiSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/WordSearchIiSolution.java" />
+              <option name="questionId" value="212" />
             </LeetcodeEditor>
           </value>
         </entry>
