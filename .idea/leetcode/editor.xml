@@ -107,6 +107,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LoudAndRichSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LoudAndRichSolution.java" />
+              <option name="questionId" value="881" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MedianOfTwoSortedArraysSolution.java">
           <value>
             <LeetcodeEditor>
@@ -136,6 +144,14 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/NumberOfLongestIncreasingSubsequenceSolution.java" />
               <option name="questionId" value="673" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/PeekingIteratorSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/PeekingIteratorSolution.java" />
+              <option name="questionId" value="284" />
             </LeetcodeEditor>
           </value>
         </entry>
