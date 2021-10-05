@@ -13,7 +13,5 @@ import java.util.*;
  * @version 1.0
  */
 public class $!velocityTool.camelCaseName(${question.titleSlug})Solution {
-    //ctrl+alt+a 加入版本控制
-
 ${question.code}
 }
