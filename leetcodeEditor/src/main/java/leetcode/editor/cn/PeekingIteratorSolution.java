@@ -63,22 +63,22 @@ import java.util.*;
  */
 public class PeekingIteratorSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
-class PeekingIterator implements Iterator<Integer> {
-    Iterator<Integer> iterator;
-    Integer nextE;
+class PeekingIterator<E> implements Iterator<E> {
+    Iterator<E> iterator;
+    E nextE;
 
-    public PeekingIterator(Iterator<Integer> iterator) {
+    public PeekingIterator(Iterator<E> iterator) {
         this.iterator = iterator;
         nextE = iterator.next();
     }
 
-    public Integer peek() {
+    public E peek() {
         return nextE;
     }
 
     @Override
-    public Integer next() {
-        Integer ret = nextE;
+    public E next() {
+        E ret = nextE;
         nextE = iterator.hasNext() ? iterator.next() : null;
         return ret;
     }
