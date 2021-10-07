@@ -51,51 +51,47 @@ import java.util.*;
  * 喧闹和富有
  *
  * @author IronSid
- * @since 2021-10-04 22:53:39 
  * @version 1.0
+ * @since 2021-10-04 22:53:39
  */
 public class LoudAndRichSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    List<Integer>[] map;
+    int[] ans;
+    int[] quiet;
+
     public int[] loudAndRich(int[][] richers, int[] quiet) {
         int N = quiet.length;
+        ans = new int[N];
+        Arrays.fill(ans, -1);
+        this.quiet = quiet;
         // 一个人到直接比他富的人的映射
-        Map<Integer, List<Integer>> map = new HashMap<>();
+        this.map = new List[N];
+        for (int i = 0; i < map.length; i++) {
+            map[i] = new ArrayList<Integer>();
+        }
         for (int[] richer : richers) {
-            map.putIfAbsent(richer[1], new ArrayList<>());
-            map.get(richer[1]).add(richer[0]);
+            map[richer[1]].add(richer[0]);
         }
-        Integer[] person = new Integer[N];
-        for (int i = 0; i < person.length; i++) {
-            person[i] = i;
-        }
-        Arrays.sort(person, Comparator.comparingInt(o -> quiet[o]));
-        int[] ans = new int[N];
-        for (int i = 0; i < ans.length; i++) {
-            for (int j = 0; j < person.length; j++) {
-                boolean[] visited = new boolean[N];
-                if (dfs(i, person[j], map, visited)) {
-                    ans[i] = person[j];
-                    break;
-                }
-            }
+        for (int i = 0; i < N; i++) {
+            dfs(i);
         }
         return ans;
     }
-    boolean dfs(int root, int target, Map<Integer, List<Integer>> map, boolean[] visited) {
-        if (root == target) {
-            return true;
-        }
-        visited[root] = true;
-        List<Integer> sons = map.get(root);
-        if (sons != null){
-            for (Integer son : sons) {
-                if (!visited[son] && dfs(son, target, map, visited)) {
-                    return true;
+
+    int dfs(int node) {
+        // 如果没访问过才dfs
+        if (ans[node] == -1) {
+            ans[node] = node;
+            for (Integer son : map[node]) {
+                int temp = dfs(son);
+                if (quiet[temp] < quiet[ans[node]]) {
+                    ans[node] = temp;
                 }
             }
         }
-        return false;
+        return ans[node];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
