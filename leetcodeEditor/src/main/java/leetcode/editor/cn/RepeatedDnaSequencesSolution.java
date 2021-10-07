@@ -75,4 +75,26 @@ class Solution1 {
         return new ArrayList<>(ans);
     }
 }
+// 方法三 4ms 来自力扣
+class Solution2 {
+    public List<String> findRepeatedDnaSequences(String s) {
+        ArrayList<String> list = new ArrayList<>();
+        HashMap<String, Integer> map = new HashMap<>();
+        if(s.length() > 10000){
+            return new ArrayList<>();
+        }
+        for (int i = 0; i <= s.length() - 10; i++) {
+            String s1 = s.substring(i, i + 10);
+            if(!list.contains(s1)) {
+                Integer integer = map.getOrDefault(s1, 0);
+                if (integer > 0) {
+                    list.add(s1);
+                    continue;
+                }
+                map.put(s1,integer + 1);
+            }
+        }
+        return list;
+    }
+}
 }
