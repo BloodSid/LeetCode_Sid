@@ -4,19 +4,20 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
+
 import static org.junit.Assert.*;
 
 /**
  * DataStreamAsDisjointIntervalsSolution Tester.
  *
  * @author IronSid
- * @since 10/10/2021
  * @version 1.0
+ * @since 10/10/2021
  */
 public class DataStreamAsDisjointIntervalsSolutionTest {
     @Before
     public void before() throws Exception {
-        
+
     }
 
     @After
@@ -25,7 +26,8 @@ public class DataStreamAsDisjointIntervalsSolutionTest {
 
     @Test
     public void test1() throws Exception {
-        DataStreamAsDisjointIntervalsSolution.SummaryRanges summaryRanges = new DataStreamAsDisjointIntervalsSolution() .new SummaryRanges();
+        DataStreamAsDisjointIntervalsSolution.SummaryRanges summaryRanges
+            = new DataStreamAsDisjointIntervalsSolution().new SummaryRanges();
         summaryRanges.addNum(1);
         int[][] actual = summaryRanges.getIntervals();
         int[][] expected = {{1, 1}};

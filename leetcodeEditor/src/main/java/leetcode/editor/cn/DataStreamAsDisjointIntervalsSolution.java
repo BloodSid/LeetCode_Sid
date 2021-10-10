@@ -63,61 +63,60 @@ import java.util.*;
  *
  * @author IronSid
  * @version 1.0
- * @since 2021-10-10 20:07:54 
+ * @since 2021-10-10 20:07:54
  */
 public class DataStreamAsDisjointIntervalsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class SummaryRanges {
     TreeMap<Integer, Integer> intervals;
+
     public SummaryRanges() {
         intervals = new TreeMap<>();
+        // 哨兵
+        intervals.put(-2, -2);
+        intervals.put(10002, 10002);
     }
-    
+
     public void addNum(int val) {
         Map.Entry<Integer, Integer> interval0 = intervals.floorEntry(val);
         Map.Entry<Integer, Integer> interval1 = intervals.ceilingEntry(val + 1);
-        Integer l0 = interval0 == null ? null : interval0.getKey();
-        Integer r0 = interval0 == null ? null : interval0.getValue();
-        Integer l1 = interval1 == null ? null : interval1.getKey();
-        Integer r1 = interval1 == null ? null : interval1.getValue();
-        if (interval0 != null && val >= l0 && val <= r0) {
+        Integer l0 = interval0.getKey();
+        Integer r0 = interval0.getValue();
+        Integer l1 = interval1.getKey();
+        Integer r1 = interval1.getValue();
+        if (val >= l0 && val <= r0) {
             return;
         }
-        if (interval0 != null && interval1 != null && val == r0 + 1 && val == l1 - 1) {
+        if (val == r0 + 1 && val == l1 - 1) {
             intervals.remove(l1);
             intervals.put(l0, r1);
             return;
         }
-        if (interval0 != null && val == r0 + 1) {
+        if (val == r0 + 1) {
             intervals.put(l0, val);
             return;
         }
-        if (interval1 != null && val == l1 - 1) {
+        if (val == l1 - 1) {
             intervals.remove(l1);
             intervals.put(val, r1);
             return;
         }
         intervals.put(val, val);
     }
-    
+
     public int[][] getIntervals() {
-        int[][] ret = new int[intervals.size()][2];
+        int[][] ret = new int[intervals.size() - 2][2];
         int index = 0;
         for (Map.Entry<Integer, Integer> entry : intervals.entrySet()) {
-            ret[index][0] = entry.getKey();
-            ret[index][1] = entry.getValue();
+            if (index - 1 >= 0 && index - 1 < ret.length) {
+                ret[index - 1][0] = entry.getKey();
+                ret[index - 1][1] = entry.getValue();
+            }
             index++;
         }
         return ret;
     }
 }
-
-/**
- * Your SummaryRanges object will be instantiated and called as such:
- * SummaryRanges obj = new SummaryRanges();
- * obj.addNum(val);
- * int[][] param_2 = obj.getIntervals();
- */
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
