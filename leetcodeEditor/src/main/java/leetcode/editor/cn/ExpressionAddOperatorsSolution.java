@@ -95,9 +95,7 @@ class Solution {
             List<String> exp = getExp(operators);
             if (isLegal(exp)) {
                 long result = calculateResult(exp);
-                if (result < target) {
-                    return;
-                } else if (result == target) {
+                if (result == target) {
                     sb = new StringBuilder();
                     for (String e : exp) {
                         sb.append(e);
