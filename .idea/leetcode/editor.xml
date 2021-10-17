@@ -99,6 +99,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ExpressionAddOperatorsSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ExpressionAddOperatorsSolution.java" />
+              <option name="questionId" value="282" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/FeiBoNaQiShuLieLcofSolution.java">
           <value>
             <LeetcodeEditor>
@@ -144,6 +152,14 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ImplementRand10UsingRand7Solution.java" />
               <option name="questionId" value="903" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/KthSmallestElementInABstSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/KthSmallestElementInABstSolution.java" />
+              <option name="questionId" value="230" />
             </LeetcodeEditor>
           </value>
         </entry>
