@@ -13,19 +13,14 @@ public class ValidParenthesesSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean isValid(String s) {
+        if (s.length() % 2 == 1) {
+            return false;
+        }
         Deque<Character> stack = new ArrayDeque<>();
         for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            if (ch == ')') {
-                if (stack.isEmpty() || stack.pollFirst() != '(') {
-                    return false;
-                }
-            } else if (ch == '}') {
-                if (stack.isEmpty() || stack.pollFirst() != '{') {
-                    return false;
-                }
-            } else if (ch == ']') {
-                if (stack.isEmpty() || stack.pollFirst() != '[') {
+            if (ch == ')' || ch == '}' || ch == ']') {
+                if (stack.isEmpty() || stack.pollFirst() != getRight(ch)) {
                     return false;
                 }
             } else {
@@ -33,6 +28,19 @@ class Solution {
             }
         }
         return stack.isEmpty();
+    }
+
+    char getRight(char left) {
+        switch (left) {
+            case ')':
+                return '(';
+            case ']':
+                return '[';
+            case '}':
+                return '{';
+            default:
+                return 0;
+        }
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
