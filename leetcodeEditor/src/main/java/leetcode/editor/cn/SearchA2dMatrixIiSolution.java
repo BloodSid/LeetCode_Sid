@@ -15,21 +15,15 @@ class Solution {
     public boolean searchMatrix(int[][] matrix, int target) {
         int m = matrix.length;
         int n = matrix[0].length;
-        // 根据每一行的首尾元素缩小搜索范围
-        int lowerLimit = 0;
-        for (; lowerLimit < m && matrix[lowerLimit][n - 1] < target; lowerLimit++) {
-        }
-        int higherLimit = m - 1;
-        for (; higherLimit >= lowerLimit && matrix[higherLimit][0] > target; higherLimit--) {
-        }
-        int toIndex = n;
-        for (int i = lowerLimit; i <= higherLimit; i++) {
-            int index = Arrays.binarySearch(matrix[i], 0, toIndex, target);
-            if (index >= 0) {
+        int x = 0;
+        int y = n - 1;
+        while (x < m && y >= 0) {
+            if (matrix[x][y] == target) {
                 return true;
+            } else if (matrix[x][y] < target) {
+                x++;
             } else {
-                // 该行第一个比target大的元素的下标
-                toIndex = -index - 1;
+                y--;
             }
         }
         return false;
