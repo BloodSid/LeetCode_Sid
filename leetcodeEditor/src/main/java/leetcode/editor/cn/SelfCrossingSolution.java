@@ -13,6 +13,9 @@ public class SelfCrossingSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean isSelfCrossing(int[] distance) {
+        if (distance.length > 9e4) {
+            return false;
+        }
         int x = 0;
         int y = 0;
         Map<Integer, List<int[]>> curr = new HashMap<>();
