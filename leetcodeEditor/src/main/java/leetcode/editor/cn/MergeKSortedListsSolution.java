@@ -13,30 +13,28 @@ public class MergeKSortedListsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        if (lists == null || lists.length == 0) {
-            return null;
-        }
-        for (int i = 1; i < lists.length; i++) {
-            lists[0] = mergeTwoLists(lists[0], lists[i]);
-        }
-        return lists[0];
-    }
-
-    ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         ListNode prehead = new ListNode(-1);
-
-        ListNode cur = prehead;
-        while (l1 != null && l2 != null) {
-            if (l1.val < l2.val) {
-                cur.next = l1;
-                l1 = l1.next;
-            } else {
-                cur.next = l2;
-                l2 = l2.next;
+        Queue<ListNode> heap = new PriorityQueue<>(Comparator.comparingInt(node -> node.val));
+        for (ListNode list : lists) {
+            if (list != null) {
+                heap.offer(list);
             }
-            cur = cur.next;
         }
-        cur.next = l1 == null ? l2 : l1;
+        ListNode cur = prehead;
+        while (!heap.isEmpty()) {
+            ListNode smallest = heap.poll();
+            cur.next = smallest;
+            if (heap.isEmpty()) {
+                break;
+            }
+            while (smallest.next != null && smallest.next.val <= heap.peek().val) {
+                smallest = smallest.next;
+            }
+            cur = smallest;
+            if (smallest.next != null) {
+                heap.offer(smallest.next);
+            }
+        }
         return prehead.next;
     }
 }
