@@ -60,4 +60,12 @@ public class SelfCrossingSolutionTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testIsSelfCrossing5() throws Exception {
+        int[] distance = {1, 1, 2, 2, 3, 3, 4, 4, 10, 4, 4, 3, 3, 2, 2, 1, 1};
+        boolean expected = false;
+        boolean actual = solution.isSelfCrossing(distance);
+        assertEquals(expected, actual);
+    }
+
 }
