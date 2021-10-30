@@ -13,28 +13,35 @@ public class MergeKSortedListsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
+        if (lists.length == 0) {
+            return null;
+        }
+        return merge(lists, 0, lists.length - 1);
+    }
+
+    ListNode merge(ListNode[] lists, int l, int r) {
+        if (l == r) {
+            return lists[l];
+        }
+        int mid = (l + r) >> 1;
+        return mergeTwoLists(merge(lists, l, mid), merge(lists, mid + 1, r));
+    }
+
+    ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         ListNode prehead = new ListNode(-1);
-        Queue<ListNode> heap = new PriorityQueue<>(Comparator.comparingInt(node -> node.val));
-        for (ListNode list : lists) {
-            if (list != null) {
-                heap.offer(list);
-            }
-        }
+
         ListNode cur = prehead;
-        while (!heap.isEmpty()) {
-            ListNode smallest = heap.poll();
-            cur.next = smallest;
-            if (heap.isEmpty()) {
-                break;
+        while (l1 != null && l2 != null) {
+            if (l1.val < l2.val) {
+                cur.next = l1;
+                l1 = l1.next;
+            } else {
+                cur.next = l2;
+                l2 = l2.next;
             }
-            while (smallest.next != null && smallest.next.val <= heap.peek().val) {
-                smallest = smallest.next;
-            }
-            cur = smallest;
-            if (smallest.next != null) {
-                heap.offer(smallest.next);
-            }
+            cur = cur.next;
         }
+        cur.next = l1 == null ? l2 : l1;
         return prehead.next;
     }
 }
