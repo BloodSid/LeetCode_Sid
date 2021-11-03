@@ -13,22 +13,20 @@ public class TrappingRainWaterSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int trap(int[] height) {
-        int[] ans = new int[height.length];
-        int max = 0;
+        int ans = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
         for (int i = 0; i < height.length; i++) {
-            max = Math.max(max, height[i]);
-            ans[i] = max;
+            while (!stack.isEmpty() && height[i] > height[stack.peekLast()]) {
+                int top = stack.pollLast();
+                if (stack.isEmpty()) {
+                    break;
+                }
+                int left = stack.peekLast();
+                ans += (i - left - 1) * (Math.min(height[left], height[i]) - height[top]);
+            }
+            stack.offerLast(i);
         }
-        max = 0;
-        for (int i = height.length - 1; i >= 0; i--) {
-            max = Math.max(max, height[i]);
-            ans[i] = Math.min(max, ans[i]);
-        }
-        int sum = 0;
-        for (int i = 0; i < ans.length; i++) {
-            sum += ans[i] - height[i];
-        }
-        return sum;
+        return ans;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
