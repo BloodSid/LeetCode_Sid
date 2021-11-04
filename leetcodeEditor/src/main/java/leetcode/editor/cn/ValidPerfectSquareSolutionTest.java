@@ -58,5 +58,13 @@ public class ValidPerfectSquareSolutionTest {
         assertEquals(Integer.toString(num), expected, actual);
     }
 
+    @Test
+    public void testIsPerfectSquare5() throws Exception {
+        int num = 9;
+        boolean expected = true;
+        boolean actual = solution.isPerfectSquare(num);
+        assertEquals(Integer.toString(num), expected, actual);
+    }
+
 
 }

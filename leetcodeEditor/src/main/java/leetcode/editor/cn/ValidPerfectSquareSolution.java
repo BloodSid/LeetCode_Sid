@@ -13,20 +13,17 @@ public class ValidPerfectSquareSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean isPerfectSquare(int num) {
-        int l = 0;
-        int r = num;
-        while (l <= r) {
-            int mid = l + ((r - l) >> 1);
-            long sqr = (long) mid * mid;
-            if (sqr < num) {
-                l = mid + 1;
-            } else if (sqr > num) {
-                r = mid - 1;
-            } else {
-                return true;
+        for (int factor = 2; factor <= num / factor; factor++) {
+            int cnt = 0;
+            while (num % factor == 0) {
+                num /= factor;
+                cnt++;
+            }
+            if (cnt % 2 == 1) {
+                return false;
             }
         }
-        return false;
+        return num == 1;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
