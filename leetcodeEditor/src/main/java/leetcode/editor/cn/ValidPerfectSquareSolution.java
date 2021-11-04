@@ -7,7 +7,7 @@ import java.util.*;
  *
  * @author IronSid
  * @version 1.0
- * @since 2021-11-04 11:01:32 
+ * @since 2021-11-04 11:01:32
  */
 public class ValidPerfectSquareSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -17,12 +17,13 @@ class Solution {
         int r = num;
         while (l <= r) {
             int mid = l + ((r - l) >> 1);
-            if (mid == 0 || mid < num / mid) {
+            long sqr = (long) mid * mid;
+            if (sqr < num) {
                 l = mid + 1;
-            } else if (mid > num / mid) {
+            } else if (sqr > num) {
                 r = mid - 1;
             } else {
-                return mid * mid == num;
+                return true;
             }
         }
         return false;
