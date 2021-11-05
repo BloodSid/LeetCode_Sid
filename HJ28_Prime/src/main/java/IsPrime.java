@@ -10,10 +10,10 @@ public class IsPrime {
         // 注意 hasNext 和 hasNextLine 的区别
         while (in.hasNextInt()) { // 注意 while 处理多个 case
             int a = in.nextInt();
-            if(!isPrime(a)){
-                System.out.println("false");
-            }else{
+            if(isPrime(a)){
                 System.out.println("true");
+            }else{
+                System.out.println("false");
             }
         }
     }

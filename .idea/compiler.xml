@@ -25,7 +25,7 @@
         <module name="HJ45" />
         <module name="322.CoinChange" />
         <module name="HJ95_DoubleTORMB" />
-        <module name="HJ28" />
+        <module name="HJ28_Prime" />
         <module name="leetcodeEditor" />
         <module name="3.LongestSubstringWithoutRepeatingCharacters" />
         <module name="887.SuperEggDrop" />
