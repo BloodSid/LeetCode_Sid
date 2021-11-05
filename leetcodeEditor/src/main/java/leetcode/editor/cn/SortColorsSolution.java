@@ -13,17 +13,24 @@ public class SortColorsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public void sortColors(int[] nums) {
-        int[] cnt = new int[3];
-        for (int num : nums) {
-            cnt[num]++;
-        }
-        int index = 0;
-        for (int i = 0; i < cnt.length; i++) {
-            for (int j = 0; j < cnt[i]; j++) {
-                nums[index] = i;
-                index++;
+        int p0 = 0;
+        int p2 = nums.length - 1;
+        for (int i = 0; i <= p2; i++) {
+            while (i <= p2 && nums[i] == 2) {
+                swap(nums, i, p2);
+                p2--;
+            }
+            if (nums[i] == 0) {
+                swap(nums, i, p0);
+                p0++;
             }
         }
+    }
+
+    void swap(int[] array, int index1, int index2) {
+        int temp = array[index1];
+        array[index1] = array[index2];
+        array[index2] = temp;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
