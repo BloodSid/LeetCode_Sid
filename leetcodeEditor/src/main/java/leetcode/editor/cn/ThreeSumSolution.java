@@ -14,25 +14,21 @@ public class ThreeSumSolution {
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> ans = new ArrayList<>();
-        Map<Integer, Integer> map = new TreeMap<>();
-        for (int num : nums) {
-            map.put(num, map.getOrDefault(num, 0) + 1);
-        }
-        Integer[] keys = map.keySet().toArray(new Integer[0]);
-        for (int i = 0; i < keys.length; i++) {
-            int num1 = keys[i];
-            int cnt1 = map.get(keys[i]);
-            if (num1 == 0) {
-                if (cnt1 >= 3) {
-                    ans.add(Arrays.asList(0, 0, 0));
-                }
-            } else if (cnt1 >= 2 && map.containsKey(-2 * num1)) {
-                ans.add(Arrays.asList(num1, num1, -2 * num1));
+        Arrays.sort(nums);
+        for (int num1 = 0; num1 < nums.length; num1++) {
+            if (num1 > 0 && nums[num1] == nums[num1 - 1]) {
+                continue;
             }
-            for (int j = i + 1; j < keys.length; j++) {
-                int num3 = -keys[i] - keys[j];
-                if (num3 > keys[j] && map.containsKey(num3)) {
-                    ans.add(Arrays.asList(keys[i], keys[j], num3));
+            int num3 = nums.length - 1;
+            for (int num2 = num1 + 1; num2 < num3; num2++) {
+                if (num2 > num1 + 1 && nums[num2] == nums[num2 - 1]) {
+                    continue;
+                }
+                while (num2 < num3 && nums[num1] + nums[num2] + nums[num3] > 0) {
+                    num3--;
+                }
+                if (num2 != num3 && nums[num1] + nums[num2] + nums[num3] == 0) {
+                    ans.add(Arrays.asList(nums[num1], nums[num2], nums[num3]));
                 }
             }
         }
