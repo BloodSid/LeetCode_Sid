@@ -347,6 +347,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LinkedListCycleIiSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LinkedListCycleIiSolution.java" />
+              <option name="questionId" value="142" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LongestArithmeticSubsequenceOfGivenDifferenceSolution.java">
           <value>
             <LeetcodeEditor>
