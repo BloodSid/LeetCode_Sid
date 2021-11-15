@@ -59,6 +59,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/BulbSwitcherSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/BulbSwitcherSolution.java" />
+              <option name="questionId" value="319" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/BullsAndCowsSolution.java">
           <value>
             <LeetcodeEditor>
@@ -152,6 +160,14 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/DesignHashmapSolution.java" />
               <option name="questionId" value="817" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/DesignLinkedListSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/DesignLinkedListSolution.java" />
+              <option name="questionId" value="838" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -768,6 +784,14 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SumOfAllOddLengthSubarraysSolution.java" />
               <option name="questionId" value="1588" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SwapNodesInPairsSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SwapNodesInPairsSolution.java" />
+              <option name="questionId" value="24" />
             </LeetcodeEditor>
           </value>
         </entry>
