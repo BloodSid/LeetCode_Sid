@@ -579,6 +579,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/PerfectRectangleSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/PerfectRectangleSolution.java" />
+              <option name="questionId" value="391" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/PlusOneSolution.java">
           <value>
             <LeetcodeEditor>
@@ -643,6 +651,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ReorderListSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ReorderListSolution.java" />
+              <option name="questionId" value="143" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ReorderedPowerOf2Solution.java">
           <value>
             <LeetcodeEditor>
@@ -664,6 +680,14 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/RestoreIpAddressesSolution.java" />
               <option name="questionId" value="93" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ReverseNodesInKGroupSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ReverseNodesInKGroupSolution.java" />
+              <option name="questionId" value="25" />
             </LeetcodeEditor>
           </value>
         </entry>
