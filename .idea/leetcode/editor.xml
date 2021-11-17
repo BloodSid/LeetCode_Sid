@@ -251,6 +251,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/FindTheWinnerOfTheCircularGameSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/FindTheWinnerOfTheCircularGameSolution.java" />
+              <option name="questionId" value="1951" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/FizzBuzzSolution.java">
           <value>
             <LeetcodeEditor>
@@ -427,6 +435,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MaximumProductOfWordLengthsSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MaximumProductOfWordLengthsSolution.java" />
+              <option name="questionId" value="318" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MaximumSubarraySolution.java">
           <value>
             <LeetcodeEditor>
@@ -467,6 +483,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MinStackSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MinStackSolution.java" />
+              <option name="questionId" value="155" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MinimumAsciiDeleteSumForTwoStringsSolution.java">
           <value>
             <LeetcodeEditor>
@@ -480,6 +504,14 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MinimumMovesToEqualArrayElementsSolution.java" />
               <option name="questionId" value="453" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MinimumRemoveToMakeValidParenthesesSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/MinimumRemoveToMakeValidParenthesesSolution.java" />
+              <option name="questionId" value="1371" />
             </LeetcodeEditor>
           </value>
         </entry>
