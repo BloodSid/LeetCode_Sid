@@ -107,6 +107,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ConstructBinaryTreeFromPreorderAndInorderTraversalSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ConstructBinaryTreeFromPreorderAndInorderTraversalSolution.java" />
+              <option name="questionId" value="105" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ConstructTheRectangleSolution.java">
           <value>
             <LeetcodeEditor>
