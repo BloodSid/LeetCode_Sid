@@ -14,25 +14,41 @@ public class MinimumRemoveToMakeValidParenthesesSolution {
 class Solution {
     public String minRemoveToMakeValid(String s) {
         StringBuilder sb = new StringBuilder();
-        Deque<Integer> stack = new LinkedList<>();
+        int left = 0;
+        int balance = 0;
         for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
             if (ch == '(') {
-                stack.push(sb.length());
+                left++;
+                balance++;
                 sb.append(ch);
             } else if (ch == ')') {
-                if (!stack.isEmpty()) {
-                    stack.pop();
+                if (balance > 0) {
+                    balance--;
                     sb.append(ch);
                 }
             } else {
                 sb.append(ch);
             }
         }
-        while (!stack.isEmpty()) {
-            sb.deleteCharAt(stack.pop());
+        if (balance == 0) {
+            return sb.toString();
         }
-        return sb.toString();
+        StringBuilder result = new StringBuilder();
+        // 总左括号数减要删除的左括号数
+        int remain = left - balance;
+        for (int i = 0; i < sb.length(); i++) {
+            char ch = sb.charAt(i);
+            if (ch == '(') {
+                if (remain > 0) {
+                    remain--;
+                    result.append(ch);
+                }
+            } else {
+                result.append(ch);
+            }
+        }
+        return result.toString();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
