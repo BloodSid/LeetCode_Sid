@@ -51,6 +51,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/BinaryTreeTiltSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/BinaryTreeTiltSolution.java" />
+              <option name="questionId" value="563" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/BoatsToSavePeopleSolution.java">
           <value>
             <LeetcodeEditor>
@@ -960,6 +968,14 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/WordSearchIiSolution.java" />
               <option name="questionId" value="212" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/YuanQuanZhongZuiHouShengXiaDeShuZiLcofSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/YuanQuanZhongZuiHouShengXiaDeShuZiLcofSolution.java" />
+              <option name="questionId" value="100343" />
             </LeetcodeEditor>
           </value>
         </entry>

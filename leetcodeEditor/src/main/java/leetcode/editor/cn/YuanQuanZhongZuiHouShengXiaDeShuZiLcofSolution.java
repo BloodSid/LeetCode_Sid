@@ -3,22 +3,22 @@ package leetcode.editor.cn;
 import java.util.*;
 
 /**
- * 找出游戏的获胜者
+ * 圆圈中最后剩下的数字
  *
  * @author IronSid
  * @version 1.0
- * @since 2021-11-17 01:01:16
+ * @since 2021-11-18 16:35:27
  */
-public class FindTheWinnerOfTheCircularGameSolution {
+public class YuanQuanZhongZuiHouShengXiaDeShuZiLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int findTheWinner(int n, int k) {
-        // f(1, k) = 1
-        int f = 1;
+    public int lastRemaining(int n, int m) {
+        // f(1, k) = 0
+        int f = 0;
         // f(n, k) = (f(n - 1, k) + k) % n
         // 防止刚好整除的情形导致取模为0，对原值-1后再对模+1
         for (int i = 2; i <= n; i++) {
-            f = (f + k - 1) % i + 1;
+            f = (f + m) % i;
         }
         return f;
     }
