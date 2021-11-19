@@ -48,7 +48,6 @@ public class BinaryTree {
     }
 
 
-
     public String toString(TreeNode root) {
         if (root == null) {
             return null;
@@ -60,7 +59,7 @@ public class BinaryTree {
         StringBuilder s = new StringBuilder();
         queue.offer(root);
         s.append(root.val);
-        while(queue.size()!=0){
+        while (queue.size() != 0) {
             TreeNode thisNode = queue.peek();
             if (thisNode.left == null && thisNode.right == null) {
                 queue.poll();
@@ -70,14 +69,14 @@ public class BinaryTree {
                 queue.offer(thisNode.left);
                 s.append(',');
                 s.append(thisNode.left.val);
-            }else {
+            } else {
                 s.append(",null");
             }
             if (thisNode.right != null) {
                 queue.offer(thisNode.right);
                 s.append(',');
                 s.append(thisNode.right.val);
-            }else {
+            } else {
                 s.append(",null");
             }
             queue.poll();
@@ -86,9 +85,9 @@ public class BinaryTree {
     }
 
     public static void main(String[] args) {
-        String[] strings = new String[]{"1,null,0,0,1","1,1,0,1,1,null,1","1,null,1,null,1"};
-        for (String s:
-             strings) {
+        String[] strings = new String[]{"1,null,0,0,1", "1,1,0,1,1,null,1", "1,null,1,null,1"};
+        for (String s :
+                strings) {
             BinaryTree binaryTree = new BinaryTree();
             TreeNode root = binaryTree.stringToBinaryTree(s);
             String s1 = binaryTree.toString(root);
