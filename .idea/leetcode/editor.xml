@@ -451,6 +451,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LongestHarmoniousSubsequenceSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LongestHarmoniousSubsequenceSolution.java" />
+              <option name="questionId" value="594" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/LongestPalindromeSolution.java">
           <value>
             <LeetcodeEditor>
@@ -848,6 +856,14 @@
             <LeetcodeEditor>
               <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SelfCrossingSolution.java" />
               <option name="questionId" value="335" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SerializeAndDeserializeBinaryTreeSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/SerializeAndDeserializeBinaryTreeSolution.java" />
+              <option name="questionId" value="297" />
             </LeetcodeEditor>
           </value>
         </entry>
