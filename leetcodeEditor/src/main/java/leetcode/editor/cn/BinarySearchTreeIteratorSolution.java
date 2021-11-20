@@ -12,27 +12,30 @@ import java.util.*;
 public class BinarySearchTreeIteratorSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class BSTIterator {
-    Deque<TreeNode> stack;
-    TreeNode curr;
+    List<Integer> list;
+    Iterator<Integer> iterator;
 
     public BSTIterator(TreeNode root) {
-        stack = new LinkedList<>();
-        curr = root;
+        list = new ArrayList<>();
+        dfs(root);
+        iterator = list.iterator();
+    }
+
+    void dfs(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        dfs(root.left);
+        list.add(root.val);
+        dfs(root.right);
     }
 
     public int next() {
-        while (curr != null) {
-            stack.push(curr);
-            curr = curr.left;
-        }
-        curr = stack.pop();
-        int val = curr.val;
-        curr = curr.right;
-        return val;
+        return iterator.next();
     }
 
     public boolean hasNext() {
-        return curr != null || !stack.isEmpty();
+        return iterator.hasNext();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
