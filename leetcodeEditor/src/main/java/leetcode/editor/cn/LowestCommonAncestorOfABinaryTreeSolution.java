@@ -12,40 +12,16 @@ import java.util.*;
 public class LowestCommonAncestorOfABinaryTreeSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    Deque<TreeNode> stack;
-    TreeNode p;
-    TreeNode q;
-    List<TreeNode> pStack;
-    List<TreeNode> qStack;
-
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        stack = new LinkedList<>();
-        this.p = p;
-        this.q = q;
-        dfs(root);
-        int min = Math.min(pStack.size(), qStack.size());
-        for (int i = pStack.size() - min, j = qStack.size() - min; i < pStack.size(); i++, j++) {
-            if (pStack.get(i) == qStack.get(j)) {
-                return pStack.get(i);
-            }
+        if (root == null || p == root || q == root) {
+            return root;
         }
-        return root;
-    }
-
-    void dfs(TreeNode root) {
-        if (root == null) {
-            return;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if (left != null && right != null) {
+            return root;
         }
-        stack.push(root);
-        if (root == p) {
-            pStack = new ArrayList<>(stack);
-        }
-        if (root == q) {
-            qStack = new ArrayList<>(stack);
-        }
-        dfs(root.right);
-        dfs(root.left);
-        stack.pop();
+        return left == null ? right : left;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
