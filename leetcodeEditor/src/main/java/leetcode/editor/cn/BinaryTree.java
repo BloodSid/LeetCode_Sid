@@ -2,6 +2,7 @@ package leetcode.editor.cn;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -18,7 +19,7 @@ public class BinaryTree {
      * @param levelTraversal level-order Traversal of the binary tree. Example: "1,null,0,0,1"
      * @return the root node of the binary tree
      */
-    public TreeNode stringToBinaryTree(String levelTraversal) {
+    public static TreeNode stringToBinaryTree(String levelTraversal) {
         if (levelTraversal == null) return null;
 
         String[] strings = levelTraversal.split(",");
@@ -48,49 +49,46 @@ public class BinaryTree {
     }
 
 
-    public String toString(TreeNode root) {
+    public static String toString(TreeNode root) {
         if (root == null) {
-            return null;
-        }
-        if (root.val == 0) {
-            return "0";
+            return "null";
         }
         Queue<TreeNode> queue = new LinkedList<>();
-        StringBuilder s = new StringBuilder();
+        List<String> list = new LinkedList<>();
         queue.offer(root);
-        s.append(root.val);
-        while (queue.size() != 0) {
-            TreeNode thisNode = queue.peek();
-            if (thisNode.left == null && thisNode.right == null) {
-                queue.poll();
-                continue;
+        list.add(Integer.toString(root.val));
+        int queueSize = 0;
+        while (!queue.isEmpty()) {
+            queueSize = queue.size();
+            for (int i = 0; i < queueSize; i++) {
+                TreeNode curr = queue.poll();
+                if (curr.left != null) {
+                    queue.offer(curr.left);
+                    list.add(Integer.toString(curr.left.val));
+                } else {
+                    list.add("null");
+                }
+                if (curr.right != null) {
+                    queue.offer(curr.right);
+                    list.add(Integer.toString(curr.right.val));
+                } else {
+                    list.add("null");
+                }
             }
-            if (thisNode.left != null) {
-                queue.offer(thisNode.left);
-                s.append(',');
-                s.append(thisNode.left.val);
-            } else {
-                s.append(",null");
-            }
-            if (thisNode.right != null) {
-                queue.offer(thisNode.right);
-                s.append(',');
-                s.append(thisNode.right.val);
-            } else {
-                s.append(",null");
-            }
-            queue.poll();
         }
-        return s.toString();
+        // 当逐层遍历到最深一层，这一层的节点即便没有子节点，也不用添加 "null"
+        // 所以最后删去最后一层节点数量两倍的 "null"
+        int len = list.size();
+        list.subList(len - 2 * queueSize, len).clear();
+        return String.join(",", list);
     }
 
     public static void main(String[] args) {
         String[] strings = new String[]{"1,null,0,0,1", "1,1,0,1,1,null,1", "1,null,1,null,1"};
         for (String s :
                 strings) {
-            BinaryTree binaryTree = new BinaryTree();
-            TreeNode root = binaryTree.stringToBinaryTree(s);
-            String s1 = binaryTree.toString(root);
+            TreeNode root = stringToBinaryTree(s);
+            String s1 = toString(root);
             System.out.println(s1);
         }
     }
