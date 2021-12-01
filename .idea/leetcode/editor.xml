@@ -131,6 +131,14 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ConsecutiveCharactersSolution.java">
+          <value>
+            <LeetcodeEditor>
+              <option name="path" value="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ConsecutiveCharactersSolution.java" />
+              <option name="questionId" value="1542" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/leetcodeEditor/src/main/java/leetcode/editor/cn/ConstructBinaryTreeFromPreorderAndInorderTraversalSolution.java">
           <value>
             <LeetcodeEditor>
