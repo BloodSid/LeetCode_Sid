@@ -14,17 +14,14 @@ public class CongWeiDaoTouDaYinLianBiaoLcofSolution {
 class Solution {
     public int[] reversePrint(ListNode head) {
         int n = 0;
-        ListNode cur = null;
-        ListNode pre = head;
-        while (pre != null) {
-            ListNode t = pre.next;
-            pre.next = cur;
-            cur = pre;
-            pre = t;
+        ListNode cur = head;
+        while (cur != null) {
+            cur = cur.next;
             n++;
         }
         int[] ans = new int[n];
-        for (int i = 0; i < ans.length; i++) {
+        cur = head;
+        for (int i = ans.length - 1; i >= 0; i--) {
             ans[i] = cur.val;
             cur = cur.next;
         }
