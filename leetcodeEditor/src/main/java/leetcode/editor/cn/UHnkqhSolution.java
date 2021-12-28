@@ -7,20 +7,19 @@ import java.util.*;
  *
  * @author IronSid
  * @version 1.0
- * @since 2021-12-28 20:39:41 
+ * @since 2021-12-28 20:39:41
  */
 public class UHnkqhSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public ListNode reverseList(ListNode head) {
-        ListNode pre = null;
-        while (head != null) {
-            ListNode t = head;
-            head = head.next;
-            t.next = pre;
-            pre = t;
+        if (head == null || head.next == null) {
+            return head;
         }
-        return pre;
+        ListNode newHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
