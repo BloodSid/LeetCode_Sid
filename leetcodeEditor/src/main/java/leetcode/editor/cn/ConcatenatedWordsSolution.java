@@ -69,7 +69,7 @@ class Trie {
                 return true;
             }
         }
-        return true;
+        return cur.word != null;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
