@@ -13,14 +13,20 @@ public class CongWeiDaoTouDaYinLianBiaoLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int[] reversePrint(ListNode head) {
-        Deque<Integer> stack = new ArrayDeque<>();
-        while (head != null) {
-            stack.push(head.val);
-            head = head.next;
+        int n = 0;
+        ListNode cur = null;
+        ListNode pre = head;
+        while (pre != null) {
+            ListNode t = pre.next;
+            pre.next = cur;
+            cur = pre;
+            pre = t;
+            n++;
         }
-        int[] ans = new int[stack.size()];
+        int[] ans = new int[n];
         for (int i = 0; i < ans.length; i++) {
-            ans[i] = stack.pop();
+            ans[i] = cur.val;
+            cur = cur.next;
         }
         return ans;
     }
