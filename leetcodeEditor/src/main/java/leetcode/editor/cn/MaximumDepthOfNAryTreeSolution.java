@@ -33,9 +33,6 @@ class Solution {
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
-
-}
-
 class Node {
     public int val;
     public List<Node> children;
@@ -52,3 +49,6 @@ class Node {
         children = _children;
     }
 }
+}
+
+
