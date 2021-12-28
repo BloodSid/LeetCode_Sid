@@ -55,21 +55,29 @@ class Trie {
     }
 
     boolean isConcatenated(String s) {
-        return isConcatenated(s.toCharArray(), 0);
+        boolean[] visited = new boolean[s.length()];
+        return isConcatenated(s.toCharArray(), 0, visited);
     }
 
-    boolean isConcatenated(char[] word, int start) {
+    boolean isConcatenated(char[] word, int start, boolean[] visited) {
+        if (start == word.length) {
+            return true;
+        }
+        if (visited[start]) {
+            return false;
+        }
+        visited[start] = true;
         TrieNode cur = root;
         for (int i = start; i < word.length; i++) {
             cur = cur.children[word[i] - 'a'];
             if (cur == null) {
                 return false;
             }
-            if (cur.word != null && isConcatenated(word, i + 1)) {
+            if (cur.word != null && isConcatenated(word, i + 1, visited)) {
                 return true;
             }
         }
-        return cur.word != null;
+        return false;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
