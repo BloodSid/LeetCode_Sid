@@ -15,24 +15,19 @@ class Solution {
     public int[] intersect(int[] nums1, int[] nums2) {
         int n = 1001;
         int[] freq1 = new int[n];
-        int[] freq2 = new int[n];
+        int[] result = new int[Math.min(nums1.length, nums2.length)];
         for (int i : nums1) {
             freq1[i]++;
         }
+        int len = 0;
         for (int i : nums2) {
-            freq2[i]++;
-        }
-        List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            for (int i1 = 0; i1 < Math.min(freq1[i], freq2[i]); i1++) {
-                list.add(i);
+            if (freq1[i] != 0) {
+                freq1[i]--;
+                result[len] = i;
+                len++;
             }
         }
-        int[] res = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            res[i] = list.get(i);
-        }
-        return res;
+        return Arrays.copyOfRange(result, 0, len);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
