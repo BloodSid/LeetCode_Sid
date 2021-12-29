@@ -13,12 +13,7 @@ public class ZuoXuanZhuanZiFuChuanLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public String reverseLeftWords(String s, int n) {
-        int len = s.length();
-        char[] res = new char[len];
-        for (int i = 0; i < len; i++) {
-            res[i] = s.charAt((i + n) % len);
-        }
-        return new String(res);
+        return (s + s).substring(n, n + s.length());
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
