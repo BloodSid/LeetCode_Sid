@@ -16,17 +16,26 @@ class Solution {
         if (hand.length % groupSize != 0) {
             return false;
         }
-        Arrays.sort(hand);
-        List<Integer> list = new LinkedList<>();
-        for (int i : hand) {
-            list.add(i);
+        if (groupSize == 1) {
+            return true;
         }
-        for (int i = 0; i < hand.length / groupSize; i++) {
-            int start = list.get(0);
-            for (int j = 0; j < groupSize; j++) {
-                if (!list.remove(Integer.valueOf(start + j))) {
+        Map<Integer, Integer> map = new HashMap<>();
+        PriorityQueue<Integer> heap = new PriorityQueue<>();
+        for (int i : hand) {
+            map.put(i, map.getOrDefault(i, 0) + 1);
+            heap.offer(i);
+        }
+        while (!heap.isEmpty()) {
+            int start = heap.poll();
+            if (map.get(start) == 0) {
+                continue;
+            }
+            for (int i = start; i < start + groupSize; i++) {
+                int cnt = map.getOrDefault(i, 0);
+                if (cnt == 0) {
                     return false;
                 }
+                map.put(i, cnt - 1);
             }
         }
         return true;
