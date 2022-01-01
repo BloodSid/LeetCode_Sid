@@ -16,22 +16,27 @@ class Solution {
         if (root == null) {
             return new int[0];
         }
-        int[] buffer = new int[1050];
-        int cnt = 0;
-        Deque<TreeNode> queue = new ArrayDeque<>();
-        queue.offer(root);
-        while (!queue.isEmpty()) {
-            TreeNode cur = queue.poll();
+        List<TreeNode> queue = new ArrayList<>();
+        queue.add(root);
+        int index = 0;
+        TreeNode cur;
+        while (index != queue.size()) {
+            cur = queue.get(index);
+            index++;
             if (cur.left != null) {
-                queue.offer(cur.left);
+                queue.add(cur.left);
             }
             if (cur.right != null) {
-                queue.offer(cur.right);
+                queue.add(cur.right);
             }
-            buffer[cnt] = cur.val;
-            cnt++;
         }
-        return Arrays.copyOfRange(buffer, 0, cnt);
+        int[] result = new int[queue.size()];
+        index = 0;
+        for (TreeNode treeNode : queue) {
+            result[index] = treeNode.val;
+            index++;
+        }
+        return result;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
