@@ -13,18 +13,18 @@ public class ValidAnagramSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean isAnagram(String s, String t) {
-        int sLen = s.length();
-        int tLen = t.length();
-        if (sLen != tLen) {
+        if (s.length() != t.length()) {
             return false;
         }
         int[] freq = new int[26];
-        for (int i = 0; i < sLen; i++) {
-            freq[s.charAt(i) - 'a']++;
-            freq[t.charAt(i) - 'a']--;
+        for (char c : s.toCharArray()) {
+            freq[c - 'a']++;
         }
-        for (int i = 0; i < freq.length; i++) {
-            if (freq[i] != 0) {
+        for (char c : t.toCharArray()) {
+            freq[c - 'a']--;
+        }
+        for (int i : freq) {
+            if (i != 0) {
                 return false;
             }
         }
