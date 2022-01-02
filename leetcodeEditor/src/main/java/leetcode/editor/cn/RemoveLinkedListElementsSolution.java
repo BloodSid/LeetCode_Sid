@@ -16,11 +16,12 @@ class Solution {
         ListNode preHead = new ListNode(-1);
         preHead.next = head;
         ListNode cur = preHead;
-        while (cur != null) {
-            while (cur.next != null && cur.next.val == val) {
+        while (cur.next != null) {
+            if (cur.next.val == val) {
                 cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
             }
-            cur = cur.next;
         }
         return preHead.next;
     }
