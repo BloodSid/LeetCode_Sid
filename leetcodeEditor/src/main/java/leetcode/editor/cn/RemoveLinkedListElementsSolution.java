@@ -13,17 +13,11 @@ public class RemoveLinkedListElementsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public ListNode removeElements(ListNode head, int val) {
-        ListNode preHead = new ListNode(-1);
-        preHead.next = head;
-        ListNode cur = preHead;
-        while (cur.next != null) {
-            if (cur.next.val == val) {
-                cur.next = cur.next.next;
-            } else {
-                cur = cur.next;
-            }
+        if (head == null) {
+            return null;
         }
-        return preHead.next;
+        head.next = removeElements(head.next, val);
+        return head.val == val ? head.next : head;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
