@@ -12,82 +12,106 @@ import java.util.*;
 public class ZumaGameSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    char[] color = "RYBGW".toCharArray();
-    Map<Character, Integer> colorMap;
+    // 球的颜色有 BGRWY
+    char[] color = "BGRWY".toCharArray();
+    char[] hand;
+    int m;
+    Map<String, Integer> map;
 
     public int findMinStep(String board, String hand) {
-        // 球的颜色有 RYBGW
-        int[] count = new int[color.length];
-        colorMap = new HashMap<>();
-        for (int i = 0; i < color.length; i++) {
-            colorMap.put(color[i], i);
-        }
-        for (char c : hand.toCharArray()) {
-            count[colorMap.get(c)]++;
-        }
-        StringBuilder sb = new StringBuilder(board);
-        return findMinStep(sb, hand.length(), count);
+        this.hand = hand.toCharArray();
+        Arrays.sort(this.hand);
+        m = hand.length();
+        map = new HashMap<>();
+        return findMinStep(board, (1 << m) - 1);
     }
 
-    int findMinStep(StringBuilder board, int sum, int[] count) {
+    int findMinStep(String board, int status) {
         if (board.length() == 0) {
             return 0;
         }
-        if (sum == 0 && board.length() != 0) {
+        if (status == 0) {
             return -1;
         }
-        int min = Integer.MAX_VALUE;
-        int len = board.length();
-        for (int i = 0; i <= board.length(); i++) {
-            for (int j = 0; j < color.length; j++) {
-                if (count[j] == 0) {
+        if (map.containsKey(board)) {
+            return map.get(board);
+        }
+        int n = board.length();
+        char[] arr = board.toCharArray();
+        // board只有1或2个相同球的时候,
+        int minStep = Integer.MAX_VALUE;
+        char cur = 0;
+        for (int i = 0; i < m; i++) {
+            // 该bit对应的球已经用过则跳过
+            if (((1 << (m - 1 - i)) & status) == 0) {
+                continue;
+            }
+            // 和上一次用的球相同则跳过
+            if (hand[i] == cur) {
+                continue;
+            }
+            cur = hand[i];
+            // 遍历插入位置
+            for (int j = 0; j <= n; j++) {
+                // 用cur, left, right 分别代表插入的，插入位置左右的球
+                // 在几个连续的相同颜色球的开始，结束和中间插入同一颜色的球，结果是一样的。
+                // 现规定遇到这种情况的时候只在最左边插入，即cur不等于left
+                if (j > 0 && arr[j - 1] == cur) {
                     continue;
                 }
-                StringBuilder newBoard = new StringBuilder(board);
-                newBoard.insert(i, color[j]);
-                count[j]--;
-                if ((i > 0 && newBoard.charAt(i - 1) == color[j]) || (i < len && newBoard.charAt(i + 1) == color[j])) {
-                    removeConsecutiveBalls(newBoard);
+                String newBoard = null;
+                // cur 等于 right
+                if (j < n && arr[j] == cur) {
+                    newBoard = insertBall(arr, j, cur);
+                    int cnt = 0;
+                    for (int k = j; k < n && arr[k] == cur; k++) {
+                        cnt++;
+                    }
+                    if (cnt == 2) {
+                        newBoard = removeConsecutiveBalls(newBoard);
+                    }
                 }
-                int step = findMinStep(newBoard, sum - 1, count);
-                if (step != -1) {
-                    min = Math.min(min, step);
+                // cur 即不等于left, 也不等于right
+                // left right 相同时，可能因为本次插入把l&r拆分到不同的组合里消除，可能得到更优解
+                // left right 不同时，该次插入不影响消除组合，不能得到更优解，不予考虑
+                if (j > 0 && j < n && arr[j - 1] != cur && arr[j - 1] == arr[j]) {
+                    newBoard = insertBall(arr, j, cur);
                 }
-                count[j]++;
+                if (newBoard == null) {
+                    continue;
+                }
+                int subStep = findMinStep(newBoard, status - (1 << (m - 1 - i)));
+                if (subStep != -1) {
+                    minStep = Math.min(minStep, subStep + 1);
+                }
             }
         }
-        if (min == Integer.MAX_VALUE) {
+        if (minStep == Integer.MAX_VALUE) {
+            map.put(board, -1);
             return -1;
+        } else {
+            map.put(board, minStep);
+            return minStep;
         }
-        return min + 1;
     }
 
-    int maxBoardLength = 16;
-    int maxHandLength = 5;
-    int[] dp = new int[maxBoardLength + maxHandLength];
-
-    void removeConsecutiveBalls(StringBuilder board) {
-        while (board.length() > 0) {
-            int len = board.length();
-            int max = 1;
-            int maxIndex = 0;
-            dp[0] = 1;
-            for (int i = 1; i < len; i++) {
-                if (board.charAt(i) == board.charAt(i - 1)) {
-                    dp[i] = dp[i - 1] + 1;
-                    if (dp[i] > max) {
-                        max = dp[i];
-                        maxIndex = i;
-                    }
-                } else {
-                    dp[i] = 1;
-                }
-            }
-            if (max < 3) {
+    String removeConsecutiveBalls(String board) {
+        while (true) {
+            String temp = board.replaceFirst("([BGRWY])\\1{2,3}", "");
+            if (temp == board) {
                 break;
+            } else {
+                board = temp;
             }
-            board.delete(maxIndex - dp[maxIndex] + 1, maxIndex + 1);
         }
+        return board;
+    }
+
+    String insertBall(char[] board, int postion, char ball) {
+        return new StringBuilder().append(board, 0, postion)
+                .append(ball)
+                .append(board, postion, board.length - postion)
+                .toString();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

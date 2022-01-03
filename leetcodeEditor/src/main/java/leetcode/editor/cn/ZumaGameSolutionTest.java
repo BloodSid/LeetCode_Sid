@@ -62,5 +62,23 @@ public class ZumaGameSolutionTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testFindMinStep5() throws Exception {
+        String board ="RRWWRRBBRR";
+        String hand ="WB";
+        int expected = 2;
+        // 第一步 RBRWWRRBBRR
+        // 第二步 RBRWWWRRBBRR -> RBRRRBBRR -> RBBBRR -> RRR
+        int actual = solution.findMinStep(board, hand);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testRemoveConsecutiveBalls1() throws Exception {
+        String board = "WRBBBBRRW";
+        String expected = "WW";
+        String actual = solution.removeConsecutiveBalls(board);
+        assertEquals(expected, actual);
+    }
 
 }
