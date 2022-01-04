@@ -38,7 +38,6 @@ class Solution {
         }
         int n = board.length();
         char[] arr = board.toCharArray();
-        // board只有1或2个相同球的时候,
         int minStep = Integer.MAX_VALUE;
         char cur = 0;
         for (int i = 0; i < m; i++) {
@@ -63,13 +62,7 @@ class Solution {
                 // cur 等于 right
                 if (j < n && arr[j] == cur) {
                     newBoard = insertBall(arr, j, cur);
-                    int cnt = 0;
-                    for (int k = j; k < n && arr[k] == cur; k++) {
-                        cnt++;
-                    }
-                    if (cnt == 2) {
-                        newBoard = removeConsecutiveBalls(newBoard);
-                    }
+                    newBoard = removeConsecutiveBalls(newBoard, j);
                 }
                 // cur 即不等于left, 也不等于right
                 // left right 相同时，可能因为本次插入把l&r拆分到不同的组合里消除，可能得到更优解
@@ -95,16 +88,41 @@ class Solution {
         }
     }
 
-    String removeConsecutiveBalls(String board) {
-        while (true) {
-            String temp = board.replaceFirst("([BGRWY])\\1{2,3}", "");
-            if (temp == board) {
+    String removeConsecutiveBalls(String board, int i) {
+        char[] arr = board.toCharArray();
+        int left = i;
+        // 按照插入规则，插入点的右边必有球
+        int right = i + 1;
+        char cur = arr[left];
+        int gapLen = 0;
+        do {
+            int l = left;
+            while (l > 0 && arr[l - 1] == cur) {
+                l--;
+            }
+            int r = right;
+            while (r < arr.length - 1 && arr[r + 1] == cur) {
+                r++;
+            }
+            // (left - l + 1) + (r - right + 1) > 2 时同色的超过3个，消除l到r
+            if (r - l + 1 - gapLen <= 2) {
                 break;
             } else {
-                board = temp;
+                left = l;
+                right = r;
+                gapLen = r - l + 1;
             }
+            if (left > 0) {
+                cur = arr[left - 1];
+            }
+        } while ((left > 0 && right < arr.length - 1));
+        if (left + 1 == right) {
+            return board;
+        } else {
+            return new StringBuilder().append(arr, 0, left)
+                    .append(arr, right + 1, arr.length - right - 1)
+                    .toString();
         }
-        return board;
     }
 
     String insertBall(char[] board, int postion, char ball) {
