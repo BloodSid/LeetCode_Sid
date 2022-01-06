@@ -13,17 +13,14 @@ public class ShanChuLianBiaoDeJieDianLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public ListNode deleteNode(ListNode head, int val) {
-        ListNode prehead = new ListNode();
-        prehead.next = head;
-        ListNode cur = prehead;
-        while (cur.next != null) {
-            if (cur.next.val == val) {
-                cur.next = cur.next.next;
-                break;
-            }
-            cur = cur.next;
+        if (head == null) {
+            return null;
         }
-        return prehead.next;
+        if (head.val == val) {
+            return head.next;
+        }
+        head.next = deleteNode(head.next, val);
+        return head;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
