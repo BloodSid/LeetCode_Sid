@@ -13,16 +13,21 @@ public class LiangGeLianBiaoDeDiYiGeGongGongJieDianLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        HashSet<ListNode> set = new HashSet<>();
-        while (headA != null) {
-            set.add(headA);
-            headA = headA.next;
-        }
-        while (headB != null) {
-            if (set.contains(headB)) {
-                return headB;
+        ListNode pA = headA;
+        ListNode pB = headB;
+        while (pA != null || pB != null) {
+            if (pA == pB) {
+                return pA;
+            }
+            if (pA == null) {
+                pA = headB;
             } else {
-                headB = headB.next;
+                pA = pA.next;
+            }
+            if (pB == null) {
+                pB = headA;
+            } else {
+                pB = pB.next;
             }
         }
         return null;
