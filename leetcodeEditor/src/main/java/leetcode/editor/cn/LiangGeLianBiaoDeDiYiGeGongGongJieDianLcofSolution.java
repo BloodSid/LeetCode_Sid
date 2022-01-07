@@ -15,10 +15,7 @@ public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         ListNode pA = headA;
         ListNode pB = headB;
-        while (pA != null || pB != null) {
-            if (pA == pB) {
-                return pA;
-            }
+        while (pA != pB) {
             if (pA == null) {
                 pA = headB;
             } else {
@@ -30,7 +27,7 @@ public class Solution {
                 pB = pB.next;
             }
         }
-        return null;
+        return pA;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
