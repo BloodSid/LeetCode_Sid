@@ -13,19 +13,13 @@ public class FanZhuanDanCiShunXuLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public String reverseWords(String s) {
-        String[] arr = s.split("\\s");
-        StringBuilder sb = new StringBuilder();
-        for (int i = arr.length - 1; i >= 0; i--) {
-            if (arr[i].length() == 0) {
-                continue;
-            }
-            sb.append(arr[i]).append(' ');
+        String[] arr = s.trim().split("\\s+");
+        for (int i = 0; i < arr.length / 2; i++) {
+            String temp = arr[i];
+            arr[i] = arr[arr.length - 1 - i];
+            arr[arr.length - 1 - i] = temp;
         }
-        int len = sb.length();
-        if (len > 0) {
-            sb.deleteCharAt(len - 1);
-        }
-        return sb.toString();
+        return String.join(" ", arr);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
