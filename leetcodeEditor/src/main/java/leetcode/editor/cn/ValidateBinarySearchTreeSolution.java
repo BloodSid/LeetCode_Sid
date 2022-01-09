@@ -13,21 +13,17 @@ public class ValidateBinarySearchTreeSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean isValidBST(TreeNode root) {
-        Deque<TreeNode> stack = new LinkedList<>();
-        TreeNode pre = null;
-        while (!stack.isEmpty() || root != null) {
-            while (root != null) {
-                stack.push(root);
-                root = root.left;
-            }
-            root = stack.pop();
-            if (pre != null && root.val <= pre.val) {
-                return false;
-            }
-            pre = root;
-            root = root.right;
+        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    boolean isValidBST(TreeNode root, long lower, long upper) {
+        if (root == null) {
+            return true;
         }
-        return true;
+        if (root.val <= lower || root.val >= upper) {
+            return false;
+        }
+        return isValidBST(root.left, lower, root.val) && isValidBST(root.right, root.val, upper);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
