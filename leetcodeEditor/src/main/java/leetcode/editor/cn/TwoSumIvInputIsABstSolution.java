@@ -12,30 +12,34 @@ import java.util.*;
 public class TwoSumIvInputIsABstSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    int[] values = new int[10001];
+    TreeNode root;
+    int target;
 
-    public boolean findTarget(TreeNode root, int k) {
-        Deque<TreeNode> stack = new ArrayDeque<>();
-        int index = 0;
-        while (!stack.isEmpty() || root != null) {
-            while (root != null) {
-                stack.push(root);
-                root = root.left;
-            }
-            root = stack.pop();
-            values[index++] = root.val;
-            root = root.right;
+    public boolean findTarget(TreeNode root, int target) {
+        this.root = root;
+        this.target = target;
+        return findTarget(root);
+    }
+
+    boolean findTarget(TreeNode node) {
+        if (node == null) {
+            return false;
         }
-        int l = 0;
-        int r = index - 1;
-        while (l < r) {
-            int sum = values[l] + values[r];
-            if (sum < k) {
-                l++;
-            } else if (sum > k) {
-                r--;
-            } else {
+        if (2 * node.val != target && findValue(target - node.val)) {
+            return true;
+        }
+        return findTarget(node.left) || findTarget(node.right);
+    }
+
+    boolean findValue(int val) {
+        TreeNode p = root;
+        while (p != null) {
+            if (p.val == val) {
                 return true;
+            } else if (p.val < val) {
+                p = p.right;
+            } else {
+                p = p.left;
             }
         }
         return false;
