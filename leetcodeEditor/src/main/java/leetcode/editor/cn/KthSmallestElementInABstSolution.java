@@ -48,21 +48,29 @@ import java.util.*;
 public class KthSmallestElementInABstSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    int result;
+    int k;
+
     public int kthSmallest(TreeNode root, int k) {
-        Deque<TreeNode> stack = new LinkedList<>();
-        while (root != null || !stack.isEmpty()) {
-            while (root != null) {
-                stack.push(root);
-                root = root.left;
-            }
-            root = stack.pop();
-            k--;
-            if (k == 0) {
-                break;
-            }
-            root = root.right;
+        this.k = k;
+        dfs(root);
+        return result;
+    }
+
+    void dfs(TreeNode root) {
+        if (root == null) {
+            return;
         }
-        return root.val;
+        dfs(root.left);
+        if (k == 0) {
+            return;
+        }
+        k--;
+        if (k == 0) {
+            result = root.val;
+        }
+        dfs(root.right);
+
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
