@@ -45,8 +45,9 @@ class Solution {
                         continue;
                     }
                     if (!visited.contains(next) && !blockedPoints.contains(next)) {
-                        visited.add(next);
-                        queue.offer(next);
+                        if (visited.add(next)) {
+                            queue.offer(next);
+                        }
                     }
                 }
             }
@@ -89,11 +90,14 @@ class Group {
     }
 
     boolean add(int x, int y) {
-        count++;
         if (!group.containsKey(x)) {
             group.put(x, new HashSet<>());
         }
-        return group.get(x).add(y);
+        boolean changed = group.get(x).add(y);
+        if (changed) {
+            count++;
+        }
+        return changed;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
