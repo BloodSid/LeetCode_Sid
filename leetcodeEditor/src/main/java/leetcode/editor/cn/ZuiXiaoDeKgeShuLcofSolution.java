@@ -16,21 +16,18 @@ class Solution {
         if (k == 0) {
             return new int[0];
         }
-        PriorityQueue<Integer> heap = new PriorityQueue<>(k, (o1, o2) -> o2 - o1);
-        for (int i = 0; i < k; i++) {
-            heap.offer(arr[i]);
+        int[] freq = new int[10_001];
+        for (int i : arr) {
+            freq[i]++;
         }
-        for (int i = k; i < arr.length; i++) {
-            if (arr[i] < heap.peek()) {
-                heap.poll();
-                heap.offer(arr[i]);
-            }
-        }
-        Iterator<Integer> itr = heap.iterator();
         int[] result = new int[k];
-        int index = 0;
-        while (itr.hasNext()) {
-            result[index++] = itr.next();
+        int num = 0;
+        for (int i = 0; i < k; i++) {
+            while (freq[num] == 0) {
+                num++;
+            }
+            result[i] = num;
+            freq[num]--;
         }
         return result;
     }
