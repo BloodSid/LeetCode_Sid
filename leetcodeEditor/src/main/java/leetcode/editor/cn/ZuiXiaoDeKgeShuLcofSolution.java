@@ -13,15 +13,28 @@ public class ZuiXiaoDeKgeShuLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int[] getLeastNumbers(int[] arr, int k) {
-        Arrays.sort(arr);
-        int[] result = new int[k];
+        if (k == 0) {
+            return new int[0];
+        }
+        PriorityQueue<Integer> heap = new PriorityQueue<>(k, (o1, o2) -> o2 - o1);
         for (int i = 0; i < k; i++) {
-            result[i] = arr[i];
+            heap.offer(arr[i]);
+        }
+        for (int i = k; i < arr.length; i++) {
+            if (arr[i] < heap.peek()) {
+                heap.poll();
+                heap.offer(arr[i]);
+            }
+        }
+        Iterator<Integer> itr = heap.iterator();
+        int[] result = new int[k];
+        int index = 0;
+        while (itr.hasNext()) {
+            result[index++] = itr.next();
         }
         return result;
     }
 }
-
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
