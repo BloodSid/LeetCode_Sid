@@ -17,22 +17,20 @@ class MedianFinder {
 
     public MedianFinder() {
         maxHeap = new PriorityQueue<>(Comparator.reverseOrder());
-        maxHeap.offer(Integer.MIN_VALUE);
         minHeap = new PriorityQueue<>();
-        minHeap.offer(Integer.MAX_VALUE);
     }
 
     public void addNum(int num) {
-        if (num > minHeap.peek()) {
-            minHeap.offer(num);
-        } else {
+        if (maxHeap.isEmpty() || maxHeap.peek() > num) {
             maxHeap.offer(num);
-        }
-        int diff = maxHeap.size() - minHeap.size();
-        if (diff == -1) {
-            maxHeap.offer(minHeap.poll());
-        } else if (diff == 2) {
-            minHeap.offer(maxHeap.poll());
+            if (maxHeap.size() - minHeap.size() == 2) {
+                minHeap.offer(maxHeap.poll());
+            }
+        } else {
+            minHeap.offer(num);
+            if (maxHeap.size() - minHeap.size() == -1) {
+                maxHeap.offer(minHeap.poll());
+            }
         }
     }
 
