@@ -52,4 +52,12 @@ public class TrappingRainWaterIiSolutionTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testTrapRainWater4() throws Exception {
+        int[][] heightMap = {{0, 1, 0}, {1, 0, 1}, {0, 1, 0}};
+        int expected = 1;
+        int actual = solution.trapRainWater(heightMap);
+        assertEquals(expected, actual);
+    }
+
 }
