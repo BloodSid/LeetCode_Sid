@@ -12,18 +12,19 @@ import java.util.*;
 public class PingHengErChaShuLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    HashMap<TreeNode, Integer> depth = new HashMap<>();
-
     public boolean isBalanced(TreeNode root) {
         if (root == null) {
             return true;
         }
-        boolean isLeftBalanced = isBalanced(root.left);
-        boolean isRightBalanced = isBalanced(root.right);
-        int left = root.left == null ? 0 : depth.get(root.left);
-        int right = root.right == null ? 0 : depth.get(root.right);
-        depth.put(root, Math.max(left, right) + 1);
-        return isLeftBalanced && isRightBalanced && Math.abs(left - right) <= 1;
+        return isBalanced(root.left) && isBalanced(root.right)
+                && Math.abs(getDepth(root.left) - getDepth(root.right)) <= 1;
+    }
+
+    int getDepth(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        return Math.max(getDepth(node.left), getDepth(node.right)) + 1;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
