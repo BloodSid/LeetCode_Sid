@@ -12,21 +12,19 @@ import java.util.*;
 public class BinaryTreeInorderTraversalSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    List<Integer> list;
-
     public List<Integer> inorderTraversal(TreeNode root) {
-        list = new LinkedList<>();
-        inorder(root);
-        return list;
-    }
-
-    private void inorder(TreeNode root) {
-        if (root == null) {
-            return;
+        List<Integer> list = new ArrayList<>();
+        Deque<TreeNode> stack = new LinkedList<>();
+        while (!stack.isEmpty() || root != null) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            list.add(root.val);
+            root = root.right;
         }
-        inorder(root.left);
-        list.add(root.val);
-        inorder(root.right);
+        return list;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

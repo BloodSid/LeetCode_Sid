@@ -12,20 +12,26 @@ import java.util.*;
 public class BinaryTreePostorderTraversalSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    List<Integer> list;
-
-    private void postorder(TreeNode root) {
-        if (root == null) {
-            return;
-        }
-        postorder(root.left);
-        postorder(root.right);
-        list.add(root.val);
-    }
-
     public List<Integer> postorderTraversal(TreeNode root) {
-        list = new LinkedList<>();
-        postorder(root);
+        List<Integer> list = new ArrayList<>();
+        Deque<TreeNode> stack = new LinkedList<>();
+        TreeNode cur = root, pre = null;
+        while (!stack.isEmpty() || cur != null) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            // 如果该节点没有右子树，或者右子树已经加入结果，则该节点加入结果
+            if (cur.right == null || cur.right == pre) {
+                list.add(cur.val);
+                pre = cur;
+                cur = null;
+            } else {
+                stack.push(cur);
+                cur = cur.right;
+            }
+        }
         return list;
     }
 }
