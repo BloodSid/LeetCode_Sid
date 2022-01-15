@@ -13,14 +13,19 @@ public class ShuZhiDeZhengShuCiFangLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public double myPow(double x, int n) {
-        if (n == 0)
-            return 1;
-        if (n % 2 == 0) {
-            return myPow(x * x, n / 2);
-        } else if (n > 0) {
-            return myPow(x * x, n / 2) * x;
-        } else
-            return myPow(x * x, n / 2) / x;
+        double pow = 1;
+        while (n != 0) {
+            if ((n & 1) == 1) {
+                if (n > 0) {
+                    pow *= x;
+                } else {
+                    pow /= x;
+                }
+            }
+            n /= 2;
+            x *= x;
+        }
+        return pow;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
