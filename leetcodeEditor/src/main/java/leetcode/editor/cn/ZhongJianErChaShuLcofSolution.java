@@ -23,22 +23,20 @@ class Solution {
         for (int i = 0; i < n; i++) {
             hash.put(inorder[i], i);
         }
-        return buildTree(0, n - 1, 0, n - 1);
+        return buildTree(0, 0, n - 1);
     }
 
-    TreeNode buildTree(int l1, int r1, int l2, int r2) {
-        if (l1 > r1) {
+    // mid代表父节点在preorder中的下标，left和right代表父节点及其左右子树在inorder中的范围
+    TreeNode buildTree(int parent, int left, int right) {
+        if (left > right) {
             return null;
         }
-        if (l1 == r1) {
-            return new TreeNode(preorder[l1]);
-        }
-        int val = preorder[l1];
+        int val = preorder[parent];
         TreeNode node = new TreeNode(val);
+        // 划分父节点，左子树，右子树
         int mid = hash.get(val);
-        int leftSize = mid - l2;
-        node.left = buildTree(l1 + 1, l1 + leftSize, l2, mid - 1);
-        node.right = buildTree(l1 + leftSize + 1, r1, mid + 1, r2);
+        node.left = buildTree(parent + 1, left, mid - 1);
+        node.right = buildTree(parent + mid - left + 1, mid + 1, right);
         return node;
     }
 }
