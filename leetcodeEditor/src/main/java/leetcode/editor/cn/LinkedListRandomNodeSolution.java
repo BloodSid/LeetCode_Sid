@@ -12,20 +12,23 @@ import java.util.*;
 public class LinkedListRandomNodeSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    Random r = new Random();
-    Integer[] values;
+    Random r;
+    ListNode head;
 
     public Solution(ListNode head) {
-        List<Integer> list = new ArrayList<>();
-        while (head != null) {
-            list.add(head.val);
-            head = head.next;
-        }
-        values = list.toArray(new Integer[0]);
+        r = new Random();
+        this.head = head;
     }
 
     public int getRandom() {
-        return values[r.nextInt(values.length)];
+        int index = 1; int ans = 0;
+        for (ListNode node = head; node != null; node = node.next) {
+            if (r.nextInt(index) == 0) {
+                ans = node.val;
+            }
+            index++;
+        }
+        return ans;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
