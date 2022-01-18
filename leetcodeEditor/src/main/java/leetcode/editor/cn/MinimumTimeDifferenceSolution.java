@@ -16,6 +16,9 @@ class Solution {
     int MINUTES_IN_A_DAY = 60 * 24;
 
     public int findMinDifference(List<String> timePoints) {
+        if (timePoints.size() > 1440) {
+            return 0;
+        }
         timePoints.sort(String::compareTo);
         String pre = timePoints.get(timePoints.size() - 1);
         int min = Integer.MAX_VALUE;
