@@ -21,14 +21,11 @@ class Solution {
         for (int i = 1; i < pre.length; i++) {
             pre[i] = a[i - 1] * pre[i - 1];
         }
-        int[] post = new int[a.length];
-        post[a.length - 1] = 1;
-        for (int i = post.length - 2; i >= 0; i--) {
-            post[i] = a[i + 1] * post[i + 1];
-        }
         int[] res = new int[a.length];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = post[i] * pre[i];
+        int post = 1;
+        for (int i = res.length - 1; i >= 0; i--) {
+            res[i] = post * pre[i];
+            post *= a[i];
         }
         return res;
     }
