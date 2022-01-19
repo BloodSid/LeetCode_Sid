@@ -13,17 +13,14 @@ public class ContainsDuplicateIiSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean containsNearbyDuplicate(int[] nums, int k) {
-        Set<Integer> set = new HashSet<>(k);
-        for (int i = 0; i < Math.min(k, nums.length); i++) {
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
             if (!set.add(nums[i])) {
                 return true;
             }
-        }
-        for (int i = 0, j = k; j < nums.length; i++, j++) {
-            if (!set.add(nums[j])) {
-                return true;
+            if (i >= k) {
+                set.remove(nums[i - k]);
             }
-            set.remove(nums[i]);
         }
         return false;
     }
