@@ -28,7 +28,9 @@ class Solution {
         }
         char temp = arr[index];
         for (int i = index; i < arr.length; i++) {
-            // if (i != index)
+            if (i != index && arr[i] == temp) {
+                continue;
+            }
             arr[index] = arr[i];
             arr[i] = temp;
             dfs(arr, index + 1);
