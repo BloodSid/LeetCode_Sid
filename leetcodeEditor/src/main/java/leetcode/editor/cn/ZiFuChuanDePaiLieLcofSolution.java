@@ -12,25 +12,27 @@ import java.util.*;
 public class ZiFuChuanDePaiLieLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    Set<String> set;
+    List<String> list;
 
     public String[] permutation(String s) {
-        set = new HashSet<>();
+        list = new LinkedList<>();
         char[] arr = s.toCharArray();
         dfs(arr, 0);
-        return set.toArray(new String[0]);
+        return list.toArray(new String[0]);
     }
 
     void dfs(char[] arr, int index) {
         if (index == arr.length) {
-            set.add(new String(arr));
+            list.add(new String(arr));
             return;
         }
         char temp = arr[index];
+        boolean[] visited = new boolean[26];
         for (int i = index; i < arr.length; i++) {
-            if (i != index && arr[i] == temp) {
+            if (visited[arr[i] - 'a']) {
                 continue;
             }
+            visited[arr[i] - 'a'] = true;
             arr[index] = arr[i];
             arr[i] = temp;
             dfs(arr, index + 1);
