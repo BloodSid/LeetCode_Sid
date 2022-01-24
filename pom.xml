@@ -49,6 +49,7 @@
         <module>59.SpiralMatrixII</module>
         <module>LinkedList</module>
         <module>context0123</module>
+        <module>NextPermutation</module>
     </modules>
 
     <properties>
