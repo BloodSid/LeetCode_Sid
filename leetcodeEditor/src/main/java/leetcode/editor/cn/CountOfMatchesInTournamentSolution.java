@@ -13,12 +13,8 @@ public class CountOfMatchesInTournamentSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int numberOfMatches(int n) {
-        int sum = 0;
-        while (n > 1) {
-            sum += n >> 1;
-            n = (n + 1) >> 1;
-        }
-        return sum;
+        // 一场比赛淘汰一个队，最后剩一个队
+        return n - 1;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
