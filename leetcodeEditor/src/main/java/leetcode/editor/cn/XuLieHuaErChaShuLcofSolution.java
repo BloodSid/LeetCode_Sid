@@ -7,18 +7,35 @@ import java.util.*;
  *
  * @author IronSid
  * @version 1.0
- * @since 2022-01-23 13:14:31 
+ * @since 2022-01-23 13:14:31
  */
 public class XuLieHuaErChaShuLcofSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 public class Codec {
+    StringBuilder sb;
+
     public String serialize(TreeNode root) {
         if (root == null) {
             return "X";
         }
-        String left = "(" + serialize(root.left) + ")";
-        String right = "(" + serialize(root.right) + ")";
-        return left + root.val + right;
+        sb = new StringBuilder();
+        dfs(root.left);
+        sb.append(root.val);
+        dfs(root.right);
+        return sb.toString();
+    }
+
+    void dfs(TreeNode node) {
+        // 任何子树都被一对括号包起，而树本身不被括号包起
+        sb.append('(');
+        if (node == null) {
+            sb.append('X');
+        } else {
+            dfs(node.left);
+            sb.append(node.val);
+            dfs(node.right);
+        }
+        sb.append(')');
     }
 
     int ptr;
@@ -68,7 +85,6 @@ public class Codec {
         return subTree;
     }
 }
-
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
