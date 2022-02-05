@@ -34,6 +34,7 @@
         <module name="916.WordSubsets" />
         <module name="HJ44_Sudoku" />
         <module name="NextPermutation" />
+        <module name="context0205" />
         <module name="HJ98_SimpleVendingSystem" />
         <module name="context0123" />
         <module name="1417.ReformatTheString" />

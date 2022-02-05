@@ -50,6 +50,7 @@
         <module>LinkedList</module>
         <module>context0123</module>
         <module>NextPermutation</module>
+        <module>context0205</module>
     </modules>
 
     <properties>
