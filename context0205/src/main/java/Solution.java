@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 /**
@@ -27,14 +28,14 @@ public class Solution {
             int i1, i2;
             if (nums[o1] < pivot) {
                 i1 = -1;
-            } else if (nums[o1] > pivot){
+            } else if (nums[o1] > pivot) {
                 i1 = 1;
             } else {
                 i1 = 0;
             }
             if (nums[o2] < pivot) {
                 i2 = -1;
-            } else if (nums[o2] > pivot){
+            } else if (nums[o2] > pivot) {
                 i2 = 1;
             } else {
                 i2 = 0;
@@ -124,10 +125,139 @@ public class Solution {
         return res;
     }
 
+    public int[] sortEvenOdd(int[] nums) {
+        int n = nums.length;
+        Integer[] odd = new Integer[n / 2];
+        int p1 = 0;
+        Integer[] even = new Integer[n - odd.length];
+        int p2 = 0;
+        for (int i = 0; i < n; i++) {
+            if ((i & 1) == 1) {
+                odd[p1++] = i;
+            } else {
+                even[p2++] = i;
+            }
+        }
+        Arrays.sort(odd, (o1, o2) -> nums[o2] - nums[o1]);
+        Arrays.sort(even, ((o1, o2) -> nums[o1] - nums[o2]));
+        int[] res = new int[n];
+        for (int i = 0; i < odd.length; i++) {
+            res[2 * i + 1] = nums[odd[i]];
+        }
+        for (int i = 0; i < even.length; i++) {
+            res[2 * i] = nums[even[i]];
+        }
+        return res;
+    }
+
+    public long smallestNumber(long num) {
+        if (num == 0) return 0;
+        char[] arr = String.valueOf(num).toCharArray();
+        if (arr[0] == '-') {
+            Arrays.sort(arr, 1, arr.length);
+            for (int l = 1, r = arr.length - 1; l < r; l++, r--) {
+                char tem = arr[l];
+                arr[l] = arr[r];
+                arr[r] = tem;
+            }
+        } else {
+            Arrays.sort(arr);
+            if (arr[0] == '0') {
+                int i = 0;
+                while (arr[i] == '0') {
+                    i++;
+                }
+                arr[0] = arr[i];
+                arr[i] = '0';
+            }
+        }
+        return Long.parseLong(new String(arr));
+    }
+
+    public int minimumTime(String str) {
+        return 0;
+    }
+
     public static void main(String[] args) {
         int[] nums = {3, 1, 2};
         Solution s = new Solution();
         long res = s.minimumDifference(nums);
         System.out.println(res);
+    }
+}
+
+class Bitset {
+    int size;
+    int[] a;
+    int tail;
+
+    public Bitset(int size) {
+        this.size = size;
+        tail = size % 32 == 0 ? 32 : size % 32;
+        a = new int[(size - 1) / 32 + 1];
+    }
+
+    public void fix(int idx) {
+        a[idx / 32] |= 1 << (32 - idx % 32 - 1);
+    }
+
+    public void unfix(int idx) {
+        int k = a[idx / 32];
+        int m = 1 << (32 - idx % 32 - 1);
+        if ((k & m) != 0) {
+            a[idx / 32] = k - m;
+        }
+    }
+
+    public void flip() {
+        for (int i = 0; i < a.length - 1; i++) {
+            a[i] = ~a[i];
+        }
+        int t = a[a.length - 1];
+        t += (1 << (32 - tail)) - 1;
+        a[a.length - 1] = ~t;
+    }
+
+    public boolean all() {
+        for (int i = 0; i < a.length - 1; i++) {
+            if (a[i] != -1) {
+                return false;
+            }
+        }
+        return Integer.bitCount(a[a.length - 1]) == tail;
+    }
+
+    public boolean one() {
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int count() {
+        int sum = 0;
+        for (int i = 0; i < a.length; i++) {
+            sum += Integer.bitCount(a[i]);
+        }
+        return sum;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < a.length - 1; i++) {
+            String s = Integer.toBinaryString(a[i]);
+            for (int i1 = 0; i1 < 32 - s.length(); i1++) {
+                sb.append('0');
+            }
+            sb.append(s);
+        }
+        String s = Integer.toBinaryString(a[a.length - 1]);
+        char[] arr = new char[32 - s.length()];
+        Arrays.fill(arr, '0');
+        s = new String(arr) + s;
+        sb.append(s, 0, tail);
+        return sb.toString();
     }
 }
