@@ -64,22 +64,18 @@ class Solution {
 }
 
 class BlockSet {
-    HashMap<Integer, HashSet<Integer>> cols = new HashMap<>();
+    HashSet<Long> blocks = new HashSet<>();
 
     void add(int col, int line) {
-        cols.putIfAbsent(col, new HashSet<>());
-        cols.get(col).add(line);
+        blocks.add(((long) col << 32) + line);
     }
 
     boolean contains(int col, int line) {
-        if (cols.containsKey(col)) {
-            return cols.get(col).contains(line);
-        }
-        return false;
+        return blocks.contains(((long) col << 32) + line);
     }
 
     void remove(int col, int line) {
-        cols.get(col).remove(line);
+        blocks.remove(((long) col << 32) + line);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
