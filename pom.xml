@@ -11,7 +11,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>RELEASE</version>
-            <scope>test</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -51,6 +51,7 @@
         <module>context0123</module>
         <module>NextPermutation</module>
         <module>context0205</module>
+        <module>HJ</module>
     </modules>
 
     <properties>
