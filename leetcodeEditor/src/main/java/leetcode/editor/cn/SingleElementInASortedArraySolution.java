@@ -17,8 +17,10 @@ class Solution {
         int r = nums.length - 1;
         while (l < r) {
             int mid = l + r >>> 1;
-            if (nums[mid] == nums[(mid & 1) == 1 ? mid - 1 : mid + 1]) {
-                l = mid + 1;
+            // 只搜索偶数下标
+            mid -= mid & 1;
+            if (nums[mid] == nums[mid + 1]) {
+                l = mid + 2;
             } else {
                 r = mid;
             }
