@@ -70,6 +70,8 @@ class Solution {
         return islandCount;
     }
 
+    int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
     int bfs(int line, int column) {
         if (grid[line][column] != '1') {
             return 0;
@@ -79,29 +81,17 @@ class Solution {
             grid[line][column]++;
             while (!queue.isEmpty()) {
                 int[] head = queue.poll();
-                for (int[] next : getNext(head)) {
-                    if (grid[next[0]][next[1]] == '1') {
-                        queue.offer(next);
-                        grid[next[0]][next[1]]++;
+                for (int[] dir : dirs) {
+                    int nl = head[0] + dir[0];
+                    int nc = head[1] + dir[1];
+                    if (nl >= 0 && nl < grid.length && nc >= 0 && nc < grid[0].length && grid[nl][nc] == '1') {
+                        queue.offer(new int[]{nl, nc});
+                        grid[nl][nc]++;
                     }
                 }
             }
         }
         return 1;
-    }
-
-    int[][] offsets = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-
-    List<int[]> getNext(int[] curr) {
-        List<int[]> next = new ArrayList<>(4);
-        for (int[] offset : offsets) {
-            int line = offset[0] + curr[0];
-            int col = offset[1] + curr[1];
-            if (line >= 0 && line < grid.length && col >= 0 && col < grid[0].length) {
-                next.add(new int[]{line, col});
-            }
-        }
-        return next;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
