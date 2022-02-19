@@ -52,6 +52,7 @@
         <module>NextPermutation</module>
         <module>context0205</module>
         <module>HJ</module>
+        <module>context</module>
     </modules>
 
     <properties>
