@@ -57,41 +57,61 @@ import java.util.*;
 public class NumberOfIslandsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    char[][] grid;
-
-    public int numIslands(char[][] grid) {
-        int islandCount = 0;
-        this.grid = grid;
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                islandCount += bfs(i, j);
-            }
-        }
-        return islandCount;
-    }
-
+    int[] p;
+    int[] r;
+    int count;
     int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
-    int bfs(int line, int column) {
-        if (grid[line][column] != '1') {
-            return 0;
-        } else {
-            Queue<int[]> queue = new ArrayDeque<>();
-            queue.offer(new int[]{line, column});
-            grid[line][column]++;
-            while (!queue.isEmpty()) {
-                int[] head = queue.poll();
-                for (int[] dir : dirs) {
-                    int nl = head[0] + dir[0];
-                    int nc = head[1] + dir[1];
-                    if (nl >= 0 && nl < grid.length && nc >= 0 && nc < grid[0].length && grid[nl][nc] == '1') {
-                        queue.offer(new int[]{nl, nc});
-                        grid[nl][nc]++;
+    public int numIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        p = new int[n * m];
+        r = new int[n * m];
+        count = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    p[i * n + j] = i * n + j;
+                    count++;
+                }
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    for (int[] dir : dirs) {
+                        int ni = i + dir[0], nj = j + dir[1];
+                        if (ni >= 0 && ni < m && nj >= 0 && nj < n && grid[ni][nj] == '1') {
+                            union(i * n + j, ni * n + nj);
+                        }
                     }
                 }
             }
         }
-        return 1;
+        return count;
+    }
+
+    void union(int a, int b) {
+        int rootA = find(a);
+        int rootB = find(b);
+        if (rootA != rootB) {
+            if (r[a] > r[b]) {
+                p[rootB] = rootA;
+            } else if (r[a] < r[b]) {
+                p[rootA] = rootB;
+            } else {
+                r[a]++;
+                p[rootB] = rootA;
+            }
+            count--;
+        }
+    }
+
+    int find(int i) {
+        if (p[i] != i) {
+            return find(p[i]);
+        }
+        return p[i];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
