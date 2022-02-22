@@ -12,57 +12,37 @@ import java.util.*;
 public class MaxAreaOfIslandSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    private int[] p;
-    private int max;
-    private int[] cnt;
-    int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    private int[][] grid;
+    private int m;
+    private int n;
 
     public int maxAreaOfIsland(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        p = new int[m * n];
-        cnt = new int[m * n];
-        max = 0;
+        m = grid.length;
+        n = grid[0].length;
+        this.grid = grid;
+        int max = 0;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1) {
-                    p[i * n + j] = i * n + j;
-                    cnt[i * n + j] = 1;
-                    max = 1;
-                }
-            }
-        }
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1) {
-                    for (int[] dir : dirs) {
-                        int ni = i + dir[0];
-                        int nj = j + dir[1];
-                        if (ni >= 0 && ni < m && nj >= 0 && nj < n && grid[ni][nj] == 1) {
-                            union(i * n + j, ni * n + nj);
-                        }
-                    }
-                }
+                max = Math.max(max, dfs(i, j));
             }
         }
         return max;
     }
 
-    void union(int a, int b) {
-        int rootA = find(a);
-        int rootB = find(b);
-        if (rootA != rootB) {
-            p[rootB] = rootA;
-            cnt[rootA] += cnt[rootB];
-            max = Math.max(max, cnt[rootA]);
+    private int dfs(int i, int j) {
+        if (i < 0 || i >= m || j < 0 || j >= n) {
+            return 0;
         }
-    }
-
-    int find(int i) {
-        if (p[i] != i) {
-            return find(p[i]);
+        if (grid[i][j] == 0) {
+            return 0;
         }
-        return p[i];
+        int area = 1;
+        grid[i][j] = 0;
+        area += dfs(i + 1, j);
+        area += dfs(i - 1, j);
+        area += dfs(i, j + 1);
+        area += dfs(i, j - 1);
+        return area;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
