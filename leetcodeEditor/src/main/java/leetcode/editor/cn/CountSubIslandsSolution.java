@@ -23,10 +23,10 @@ class Solution {
         p = new int[m * n];
         this.grid1 = grid1;
         this.grid2 = grid2;
-        // 并查集，对grid1的相连陆地进行合并
+        // 并查集，对grid2的相连陆地进行合并
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid1[i][j] == 1) {
+                if (grid2[i][j] == 1) {
                     p[i * n + j] = i * n + j;
                 } else {
                     p[i * n + j] = -1;
@@ -35,43 +35,31 @@ class Solution {
         }
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid1[i][j] == 1) {
-                    if (i < m - 1 && grid1[i + 1][j] == 1) union(i * n + j, (i + 1) * n + j);
-                    if (j < n - 1 && grid1[i][j + 1] == 1) union(i * n + j, i * n + j + 1);
+                if (grid2[i][j] == 1) {
+                    if (i < m - 1 && grid2[i + 1][j] == 1) union(i * n + j, (i + 1) * n + j);
+                    if (j < n - 1 && grid2[i][j + 1] == 1) union(i * n + j, i * n + j + 1);
                 }
             }
         }
-        // 对grid2进行dfs, 如果以a为起点的一次搜索中，搜到了在grid1中与a不处于同一个联通分量的格子，则该岛屿不是子岛屿
-        int cnt = 0;
+        // 记录连通分量的根节点
+        HashSet<Integer> islands = new HashSet<>();
+        HashSet<Integer> notSub = new HashSet<>();
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid2[i][j] == 1) {
-                    if (dfs(i, j, i * n + j)) {
-                        cnt++;
+                    int cur = i * n + j;
+                    int root = find(cur);
+                    if (root == cur) {
+                        islands.add(root);
+                    }
+                    if (grid1[i][j] == 0) {
+                        notSub.add(root);
                     }
                 }
             }
         }
-        return cnt;
-    }
-
-    // 进行bfs的同时判断是否是子岛屿
-    boolean dfs(int i, int j, int source) {
-        if (i < 0 || i >= m || j < 0 || j >= n) {
-            return true;
-        }
-        if (grid2[i][j] == 0) {
-            return true;
-        }
-        grid2[i][j] = 0;
-        // 若与源点不是一个连通分量则不是子岛屿
-        // 若在grid1中是海洋则不是子岛屿
-        boolean isSubIsland = grid1[i][j] == 1 && find(i * n + j) == find(source);
-        boolean d = dfs(i, j + 1, source);
-        boolean u = dfs(i, j - 1, source);
-        boolean r = dfs(i + 1, j, source);
-        boolean l = dfs(i - 1, j, source);
-        return isSubIsland && d && u && r && l;
+        islands.removeAll(notSub);
+        return islands.size();
     }
 
     void union(int a, int b) {
