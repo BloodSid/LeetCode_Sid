@@ -12,73 +12,48 @@ import java.util.*;
 public class CountSubIslandsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    int[] p;
     int m, n;
-    int[][] grid1;
     int[][] grid2;
 
     public int countSubIslands(int[][] grid1, int[][] grid2) {
         m = grid1.length;
         n = grid1[0].length;
-        p = new int[m * n];
-        this.grid1 = grid1;
         this.grid2 = grid2;
-        // 并查集，对grid2的相连陆地进行合并
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid2[i][j] == 1) {
-                    p[i * n + j] = i * n + j;
-                } else {
-                    p[i * n + j] = -1;
-                }
+                // 1表示g1中没有的格子，2表示g1也有的格子
+                if (grid2[i][j] == 1) grid2[i][j] += grid1[i][j];
             }
         }
+        int cnt = 0;
+        // 找出只包含2的岛屿数量
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid2[i][j] == 1) {
-                    if (i < m - 1 && grid2[i + 1][j] == 1) union(i * n + j, (i + 1) * n + j);
-                    if (j < n - 1 && grid2[i][j + 1] == 1) union(i * n + j, i * n + j + 1);
-                }
-            }
-        }
-        // 记录连通分量的根节点
-        HashSet<Integer> islands = new HashSet<>();
-        HashSet<Integer> notSub = new HashSet<>();
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (grid2[i][j] == 1) {
-                    int cur = i * n + j;
-                    int root = find(cur);
-                    if (root == cur) {
-                        islands.add(root);
-                    }
-                    if (grid1[i][j] == 0) {
-                        notSub.add(root);
+                if (grid2[i][j] == 2) {
+                    if (dfs(i, j)) {
+                        cnt++;
                     }
                 }
             }
         }
-        islands.removeAll(notSub);
-        return islands.size();
+        return cnt;
     }
 
-    void union(int a, int b) {
-        int rootA = find(a);
-        int rootB = find(b);
-        if (rootA != rootB) {
-            p[rootB] = rootA;
+    boolean dfs(int i, int j) {
+        if (i < 0 || i >= m || j < 0 || j >= n) {
+            return true;
         }
-    }
-
-    int find(int a) {
-        if (p[a] == -1) {
-            return -1;
+        if (grid2[i][j] != 2) {
+            return grid2[i][j] == 0;
         }
-        // 路径压缩
-        if (p[a] != a) {
-            p[a] = find(p[a]);
-        }
-        return p[a];
+        grid2[i][j] = 0;
+        // 若与源点不是一个连通分量则不是子岛屿
+        // 若在grid1中是海洋则不是子岛屿
+        boolean d = dfs(i, j + 1);
+        boolean u = dfs(i, j - 1);
+        boolean r = dfs(i + 1, j);
+        boolean l = dfs(i - 1, j);
+        return d && u && r && l;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
