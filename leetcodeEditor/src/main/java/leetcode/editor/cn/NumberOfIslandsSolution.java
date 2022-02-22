@@ -60,7 +60,7 @@ class Solution {
     int[] p;
     int[] r;
     int count;
-    int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    int[][] dirs = {{1, 0}, {0, 1}};
 
     public int numIslands(char[][] grid) {
         int m = grid.length;
