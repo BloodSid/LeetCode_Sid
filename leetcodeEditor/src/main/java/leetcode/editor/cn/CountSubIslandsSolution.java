@@ -7,7 +7,7 @@ import java.util.*;
  *
  * @author IronSid
  * @version 1.0
- * @since 2022-02-22 16:34:40 
+ * @since 2022-02-22 16:34:40
  */
 public class CountSubIslandsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -95,8 +95,9 @@ class Solution {
         if (p[a] == -1) {
             return -1;
         }
+        // 路径压缩
         if (p[a] != a) {
-            return find(p[a]);
+            p[a] = find(p[a]);
         }
         return p[a];
     }
