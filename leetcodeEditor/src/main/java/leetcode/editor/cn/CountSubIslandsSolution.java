@@ -13,7 +13,6 @@ public class CountSubIslandsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     int[] p;
-    int[] rank;
     int m, n;
     int[][] grid1;
     int[][] grid2;
@@ -22,7 +21,6 @@ class Solution {
         m = grid1.length;
         n = grid1[0].length;
         p = new int[m * n];
-        rank = new int[m * n];
         this.grid1 = grid1;
         this.grid2 = grid2;
         // 并查集，对grid1的相连陆地进行合并
@@ -80,14 +78,7 @@ class Solution {
         int rootA = find(a);
         int rootB = find(b);
         if (rootA != rootB) {
-            if (rank[rootA] > rank[rootB]) {
-                p[rootB] = rootA;
-            } else if (rank[rootA] < rank[rootB]) {
-                p[rootA] = rootB;
-            } else {
-                rank[rootA]++;
-                p[rootB] = rootA;
-            }
+            p[rootB] = rootA;
         }
     }
 
