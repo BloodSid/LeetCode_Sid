@@ -52,60 +52,44 @@ import java.util.*;
  */
 public class AsFarFromLandAsPossibleSolution {
 
-    //leetcode submit region begin(Prohibit modification and deletion)
-    class Solution {
-        public int maxDistance(int[][] grid) {
-            int m = grid.length;
-            int n = grid[0].length;
-            Queue<int[]> queue = new ArrayDeque<>();
-            int land = 0;
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (grid[i][j] == 1) {
-                        land++;
-                        queue.offer(new int[]{i, j});
+//leetcode submit region begin(Prohibit modification and deletion)
+class Solution {
+    int[][] dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+    public int maxDistance(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        Queue<int[]> queue = new ArrayDeque<>();
+        int land = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    land++;
+                    queue.offer(new int[]{i, j});
+                }
+            }
+        }
+        if (land == 0 || land == m * n) {
+            return -1;
+        }
+        int dist = -1;
+        while (!queue.isEmpty()) {
+            int len = queue.size();
+            for (int i = 0; i < len; i++) {
+                int[] cur = queue.poll();
+                for (int[] dir : dirs) {
+                    int x = cur[0] + dir[0], y = cur[1] + dir[1];
+                    if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 0) {
+                        queue.offer(new int[]{x, y});
+                        grid[x][y] = 1;
                     }
                 }
             }
-            if (land == 0 || land == m * n) {
-                return -1;
-            }
-            int dist = -1;
-            while (!queue.isEmpty()) {
-                int len = queue.size();
-                for (int i = 0; i < len; i++) {
-                    int[] head = queue.poll();
-                    List<int[]> nexts = getNext(head, m, n);
-                    for (int[] next : nexts) {
-                        if (grid[next[0]][next[1]] == 0) {
-                            queue.offer(next);
-                            grid[next[0]][next[1]] = 1;
-                        }
-                    }
-                }
-                dist++;
-            }
-
-            return dist;
+            dist++;
         }
-
-        int[][] offsets = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-
-        List<int[]> getNext(int[] pos, int m, int n) {
-            List<int[]> res = new ArrayList<>(4);
-            for (int[] offset : offsets) {
-                int[] next = new int[2];
-                for (int i = 0; i < 2; i++) {
-                    next[i] = pos[i] + offset[i];
-                }
-                if (next[0] >= 0 && next[0] < m && next[1] >= 0 && next[1] < n) {
-                    res.add(next);
-                }
-            }
-            return res;
-        }
-
+        return dist;
     }
+}
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
