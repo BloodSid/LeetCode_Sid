@@ -13,48 +13,18 @@ public class OptimalDivisionSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public String optimalDivision(int[] nums) {
-        int n = nums.length;
-        double[][] max = new double[n][n];
-        double[][] min = new double[n][n];
-        int[][] kIndex = new int[n][n];
-        for (int i = 0; i < n; i++) {
-            max[i][i] = nums[i];
-            min[i][i] = nums[i];
+        if (nums.length == 1) {
+            return String.valueOf(nums[0]);
         }
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = i + 1; j < n; j++) {
-                double t1 = Double.MIN_VALUE;
-                double t2 = Double.MAX_VALUE;
-                for (int k = i; k < j; k++) {
-                    t1 = Math.max(t1, max[i][k] / min[k + 1][j]);
-                    if (t1 == max[i][k] / min[k + 1][j]) {
-                        kIndex[i][j] = k + 1;
-                    }
-                    t2 = Math.min(t2, min[i][k] / max[k + 1][j]);
-                }
-                max[i][j] = t1;
-                min[i][j] = t2;
-            }
+        if (nums.length == 2) {
+            return nums[0] + "/" + nums[1];
         }
         StringBuilder sb = new StringBuilder();
-        int r = n - 1;
-        while (r >= 0) {
-            int l = kIndex[0][r];
-            if (l != r) {
-                sb.insert(0, ")");
-                for (int i = r; i >= l; i--) {
-                    sb.insert(0, nums[i]);
-                    sb.insert(0, "/");
-                }
-                sb.deleteCharAt(0);
-                sb.insert(0, "(");
-            } else {
-                sb.insert(0, nums[l]);
-            }
-            sb.insert(0, "/");
-            r = l - 1;
+        sb.append(nums[0]).append('/').append('(');
+        for (int i = 1; i < nums.length - 1; i++) {
+            sb.append(nums[i]).append('/');
         }
-        sb.deleteCharAt(0);
+        sb.append(nums[nums.length - 1]).append(')');
         return sb.toString();
     }
 }
