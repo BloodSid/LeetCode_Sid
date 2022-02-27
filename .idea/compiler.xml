@@ -16,7 +16,7 @@
         <module name="273.IntegerToEnglishWords" />
         <module name="54.SpiralMatrix" />
         <module name="5.LongestPalindromicSubstring" />
-        <module name="context" />
+        <module name="contest0123" />
         <module name="Sort" />
         <module name="36.ValidSudoku" />
         <module name="35.SearchInsertPosition" />
@@ -24,7 +24,9 @@
         <module name="767.ReorganizeString" />
         <module name="LargestIntArray" />
         <module name="37.SudokuSolver" />
+        <module name="contest0205" />
         <module name="HJ45" />
+        <module name="contest" />
         <module name="322.CoinChange" />
         <module name="HJ95_DoubleTORMB" />
         <module name="HJ28_Prime" />
@@ -36,9 +38,7 @@
         <module name="916.WordSubsets" />
         <module name="HJ44_Sudoku" />
         <module name="NextPermutation" />
-        <module name="context0205" />
         <module name="HJ98_SimpleVendingSystem" />
-        <module name="context0123" />
         <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>
