@@ -13,23 +13,12 @@ public class MinimumTimeToFinishTheRaceSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int minimumFinishTime(int[][] tires, int changeTime, int numLaps) {
-        // tire = {f, r}, f从小到大排序，若f相同，则按r从小到大排序
-        Arrays.sort(tires, (o1, o2) -> o1[0] == o2[0] ? o1[1] - o2[1] : o1[0] - o2[0]);
-        // 若一个tire的f和r都大于等于另外一个tire的f和r，则不考虑这个tire
-        int minR = Integer.MAX_VALUE;
-        List<int[]> tireList = new ArrayList<>();
-        for (int[] tire : tires) {
-            if (tire[1] < minR) {
-                minR = tire[1];
-                tireList.add(tire);
-            }
-        }
         // 只用一种轮胎跑 i 圈的最小时间
         int[] dp = new int[numLaps + 1];
         Arrays.fill(dp, Integer.MAX_VALUE);
         // 根据题意，一个轮胎连续使用一定圈数后，一定不如换新轮胎，这个圈数为：
         int MAX_REPEAT = 0;
-        for (int[] tire : tireList) {
+        for (int[] tire : tires) {
             long lapTime = tire[0], total = 0;
             // 若继续跑一圈的时间大于换新胎跑一圈的时间，则停止计算
             for (int i = 1; lapTime <= tire[0] + changeTime && i <= numLaps; i++) {
