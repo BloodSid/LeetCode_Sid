@@ -2,9 +2,7 @@ package Contest0305;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author IronSid
@@ -12,6 +10,7 @@ import java.util.List;
  */
 public class Solution {
     static Solution solution = new Solution();
+
     public int mostFrequent(int[] nums, int key) {
         int[] freq = new int[1001];
         int maxFreq = 0;
@@ -68,29 +67,42 @@ public class Solution {
         solution.sortJumbled(mapping, nums);
     }
 
+    Map<Integer, Set<Integer>> map = new HashMap<>();
+    List<List<Integer>> list = new ArrayList<>();
+    boolean[] visited;
+
     public List<List<Integer>> getAncestors(int n, int[][] edges) {
-        // e[i][j] 表示从i到j的边, 值是1表示通，值是0表示不通
-        int[][] e = new int[n][n];
         for (int[] edge : edges) {
-            e[edge[0]][edge[1]] = 1;
+            int f = edge[0], t = edge[1];
+            if (!map.containsKey(f)) map.put(f, new HashSet<>());
+            map.get(f).add(t);
         }
-        for (int k = 0; k < n; k++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    e[i][j] = e[i][j] | (e[i][k] & e[k][j]);
-                }
-            }
-        }
-        List<List<Integer>> list = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
-            List<Integer> ancestors = new ArrayList<>();
-            for (int j = 0; j < n; j++) {
-                if (e[j][i] == 1) {
-                    ancestors.add(j);
-                }
-            }
-            list.add(ancestors);
+            list.add(new ArrayList<>());
+        }
+        for (int i = 0; i < n; i++) {
+            visited = new boolean[n];
+            dfs(i, i);
         }
         return list;
+    }
+
+    void dfs(int cur, int root) {
+        visited[cur] = true;
+        if (root != cur) {
+            list.get(cur).add(root);
+        }
+        if (map.containsKey(cur)) {
+            for (Integer child : map.get(cur)) {
+                if (!visited[child]) dfs(child, root);
+            }
+        }
+
+    }
+
+
+
+    public int minMovesToMakePalindrome(String s) {
+        return 0;
     }
 }
