@@ -25,6 +25,7 @@ public class Solution {
         }
         return mostFreq;
     }
+
     public int[] sortJumbled(int[] mapping, int[] nums) {
         int n = nums.length;
         long[] mapTo = new long[n];
@@ -62,8 +63,8 @@ public class Solution {
 
     @Test
     public void test1() {
-        int[] mapping = {9,8,7,6,5,4,3,2,1,0};
-        int[] nums = {0,1,2,3,4,5,6,7,8,9};
+        int[] mapping = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+        int[] nums = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         solution.sortJumbled(mapping, nums);
     }
 
@@ -101,8 +102,17 @@ public class Solution {
     }
 
 
-
     public int minMovesToMakePalindrome(String s) {
+        if (s.length() == 1 || s.length() == 0) {
+            return 0;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(0) == s.charAt(s.length() - 1 - i)) {
+                return i + minMovesToMakePalindrome(s.substring(1, s.length() - 1 - i) + s.substring(s.length() - i));
+            } else if (s.charAt(s.length() - 1) == s.charAt(i)) {
+                return i + minMovesToMakePalindrome(s.substring(0, i) + s.substring(i + 1, s.length() - 1));
+            }
+        }
         return 0;
     }
 }
