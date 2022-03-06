@@ -1,6 +1,6 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import linkedList.ListNode;
 
 /**
  * 两两交换链表中的节点

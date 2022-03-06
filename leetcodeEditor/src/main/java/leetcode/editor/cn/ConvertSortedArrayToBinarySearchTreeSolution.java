@@ -1,6 +1,6 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import binaryTree.TreeNode;
 
 /**
  * 将有序数组转换为二叉搜索树

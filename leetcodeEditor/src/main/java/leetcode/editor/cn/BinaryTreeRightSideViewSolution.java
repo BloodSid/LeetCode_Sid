@@ -1,6 +1,10 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import binaryTree.TreeNode;
+
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 二叉树的右视图

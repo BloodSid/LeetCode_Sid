@@ -1,6 +1,6 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import linkedList.ListNode;
 
 /**
  * 从尾到头打印链表

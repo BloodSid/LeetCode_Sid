@@ -1,6 +1,6 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import linkedList.ListNode;
 
 /**
  * 合并两个有序链表

@@ -1,6 +1,6 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import linkedList.ListNode;
 
 /**
  * 分隔链表

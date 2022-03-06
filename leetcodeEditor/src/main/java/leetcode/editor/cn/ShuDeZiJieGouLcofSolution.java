@@ -1,6 +1,6 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import binaryTree.TreeNode;
 
 /**
  * 树的子结构

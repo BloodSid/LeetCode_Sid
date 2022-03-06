@@ -1,6 +1,6 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import binaryTree.TreeNode;
 
 /**
  * 验证二叉搜索树

@@ -42,7 +42,7 @@ package leetcode.editor.cn;
 // 👍 6848 👎 0
 
 
-import java.util.*;
+import linkedList.ListNode;
 
 /**
  * 两数相加

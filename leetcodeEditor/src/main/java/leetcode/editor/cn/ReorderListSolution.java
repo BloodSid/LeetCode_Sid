@@ -1,6 +1,9 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import linkedList.ListNode;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * 重排链表

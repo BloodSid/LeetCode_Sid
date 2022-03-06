@@ -1,9 +1,12 @@
 package leetcode.editor.cn;
 
-import org.junit.Test;
-import org.junit.Before;
+import binaryTree.BinaryTree;
+import binaryTree.TreeNode;
 import org.junit.After;
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * SerializeAndDeserializeBinaryTreeSolution Tester.
@@ -28,12 +31,11 @@ public class SerializeAndDeserializeBinaryTreeSolutionTest {
     */
     @Test
     public void test1() throws Exception {
-        BinaryTree binaryTree = new BinaryTree();
         String data = "1,2,3,null,null,4,5";
-        TreeNode root = binaryTree.stringToBinaryTree(data);
+        TreeNode root = BinaryTree.stringToBinaryTree(data);
         String str = solution.serialize(root);
         TreeNode result = solution.deserialize(str);
-        assertEquals(data, binaryTree.toString(result));
+        assertEquals(data, BinaryTree.toString(result));
     }
 
 }

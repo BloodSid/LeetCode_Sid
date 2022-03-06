@@ -1,6 +1,6 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import binaryTree.TreeNode;
 
 /**
  * 二叉搜索树的最近公共祖先

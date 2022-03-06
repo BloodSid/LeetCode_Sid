@@ -1,9 +1,12 @@
 package leetcode.editor.cn;
 
-import org.junit.Test;
-import org.junit.Before;
+import binaryTree.BinaryTree;
+import binaryTree.TreeNode;
 import org.junit.After;
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * KthSmallestElementInABstSolution Tester.
@@ -14,7 +17,6 @@ import static org.junit.Assert.*;
  */
 public class KthSmallestElementInABstSolutionTest {
     KthSmallestElementInABstSolution.Solution solution = new KthSmallestElementInABstSolution().new Solution();
-    BinaryTree binaryTree = new BinaryTree();
     @Before
     public void before() throws Exception {
         
@@ -29,7 +31,7 @@ public class KthSmallestElementInABstSolutionTest {
     */
     @Test
     public void testKthSmallest1() throws Exception {
-        TreeNode root = binaryTree.stringToBinaryTree("3,1,4,null,2");
+        TreeNode root = BinaryTree.stringToBinaryTree("3,1,4,null,2");
         int k = 1;
         int expected = 1;
         int actual = solution.kthSmallest(root, k);
@@ -38,7 +40,7 @@ public class KthSmallestElementInABstSolutionTest {
 
     @Test
     public void testKthSmallest2() throws Exception {
-        TreeNode root = binaryTree.stringToBinaryTree("5,3,6,2,4,null,null,1");
+        TreeNode root = BinaryTree.stringToBinaryTree("5,3,6,2,4,null,null,1");
         int k = 3;
         int expected = 3;
         int actual = solution.kthSmallest(root, k);

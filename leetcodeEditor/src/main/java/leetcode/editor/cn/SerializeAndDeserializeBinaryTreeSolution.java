@@ -1,6 +1,10 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import binaryTree.TreeNode;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * 二叉树的序列化与反序列化

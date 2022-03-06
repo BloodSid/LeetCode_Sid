@@ -1,6 +1,8 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import linkedList.ListNode;
+
+import java.util.Random;
 
 /**
  * 链表随机节点

@@ -36,7 +36,7 @@ package leetcode.editor.cn;
 // 👍 495 👎 0
 
 
-import java.util.*;
+import binaryTree.TreeNode;
 
 /**
  * 二叉搜索树中第K小的元素

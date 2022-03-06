@@ -1,9 +1,12 @@
 package leetcode.editor.cn;
 
-import org.junit.Test;
-import org.junit.Before;
+import binaryTree.BinaryTree;
+import binaryTree.TreeNode;
 import org.junit.After;
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * LowestCommonAncestorOfABinaryTreeSolution Tester.
@@ -29,8 +32,7 @@ public class LowestCommonAncestorOfABinaryTreeSolutionTest {
     @Test
     public void testLowestCommonAncestor1() throws Exception {
         String data = "3,5,1,6,2,0,8,null,null,7,4";
-        BinaryTree binaryTree = new BinaryTree();
-        TreeNode root = binaryTree.stringToBinaryTree(data);
+        TreeNode root = BinaryTree.stringToBinaryTree(data);
         TreeNode p = dfs(root, 5);
         TreeNode q = dfs(root, 1);
         TreeNode expected = dfs(root, 3);
@@ -41,8 +43,7 @@ public class LowestCommonAncestorOfABinaryTreeSolutionTest {
     @Test
     public void testLowestCommonAncestor2() throws Exception {
         String data = "3,5,1,6,2,0,8,null,null,7,4";
-        BinaryTree binaryTree = new BinaryTree();
-        TreeNode root = binaryTree.stringToBinaryTree(data);
+        TreeNode root = BinaryTree.stringToBinaryTree(data);
         TreeNode p = dfs(root, 5);
         TreeNode q = dfs(root, 4);
         TreeNode expected = dfs(root, 5);
