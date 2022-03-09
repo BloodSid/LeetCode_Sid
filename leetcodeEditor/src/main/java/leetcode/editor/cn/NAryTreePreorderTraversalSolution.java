@@ -27,21 +27,21 @@ public class NAryTreePreorderTraversalSolution {
     }
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    List<Integer> list = new ArrayList<>();
-
     public List<Integer> preorder(Node root) {
-        dfs(root);
+        if (root == null) return new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        Deque<Node> stack = new ArrayDeque<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            Node cur = stack.pop();
+            list.add(cur.val);
+            List<Node> children = cur.children;
+            ListIterator<Node> iterator = children.listIterator(children.size());
+            while (iterator.hasPrevious()) {
+                stack.push(iterator.previous());
+            }
+        }
         return list;
-    }
-
-    void dfs(Node node) {
-        if (node == null) {
-            return;
-        }
-        list.add(node.val);
-        for (Node child : node.children) {
-            dfs(child);
-        }
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
