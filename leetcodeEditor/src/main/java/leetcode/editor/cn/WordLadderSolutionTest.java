@@ -32,7 +32,7 @@ public class WordLadderSolutionTest {
      * Method: ladderLength(String beginWord, String endWord, List<String> wordList)
      */
     @Test
-    public void testLadderLength() throws Exception {
+    public void testLadderLength1() throws Exception {
         String beginWord = "qa";
         String endWord = "sq";
         List<String> wordList = Arrays.asList("si", "go", "se", "cm", "so", "ph", "mt", "db", "mb", "sb", "kr", "ln",
@@ -42,6 +42,16 @@ public class WordLadderSolutionTest {
                 "hi", "qa", "pi", "os", "uh", "wm", "an", "me", "mo", "na", "la", "st", "er", "sc", "ne", "mn", "mi",
                 "am", "ex", "pt", "io", "be", "fm", "ta", "tb", "ni", "mr", "pa", "he", "lr", "sq", "ye");
         int expected = 5;
+        int actual = solution.ladderLength(beginWord, endWord, wordList);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testLadderLength2() throws Exception {
+        String beginWord = "hit";
+        String endWord = "cog";
+        List<String> wordList = Arrays.asList("hot", "dot", "dog", "lot", "log");
+        int expected = 0;
         int actual = solution.ladderLength(beginWord, endWord, wordList);
         assertEquals(expected, actual);
     }

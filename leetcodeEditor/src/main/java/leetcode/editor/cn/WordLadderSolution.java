@@ -12,42 +12,37 @@ import java.util.*;
 public class WordLadderSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    private HashSet<String> set;
-    private String endWord;
-    private int n;
-
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        n = beginWord.length();
-        this.endWord = endWord;
-        set = new HashSet<>();
-        for (String s : wordList) {
-            set.add(s);
-        }
-        int depth = dfs(beginWord);
-        if (depth == Integer.MAX_VALUE) return 0;
-        return depth;
-    }
-
-    int dfs(String s) {
-        if (s.equals(endWord)) {
-            return 1;
-        }
-        set.remove(s);
-        int depth = Integer.MAX_VALUE;
-        for (int i = 0; i < n; i++) {
-            char cur = s.charAt(i);
-            for (char c = 'a'; c <= 'z'; c++) {
-                if (c != cur) {
-                    String next = s.substring(0, i) + c + s.substring(i + 1);
-                    if (set.contains(next)) {
-                        depth = Math.min(depth, dfs(next));
+        int n = beginWord.length();
+        HashSet<String> set = new HashSet<>(wordList);
+        int depth = 1;
+        Deque<String> queue = new ArrayDeque<>();
+        queue.offer(beginWord);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int j = 0; j < size; j++) {
+                String s = queue.poll();
+                if (s.equals(endWord)) {
+                    return depth;
+                }
+                for (int i = 0; i < n; i++) {
+                    char cur = s.charAt(i);
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        if (c != cur) {
+                            String next = s.substring(0, i) + c + s.substring(i + 1);
+                            // 若删除成功，则说明该节点未被遍历，加入队中
+                            if (set.remove(next)) {
+                                queue.offer(next);
+                            }
+                        }
                     }
                 }
             }
+            depth++;
         }
-        set.add(s);
-        return depth == Integer.MAX_VALUE ? Integer.MAX_VALUE : depth + 1;
+        return 0;
     }
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
