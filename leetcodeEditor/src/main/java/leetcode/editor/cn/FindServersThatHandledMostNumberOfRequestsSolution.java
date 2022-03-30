@@ -13,41 +13,39 @@ public class FindServersThatHandledMostNumberOfRequestsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    private int k;
-    private int[] taskCnt;
-    private int[] hash;
-
     public List<Integer> busiestServers(int k, int[] arrival, int[] load) {
-        this.k = k;
-        taskCnt = new int[k];
-        // 此位置上一个任务的结束时间
-        hash = new int[k];
-        int maxCnt = 0;
+        // 结束处理前一个任务的时间
+        int[] cnt = new int[k];
+        int[] end = new int[k];
+        PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> end[o1] - end[o2]);
+        TreeSet<Integer> set = new TreeSet<>();
+        for (int i = 0; i < k; i++) {
+            set.add(i);
+        }
         for (int i = 0; i < arrival.length; i++) {
-            put(i, arrival[i], arrival[i] + load[i]);
+            while (!pq.isEmpty() && end[pq.peek()] <= arrival[i]) {
+                set.add(pq.poll());
+            }
+            Integer idx = set.ceiling(i % k);
+            if (idx == null) idx = set.ceiling(0);
+            if (idx == null) continue;
+            end[idx] = arrival[i] + load[i];
+            cnt[idx]++;
+            pq.offer(idx);
+            set.remove(idx);
         }
         List<Integer> list = new ArrayList<>();
-        for (int i = 0; i < taskCnt.length; i++) {
-            if (taskCnt[i] == maxCnt) {
+        int maxCnt = 0;
+        for (int i = 0; i < k; i++) {
+            if (cnt[i] == maxCnt) {
                 list.add(i);
-            } else if (taskCnt[i] > maxCnt) {
-                maxCnt = taskCnt[i];
+            } else if (cnt[i] > maxCnt) {
+                maxCnt = cnt[i];
                 list.clear();
                 list.add(i);
             }
         }
         return list;
-    }
-
-    void put(int key, int arrival, int leave) {
-        for (int i = 0; i < k; i++) {
-            int idx = (key + i) % k;
-            if (hash[idx] <= arrival) {
-                hash[idx] = leave;
-                ++taskCnt[idx];
-                break;
-            }
-        }
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
