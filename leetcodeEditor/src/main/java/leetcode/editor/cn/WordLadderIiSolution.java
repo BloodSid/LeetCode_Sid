@@ -19,20 +19,27 @@ class Solution {
     private HashSet<String> visited;
     private LinkedList<String> stack;
     private int n;
+    // 记录每个单词到起点单词的最短路长度
+    private Map<String, Integer> d;
 
     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
         n = beginWord.length();
+        d = new HashMap<>();
         this.endWord = endWord;
         visited = new HashSet<>(wordList);
         int depth = 0;
         Deque<String> queue = new ArrayDeque<>();
         queue.offer(beginWord);
+        visited.remove(beginWord);
+        boolean exist = false;
         loop :
         while (!queue.isEmpty()) {
             int size = queue.size();
             for (int j = 0; j < size; j++) {
                 String s = queue.poll();
+                d.put(s, depth);
                 if (s.equals(endWord)) {
+                    exist = true;
                     break loop;
                 }
                 for (int i = 0; i < n; i++) {
@@ -51,34 +58,35 @@ class Solution {
             depth++;
         }
         res = new ArrayList<>();
+        if (!exist) return res;
         stack = new LinkedList<>();
-        target = depth;
-        this.visited = new HashSet<>(wordList);
-        dfs(beginWord, 0);
+        target = depth + 1;
+        dfs(beginWord);
         return res;
     }
 
-    void dfs(String cur, int depth) {
+    void dfs(String cur) {
         stack.addLast(cur);
-        visited.remove(cur);
-        if (depth == target && cur.equals(endWord)) {
-            res.add(new LinkedList<>(stack));
+        // 只要达到目标深度就一定停止搜索
+        if (stack.size() == target) {
+            // 若找到目标单词则把当前栈中序列加入结果，若不是目标单词也不继续搜索
+            if (cur.equals(endWord)) {
+                res.add(new LinkedList<>(stack));
+            }
         } else {
             for (int i = 0; i < n; i++) {
                 char ch = cur.charAt(i);
                 for (char c = 'a'; c <= 'z'; c++) {
                     if (c != ch) {
                         String next = cur.substring(0, i) + c + cur.substring(i + 1);
-                        // next还未被访问
-                        if (visited.contains(next)) {
-                            dfs(next, depth + 1);
+                        if (d.getOrDefault(next, 0) == stack.size()) {
+                            dfs(next);
                         }
                     }
                 }
             }
         }
         stack.removeLast();
-        visited.add(cur);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
