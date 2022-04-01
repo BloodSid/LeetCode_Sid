@@ -42,17 +42,20 @@ class Solution {
                     exist = true;
                     break loop;
                 }
+                char[] arr = s.toCharArray();
                 for (int i = 0; i < n; i++) {
-                    char cur = s.charAt(i);
+                    char cur = arr[i];
                     for (char c = 'a'; c <= 'z'; c++) {
                         if (c != cur) {
-                            String next = s.substring(0, i) + c + s.substring(i + 1);
+                            arr[i] = c;
+                            String next = new String(arr);
                             // 若删除成功，则说明该节点未被遍历，加入队中
                             if (visited.remove(next)) {
                                 queue.offer(next);
                             }
                         }
                     }
+                    arr[i] = cur;
                 }
             }
             depth++;
@@ -75,14 +78,17 @@ class Solution {
             }
         } else {
             for (int i = 0; i < n; i++) {
-                char ch = cur.charAt(i);
+                char[] arr = cur.toCharArray();
+                char ch = arr[i];
                 for (char c = 'a'; c <= 'z'; c++) {
                     if (c != ch) {
-                        String next = cur.substring(0, i) + c + cur.substring(i + 1);
+                        arr[i] = c;
+                        String next = new String(arr);
                         if (d.getOrDefault(next, 0) == stack.size()) {
                             dfs(next);
                         }
                     }
+                    arr[i] = ch;
                 }
             }
         }
