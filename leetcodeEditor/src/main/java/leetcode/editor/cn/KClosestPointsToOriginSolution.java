@@ -27,8 +27,9 @@ class Solution {
             // 若堆顶的点距离更小，则当前点比堆中的k个点距离都大，不入堆
         }
         int[][] ans = new int[k][];
-        for (int i = 0; i < k; i++) {
-            ans[i] = queue.poll();
+        int i = 0;
+        for (int[] ints : queue) {
+            ans[i++] = ints;
         }
         return ans;
     }
