@@ -1,5 +1,8 @@
 package Contest0402;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.util.HashSet;
 
 /**
@@ -54,26 +57,82 @@ public class Solution {
     }
 
     // T4
-    public long sumScores(String s) {
-            long score = 0;
-            int n = s.length();
-            HashSet<String> pre = new HashSet<>();
-            for (int i = 0; i <= n; i++) {
-                pre.add(s.substring(0, i));
-            }
-            for (int i = n - 1; i >= 0; i--) {
-                int l = 0, r = n - i;
-                while (l <= r) {
-                    int mid = l + r >> 1;
-                    if (pre.contains(s.substring(i, i + mid))){
-                        l = mid + 1;
-                    } else {
-                        r = mid - 1;
-                    }
-                }
-                score += r;
-            }
-            return score;
+    class Str {
+        int hash;
+        char[] value;
+        int start, end;
+
+        public Str(char[] value, int start, int end) {
+            this.value = value;
+            this.start = start;
+            this.end = end;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            Str str = (Str) o;
+            if (value == str.value && start == str.start && end == str.end) {
+                return true;
+            }
+            for (int i = start, j = str.start; i < end; i++, j++) {
+                if (value[i] != str.value[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int h = hash;
+            if (h == 0) {
+                for (int i = start; i < end; i++) {
+                    h = 31 * h + value[i];
+                }
+                hash = h;
+            }
+            return h;
+        }
+    }
+
+    public long sumScores(String s) {
+        long score = 0;
+        int n = s.length();
+        char[] value = s.toCharArray();
+        HashSet<Str> pre = new HashSet<>();
+        for (int i = 0; i <= n; i++) {
+            pre.add(new Str(value, 0, i));
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            int l = 0, r = n - i;
+            while (l <= r) {
+                int mid = l + r >> 1;
+                if (pre.contains(new Str(value, i, i + mid))){
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+            score += r;
+        }
+        return score;
+    }
+
+    static Solution solution = new Solution();
+    @Test
+    public void T4test1() {
+        String s = "babab";
+        long expected = 9;
+        long actual = solution.sumScores(s);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void T4test2() {
+        String s = "azbazbzaz";
+        long expected = 14;
+        long actual = solution.sumScores(s);
+        Assert.assertEquals(expected, actual);
+    }
 
 }
