@@ -11,7 +11,6 @@ public class SumOfScoresOfBuiltStringsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    public static final int MOD = (int) (1e9 + 7);
     public static final int BASE = 173;
     private int[] scores;
 
@@ -23,8 +22,8 @@ class Solution {
         long[] h = new long[n + 1];
         p[0] = 1;
         for (int i = 1; i <= n; i++) {
-            p[i] = p[i - 1] * BASE % MOD;
-            h[i] = (h[i - 1] * BASE + val[i - 1]) % MOD;
+            p[i] = p[i - 1] * BASE;
+            h[i] = (h[i - 1] * BASE + val[i - 1]);
         }
         long score = 0;
         scores = new int[n];
@@ -33,8 +32,7 @@ class Solution {
             while (l <= r) {
                 int mid = l + r >> 1;
                 // si 的前缀s[i, i + mid)的哈希值
-                long preHash = (h[i + mid] - h[i] * p[mid]) % MOD;
-                if (preHash < 0) preHash += MOD;
+                long preHash = h[i + mid] - h[i] * p[mid];
                 if (h[mid] == preHash){
                     l = mid + 1;
                 } else {
