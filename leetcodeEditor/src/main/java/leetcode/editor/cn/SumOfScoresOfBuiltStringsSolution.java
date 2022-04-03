@@ -13,6 +13,7 @@ class Solution {
 
     public static final int MOD = (int) (1e9 + 7);
     public static final int BASE = 173;
+    private int[] scores;
 
     public long sumScores(String s) {
         // 滚动哈希
@@ -26,6 +27,7 @@ class Solution {
             h[i] = (h[i - 1] * BASE + val[i - 1]) % MOD;
         }
         long score = 0;
+        scores = new int[n];
         for (int i = n - 1; i >= 0; i--) {
             int l = 0, r = n - i;
             while (l <= r) {
@@ -40,8 +42,13 @@ class Solution {
                 }
             }
             score += r;
+            scores[i] = r;
         }
         return score;
+    }
+
+    public int[] getScores() {
+        return scores;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
