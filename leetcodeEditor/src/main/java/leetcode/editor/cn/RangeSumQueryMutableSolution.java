@@ -38,8 +38,10 @@ class NumArray {
         n = nums.length;
         this.nums = nums;
         tree = new int[n + 1];
-        for (int i = 0; i < n; i++) {
-            add(i + 1, nums[i]);
+        for (int i = 1; i <= n; i++) {
+            tree[i] += nums[i - 1];
+            int j = i + lowBit(i);
+            if (j <= n) tree[j] += tree[i];
         }
     }
 
