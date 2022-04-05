@@ -13,10 +13,11 @@ public class MinimumHeightTreesSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    private HashSet<Integer> visited = new HashSet<>();
     private List<List<Integer>> map;
 
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        if (n == 1) return Arrays.asList(0);
+        int[] cnt = new int[n];
         map = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             map.add(new LinkedList<>());
@@ -24,37 +25,39 @@ class Solution {
         for (int[] edge : edges) {
             add(edge[0], edge[1]);
             add(edge[1], edge[0]);
+            cnt[edge[0]]++;
+            cnt[edge[1]]++;
         }
-        List<Integer> minRoots = new ArrayList<>();
-        int minHeight = Integer.MAX_VALUE;
+        Deque<Integer> queue = new LinkedList<>();
+        HashSet<Integer> visited = new HashSet<>();
         for (int i = 0; i < n; i++) {
-            visited.clear();
-            int height = dfs(i);
-            if (height == minHeight) {
-                minRoots.add(i);
-            } else if (height < minHeight) {
-                minHeight = height;
-                minRoots.clear();
-                minRoots.add(i);
+            if (cnt[i] == 1) {
+                queue.offer(i);
+                visited.add(i);
             }
         }
-        return minRoots;
+        while (!queue.isEmpty()) {
+            if (visited.size() == n) return (List<Integer>) queue;
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int vertex = queue.poll();
+                for (Integer next : map.get(vertex)) {
+                    if (!visited.contains(next)) {
+                        if (--cnt[next] == 1) {
+                            queue.offer(next);
+                            visited.add(next);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void add(int from, int to) {
         map.get(from).add(to);
     }
 
-    private int dfs(int i) {
-        visited.add(i);
-        int max = 0;
-        for (Integer child : map.get(i)) {
-            if (!visited.contains(child)) {
-                max = Math.max(max, dfs(child));
-            }
-        }
-        return max + 1;
-    }
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
