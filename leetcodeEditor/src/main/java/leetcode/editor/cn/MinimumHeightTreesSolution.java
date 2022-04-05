@@ -13,14 +13,14 @@ public class MinimumHeightTreesSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    private List<List<Integer>> map;
+    private List<Integer>[] map;
 
     public List<Integer> findMinHeightTrees(int n, int[][] edges) {
         if (n == 1) return Arrays.asList(0);
         int[] cnt = new int[n];
-        map = new ArrayList<>(n);
+        map = new List[n];
         for (int i = 0; i < n; i++) {
-            map.add(new LinkedList<>());
+            map[i] = new LinkedList<>();
         }
         for (int[] edge : edges) {
             add(edge[0], edge[1]);
@@ -29,33 +29,29 @@ class Solution {
             cnt[edge[1]]++;
         }
         Deque<Integer> queue = new LinkedList<>();
-        HashSet<Integer> visited = new HashSet<>();
         for (int i = 0; i < n; i++) {
             if (cnt[i] == 1) {
                 queue.offer(i);
-                visited.add(i);
             }
         }
-        while (!queue.isEmpty()) {
-            if (visited.size() == n) return (List<Integer>) queue;
+        int remain = n;
+        while (remain > 2) {
             int size = queue.size();
+            remain -= size;
             for (int i = 0; i < size; i++) {
                 int vertex = queue.poll();
-                for (Integer next : map.get(vertex)) {
-                    if (!visited.contains(next)) {
+                for (Integer next : map[vertex]) {
                         if (--cnt[next] == 1) {
                             queue.offer(next);
-                            visited.add(next);
-                        }
                     }
                 }
             }
         }
-        return null;
+        return (List<Integer>) queue;
     }
 
     private void add(int from, int to) {
-        map.get(from).add(to);
+        map[from].add(to);
     }
 
 }
