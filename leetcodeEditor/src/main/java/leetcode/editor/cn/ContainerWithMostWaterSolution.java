@@ -14,13 +14,12 @@ class Solution {
         int l = 0, r = height.length - 1;
         int maxArea = 0;
         while (l < r) {
-            int leftH = height[l], rightH = height[r];
-            maxArea = Math.max(maxArea, Math.min(leftH, rightH) * (r - l));
+            maxArea = Math.max(maxArea, Math.min(height[l], height[r]) * (r - l));
             // 将较短的一边向内移动。长的一边向内移动，容积一定变小，短的一边向内移动，溶剂可能变大。
             if (height[l] < height[r]) {
-                for (; l < r && height[l] <= leftH; l++) {}
+                l++;
             } else {
-                for (; l < r && height[r] <= rightH; r--) {}
+                r--;
             }
         }
         return maxArea;
