@@ -44,6 +44,8 @@ public class WordLadderSolutionTest {
         int expected = 5;
         int actual = solution.ladderLength(beginWord, endWord, wordList);
         assertEquals(expected, actual);
+        //单向bfs visited.size() = 129
+        //双向bfs v1.size() + v2.size() = 165, 但是 v1 和 v2 的并集的大小是114， 搜索空间减少了
     }
 
     @Test
@@ -54,6 +56,7 @@ public class WordLadderSolutionTest {
         int expected = 0;
         int actual = solution.ladderLength(beginWord, endWord, wordList);
         assertEquals(expected, actual);
+        // visited.size() = 18 单向bfs
     }
 
 }
