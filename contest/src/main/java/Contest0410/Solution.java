@@ -1,5 +1,8 @@
 package Contest0410;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -91,23 +94,62 @@ public class Solution {
             for (int j = i; j < flowers.length; j++) {
                 remain -= Math.max(0, target - flowers[j]);
             }
+            if (remain < 0) break;
             int l = 0, r = target - 1;
-            long cost = 0;
             while (l <= r) {
+                long cost = 0;
                 int mid = l + r >> 1;
                 for (int j = 0; j < i; j++) {
                     cost += Math.max(0, mid - flowers[j]);
                 }
                 if (cost <= remain) {
-                    r = mid - 1;
-                } else {
                     l = mid + 1;
+                } else {
+                    r = mid - 1;
                 }
             }
-            long res = (long) r * partial + (long) (flowers.length - i) * full;
+            long res = (long) (flowers.length - i) * full;
+            if (i != 0) res += (long) r * partial;
             max = Math.max(max, res);
         }
         return max;
     }
 
+    static Solution solution = new Solution();
+
+    @Test
+    public void maximumBeautyTest1() {
+        int[] flowers = {1,3,1,1};
+        long newFlowers = 7;
+        int target = 6;
+        int full = 12;
+        int partial = 1;
+        long expected = 14;
+        long actual = solution.maximumBeauty(flowers, newFlowers, target, full, partial);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void maximumBeautyTest2() {
+        int[] flowers = {2,4,5,3};
+        long newFlowers = 10;
+        int target = 5;
+        int full = 2;
+        int partial = 6;
+        long expected = 30;
+        long actual = solution.maximumBeauty(flowers, newFlowers, target, full, partial);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void maximumBeautyTest3() {
+        int[] flowers = {5,5,15,1,9};
+        long newFlowers = 36;
+        int target = 12;
+        int full = 9;
+        int partial = 2;
+        long expected = 58;
+        long actual = solution.maximumBeauty(flowers, newFlowers, target, full, partial);
+        Assert.assertEquals(expected, actual);
+    }
 }
