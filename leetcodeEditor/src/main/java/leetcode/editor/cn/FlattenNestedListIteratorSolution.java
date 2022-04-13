@@ -24,14 +24,11 @@ public class NestedIterator implements Iterator<Integer> {
 
     @Override
     public Integer next() {
-        return hasNext() ? stack.pop().getInteger() : null;
+        return stack.pop().getInteger();
     }
 
     @Override
     public boolean hasNext() {
-        if (stack.isEmpty()) return false;
-        if (stack.peek().isInteger()) return true;
-        // 栈顶不是数字
         while (!stack.isEmpty() && !stack.peek().isInteger()) {
             NestedInteger cur = stack.pop();
             List<NestedInteger> list = cur.getList();
