@@ -13,35 +13,33 @@ public class FlattenNestedListIteratorSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 public class NestedIterator implements Iterator<Integer> {
 
-    Iterator<Integer> iterator;
-    List<Integer> list;
+    Deque<NestedInteger> stack;
 
     public NestedIterator(List<NestedInteger> nestedList) {
-        list = new ArrayList<>();
-        for (NestedInteger nestedInteger : nestedList) {
-            dfs(nestedInteger);
-        }
-        iterator = list.iterator();
-    }
-
-    void dfs(NestedInteger cur) {
-        if (cur.isInteger()) {
-            list.add(cur.getInteger());
-            return;
-        }
-        for (NestedInteger nestedInteger : cur.getList()) {
-            dfs(nestedInteger);
+        stack = new ArrayDeque<>();
+        for (int i = nestedList.size() - 1; i >= 0; i--) {
+            stack.push(nestedList.get(i));
         }
     }
 
     @Override
     public Integer next() {
-        return iterator.next();
+        return hasNext() ? stack.pop().getInteger() : null;
     }
 
     @Override
     public boolean hasNext() {
-        return iterator.hasNext();
+        if (stack.isEmpty()) return false;
+        if (stack.peek().isInteger()) return true;
+        // 栈顶不是数字
+        while (!stack.isEmpty() && !stack.peek().isInteger()) {
+            NestedInteger cur = stack.pop();
+            List<NestedInteger> list = cur.getList();
+            for (int i = list.size() - 1; i >= 0; i--) {
+                stack.push(list.get(i));
+            }
+        }
+        return !stack.isEmpty();
     }
 }
 
