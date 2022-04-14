@@ -50,48 +50,45 @@ public class NestedInteger {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
+    private int idx;
     private char[] val;
-    private Deque<NestedInteger> stack;
 
     public NestedInteger deserialize(String s) {
+        idx = 0;
         val = s.toCharArray();
-        stack = new ArrayDeque<>();
-        NestedInteger cur = null;
-        for (int i = 0; i < val.length; ) {
-            switch (val[i]) {
-                case ('['):
-                    NestedInteger newList = new NestedInteger();
-                    stack.push(newList);
-                    i++;
-                    break;
-                case (']'):
-                    cur = stack.pop();
-                    if (!stack.isEmpty()) stack.peek().add(cur);
-                    i++;
-                    break;
-                case (','):
-                    i++;
-                    break;
-                default:
-                    // 负号和数字
-                    int num = 0;
-                    boolean negative = false;
-                    if (val[i] == '-') {
-                        negative = true;
-                        i++;
-                    }
-                    for (; i < val.length && Character.isDigit(val[i]); i++) {
-                        num *= 10;
-                        num += val[i] & 15;
-                    }
-                    if (negative) num = -num;
-                    if (stack.isEmpty())
-                        return new NestedInteger(num);
-                    else
-                        stack.peek().add(new NestedInteger(num));
+        if (val[0] != '[') {
+            return new NestedInteger(Integer.parseInt(s));
+        }
+        return getNested();
+    }
+
+    private NestedInteger getNested() {
+        // 跳过一个左括号
+        idx++;
+        NestedInteger cur = new NestedInteger();
+        for (int num = 0, sig = 1; idx < val.length; idx++) {
+            char ch = val[idx];
+            if (ch == '[') {
+                cur.add(getNested());
+            }
+            else if (ch == ',') {
+                continue;
+            }
+            else if (ch == ']') {
+                return cur;
+            }
+            else if (ch == '-') {
+                sig = -1;
+            } else {
+                num = num * 10 + sig * (ch & 15);
+                if (val[idx + 1] == ',' || val[idx + 1] == ']') {
+                    cur.add(new NestedInteger(num));
+                    num = 0;
+                    sig = 1;
+                }
             }
         }
-        return cur;
+        return null;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
