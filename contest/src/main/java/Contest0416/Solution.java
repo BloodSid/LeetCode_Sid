@@ -3,8 +3,6 @@ package Contest0416;
 import binaryTree.TreeNode;
 import org.junit.Test;
 
-import java.util.HashMap;
-
 /**
  * @author IronSid
  * @since 2022-04-16 12:09
@@ -63,88 +61,31 @@ public class Solution {
     }
 
     // T3
-    HashMap<Integer, Integer> idx = new HashMap<>();
+    int cnt;
+    int[][] ops;
 
     public int getNumber(TreeNode root, int[][] ops) {
+        this.ops = ops;
         dfs(root);
-        int n = idx.size();
-        class Node {
-            int low, high;
-            Node next;
-
-            Node() {
-
-            }
-
-            Node(int low, int high, Node next) {
-                this.low = low;
-                this.high = high;
-                this.next = next;
-            }
-
-            @Override
-            public String toString() {
-                return "{" + low + ", " + high + "}" + next;
-            }
-        }
-        Node preHead = new Node(-1, -1, null);
-        for (int[] op : ops) {
-            int low = idx.get(op[1]), high = idx.get(op[2]);
-            if (op[0] == 1) {
-                // 染红
-                Node cur = preHead;
-                while (cur.next != null && cur.next.high >= low) {
-                    cur = cur.next;
-                }
-                while (cur.next != null) {
-                    if (cur.next.high <= high && cur.next.low >= low) {
-                        cur.next.next = cur.next;
-                    } else if (cur.next.low >= low) {
-                        cur.next.low = low;
-                        cur = cur.next;
-                    } else if (cur.next.high <= high) {
-                        cur.next.high = high;
-                        cur = cur.next;
-                    } else {
-                        Node t = cur.next;
-                        cur.next = new Node(low, high, t);
-                        break;
-                    }
-                }
-            } else {
-                // 染蓝
-                Node cur = preHead;
-                while (cur.next != null && (cur.next.low <= high || cur.next.high >= low)) {
-                    cur = cur.next;
-                }
-                while (cur.next != null) {
-                    if (cur.next.high <= high && cur.next.low >= low) {
-                        cur.next.next = cur.next;
-                    } else if (cur.next.low >= low) {
-                        cur.next.high = low;
-                        cur = cur.next;
-                    } else if (cur.next.high <= high) {
-                        cur.next.low = high;
-                        cur = cur.next;
-                    } else {
-                        break;
-                    }
-                }
-            }
-            System.out.println(preHead);
-        }
-        int cnt = 0;
-        for (Node cur = preHead.next; cur != null; cur = cur.next) {
-            cnt += cur.high - cur.low + 1;
-        }
         return cnt;
     }
 
     void dfs(TreeNode node) {
         if (node == null) return;
         dfs(node.left);
-        idx.put(node.val, idx.size());
+        if (isRed(node.val)) {
+            cnt++;
+        }
         dfs(node.right);
+    }
+
+    boolean isRed(int val) {
+        for (int i = ops.length - 1; i >= 0; i--) {
+            if (val >= ops[i][1] && val <= ops[i][2]) {
+                return ops[i][0] == 1;
+            }
+        }
+        return false;
     }
 
     // T4
