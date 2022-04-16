@@ -1,7 +1,11 @@
 package Contest0416;
 
+import binaryTree.BinaryTree;
 import binaryTree.TreeNode;
+import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.HashMap;
 
 /**
  * @author IronSid
@@ -61,31 +65,90 @@ public class Solution {
     }
 
     // T3
-    int cnt;
-    int[][] ops;
+    HashMap<Integer, Integer> idx;
 
     public int getNumber(TreeNode root, int[][] ops) {
-        this.ops = ops;
+        idx = new HashMap<>();
         dfs(root);
+        int n = idx.size();
+        class Node {
+            int low, high;
+            Node next;
+
+            Node() {
+
+            }
+
+            Node(int low, int high, Node next) {
+                this.low = low;
+                this.high = high;
+                this.next = next;
+            }
+
+            @Override
+            public String toString() {
+                return "{" + low + ", " + high + "}, " + next;
+            }
+        }
+        Node preHead = new Node(-1, -1, null);
+        for (int[] op : ops) {
+            int low = idx.get(op[1]), high = idx.get(op[2]);
+            if (op[0] == 1) {
+                // 染红
+                Node cur = preHead;
+                while (cur.next != null && cur.next.high < low) {
+                    cur = cur.next;
+                }
+                if (cur.next == null) {
+                    cur.next = new Node(low, high, null);
+                    continue;
+                }
+                while (cur.next != null) {
+                    if (cur.next.high <= high && cur.next.low >= low) {
+                        cur.next.next = cur.next;
+                    } else if (cur.next.low >= low) {
+                        cur.next.low = low;
+                        cur = cur.next;
+                    } else if (cur.next.high <= high) {
+                        cur.next.high = high;
+                        cur = cur.next;
+                    } else {
+                        break;
+                    }
+                }
+            } else {
+                // 染蓝
+                Node cur = preHead;
+                while (cur.next != null && cur.next.high < low) {
+                    cur = cur.next;
+                }
+                while (cur.next != null) {
+                    if (cur.next.high <= high && cur.next.low >= low) {
+                        cur.next.next = cur.next;
+                    } else if (cur.next.low >= low) {
+                        cur.next.low = high + 1;
+                        cur = cur.next;
+                    } else if (cur.next.high <= high) {
+                        cur.next.high = low - 1;
+                        cur = cur.next;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        int cnt = 0;
+        for (Node cur = preHead.next; cur != null; cur = cur.next) {
+            cnt += cur.high - cur.low + 1;
+        }
         return cnt;
     }
 
     void dfs(TreeNode node) {
         if (node == null) return;
         dfs(node.left);
-        if (isRed(node.val)) {
-            cnt++;
-        }
+        idx.put(node.val, idx.size());
         dfs(node.right);
-    }
-
-    boolean isRed(int val) {
-        for (int i = ops.length - 1; i >= 0; i--) {
-            if (val >= ops[i][1] && val <= ops[i][2]) {
-                return ops[i][0] == 1;
-            }
-        }
-        return false;
     }
 
     // T4
@@ -93,8 +156,24 @@ public class Solution {
         return 0;
     }
 
+    static Solution solution = new Solution();
+
     @Test
-    public void test() {
-        
+    public void T3test1() {
+        TreeNode root = BinaryTree.stringToBinaryTree("1,null,2,null,3,null,4,null,5");
+        int[][] ops = {{1, 2, 4}, {1, 1, 3}, {0, 3, 5}};
+        int expected = 2;
+        int actual = solution.getNumber(root, ops);
+        Assert.assertEquals(expected, actual);
     }
+
+    @Test
+    public void T3test2() {
+        TreeNode root = BinaryTree.stringToBinaryTree("4,2,7,1,null,5,null,null,null,null,6");
+        int[][] ops = {{0,2,2},{1,1,5},{0,4,5},{1,5,7}};
+        int expected = 5;
+        int actual = solution.getNumber(root, ops);
+        Assert.assertEquals(expected, actual);
+    }
+
 }
