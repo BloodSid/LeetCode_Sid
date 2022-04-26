@@ -13,22 +13,25 @@ public class RandomPickIndexSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    private final HashMap<Integer, List<Integer>> map;
     private Random random = new Random();
+    private int[] nums;
 
     public Solution(int[] nums) {
-        map = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (!map.containsKey(nums[i])) {
-                map.put(nums[i], new ArrayList<>());
-            }
-            map.get(nums[i]).add(i);
-        }
+        this.nums = nums;
     }
     
     public int pick(int target) {
-        List<Integer> list = map.get(target);
-        return list.get(random.nextInt(list.size()));
+        int cnt = 0;
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == target) {
+                cnt++;
+                if (random.nextInt(cnt) == 0) {
+                    res = i;
+                }
+            }
+        }
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
