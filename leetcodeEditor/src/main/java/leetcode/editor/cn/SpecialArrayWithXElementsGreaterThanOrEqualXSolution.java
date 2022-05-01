@@ -1,7 +1,5 @@
 package leetcode.editor.cn;
 
-import java.util.Arrays;
-
 /**
  * 特殊数组的特征值
  *
@@ -13,12 +11,19 @@ public class SpecialArrayWithXElementsGreaterThanOrEqualXSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int specialArray(int[] nums) {
-        Arrays.sort(nums);
         int n = nums.length;
-        if (nums[n - 1] < 0) return 0;
-        if (nums[0] >= n) return n;
-        for (int x = 1; x < n; x++) {
-            if (nums[n - x] >= x && nums[n - x - 1] < x) return x;
+        int l = 0, r = n;
+        while (l <= r) {
+            int mid = l + r >> 1;
+            int cnt = 0;
+            for (int i = 0; i < n; i++) {
+                if (nums[i] >= mid) {
+                    cnt++;
+                }
+            }
+            if (cnt == mid) return mid;
+            else if (cnt < mid) r = mid - 1;
+            else l = mid + 1;
         }
         return -1;
     }
