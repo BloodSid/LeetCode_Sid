@@ -1,7 +1,5 @@
 package leetcode.editor.cn;
 
-import java.util.*;
-
 /**
  * 最近的请求次数
  *
@@ -12,18 +10,21 @@ import java.util.*;
 public class NumberOfRecentCallsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class RecentCounter {
-
-    private final Deque<Integer> q = new ArrayDeque<>();
+    // 提交时声明为静态
+    private final int[] q = new int[10010];
+    int rear, head;
 
     public RecentCounter() {
+        rear = 0;
+        head = 0;
     }
     
     public int ping(int t) {
-        q.offer(t);
-        while (!q.isEmpty() && q.peek() < t - 3000) {
-            q.poll();
+        q[rear++] = t;
+        while (head < rear && q[head] < t - 3000) {
+            head++;
         }
-        return q.size();
+        return rear - head;
     }
 }
 
