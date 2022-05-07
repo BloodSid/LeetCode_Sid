@@ -16,15 +16,11 @@ class Solution {
         int n = nums.length;
         List<Integer> res = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            while (nums[nums[i] - 1] != nums[i]) {
-                int temp = nums[nums[i] - 1];
-                nums[nums[i] - 1] = nums[i];
-                nums[i] = temp;
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            if (nums[i] - 1 != i) {
-                res.add(nums[i]);
+            int val = Math.abs(nums[i]);
+            if (nums[val - 1] > 0) {
+                nums[val - 1] = -nums[val - 1];
+            } else {
+                res.add(val);
             }
         }
         return res;
