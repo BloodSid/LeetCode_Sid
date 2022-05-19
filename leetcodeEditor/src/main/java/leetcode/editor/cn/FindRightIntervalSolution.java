@@ -1,6 +1,7 @@
 package leetcode.editor.cn;
 
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 寻找右区间
@@ -14,25 +15,15 @@ public class FindRightIntervalSolution {
 class Solution {
     public int[] findRightInterval(int[][] intervals) {
         int n = intervals.length;
-        Integer[] keys = new Integer[n];
+        TreeMap<Integer, Integer> startToIndex = new TreeMap<>();
         for (int i = 0; i < n; i++) {
-            keys[i] = i;
+            startToIndex.put(intervals[i][0], i);
         }
-        Arrays.sort(keys, (o1, o2) -> intervals[o1][0] - intervals[o2][0]);
         int[] res = new int[n];
         for (int i = 0; i < n; i++) {
-            int l = 0, r = n - 1;
-            int val = intervals[i][1];
-            while (l <= r) {
-                int mid = l + r >> 1;
-                if (intervals[keys[mid]][0] >= val) {
-                    r = mid - 1;
-                } else {
-                    l = mid + 1;
-                }
-            }
-            if (l == n) res[i] = -1;
-            else res[i] = keys[l];
+            Map.Entry<Integer, Integer> entry = startToIndex.ceilingEntry(intervals[i][1]);
+            if (entry == null) res[i] = -1;
+            else res[i] = entry.getValue();
         }
         return res;
     }
