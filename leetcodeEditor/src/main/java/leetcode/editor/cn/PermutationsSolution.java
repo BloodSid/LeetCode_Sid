@@ -13,29 +13,33 @@ public class PermutationsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    List<Integer> list = new ArrayList<>();
-    List<Integer> remain = new ArrayList<>();
     List<List<Integer>> res = new ArrayList<>();
 
     public List<List<Integer>> permute(int[] nums) {
-        for (int i = 0; i < nums.length; i++) {
-            remain.add(nums[i]);
-        }
-        dfs();
+        dfs(0, nums);
         return res;
     }
 
-    void dfs() {
-        if (remain.isEmpty()) {
-            res.add(new ArrayList<>(list));
+    void dfs(int idx, int[] nums) {
+        if (idx == nums.length) {
+            ArrayList<Integer> cur = new ArrayList<>();
+            for (int i = 0; i < nums.length; i++) {
+                cur.add(nums[i]);
+            }
+            res.add(cur);
             return;
         }
-        int size = remain.size();
-        for (int i = 0; i < size; i++) {
-            list.add(remain.remove(i));
-            dfs();
-            remain.add(i, list.remove(list.size() - 1));
+        for (int i = idx; i < nums.length; i++) {
+            swap(nums, idx, i);
+            dfs(idx + 1, nums);
+            swap(nums, idx, i);
         }
+    }
+
+    void swap(int[] nums, int i, int j) {
+        int t = nums[i];
+        nums[i] = nums[j];
+        nums[j] = t;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
