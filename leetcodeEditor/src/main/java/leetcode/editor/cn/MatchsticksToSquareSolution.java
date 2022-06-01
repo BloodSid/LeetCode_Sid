@@ -71,8 +71,12 @@ class Solution {
         if (i == -1) {
             return true;
         }
+        loop:
         for (int k = 0; k < 4; k++) {
             if (matchsticks[i] > total / 4 - sum[k]) continue;
+            for (int j = 0; j < k; j++) {
+                if (sum[j] == sum[k]) continue loop;
+            }
             sum[k] += matchsticks[i];
             if (dfs(i - 1)) return true;
             sum[k] -= matchsticks[i];
