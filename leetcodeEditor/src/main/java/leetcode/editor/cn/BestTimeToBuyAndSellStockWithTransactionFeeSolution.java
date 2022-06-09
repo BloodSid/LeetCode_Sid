@@ -51,18 +51,21 @@ public class BestTimeToBuyAndSellStockWithTransactionFeeSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    private static final int EMPTY = 0;
-    private static final int HOLDING = 1;
-
     public int maxProfit(int[] prices, int fee) {
         int n = prices.length;
-        int[][] dp = new int[2][n];
-        dp[HOLDING][0] = -prices[0];
+        int profit = 0;
+        int buy = prices[0] + fee;
         for (int i = 1; i < n; i++) {
-            dp[EMPTY][i] = Math.max(dp[EMPTY][i - 1], dp[HOLDING][i - 1] + prices[i] - fee);
-            dp[HOLDING][i] = Math.max(dp[HOLDING][i - 1], dp[EMPTY][i - 1] - prices[i]);
+            if (prices[i] + fee < buy) {
+                buy = prices[i] + fee;
+            } else if (prices[i] > buy) {
+                profit += prices[i] - buy;
+                // 当我们卖出一支股票时，我们就立即获得了以相同价格并且免除手续费买入一支股票的权利
+                // 若施行该权利，则等价于当天没有卖出
+                buy = prices[i];
+            }
         }
-        return dp[EMPTY][n - 1];
+        return profit;
 
     }
 }
