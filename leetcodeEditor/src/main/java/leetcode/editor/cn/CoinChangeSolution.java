@@ -43,8 +43,8 @@ package leetcode.editor.cn;
  * 零钱兑换
  *
  * @author IronSid
- * @since 2022-06-09 23:53:17 
  * @version 1.0
+ * @since 2022-06-09 23:53:17
  */
 public class CoinChangeSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -59,7 +59,7 @@ class Solution {
             for (int j = 1; j <= amount - cur; j++) {
                 // 没有组合能组成该金额 j, 则跳过
                 if (dp[j] == 0) continue;
-                dp[j + cur] = dp[j + cur] == 0 ? dp[j] + 1 :Math.min(dp[j + cur], dp[j] + 1);
+                dp[j + cur] = dp[j + cur] == 0 ? dp[j] + 1 : Math.min(dp[j + cur], dp[j] + 1);
             }
         }
         if (dp[amount] == 0) return -1;
