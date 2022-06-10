@@ -55,8 +55,17 @@ public class LongestPalindromicSubstringSolutionTest {
 
     @Test
     public void testLongestPalindrome4() throws Exception {
-        String s = "ccccc";
-        String expected = "ccccc";
+        String s = "cccc";
+        String expected = "cccc";
+        String actual = solution.longestPalindrome(s);
+        assertEquals("长度错误", expected.length(), actual.length());
+        assertTrue("不是回文", isPalindrome(actual));
+    }
+
+    @Test
+    public void testLongestPalindrome5() throws Exception {
+        String s = "aaaaa";
+        String expected = "aaaaa";
         String actual = solution.longestPalindrome(s);
         assertEquals("长度错误", expected.length(), actual.length());
         assertTrue("不是回文", isPalindrome(actual));

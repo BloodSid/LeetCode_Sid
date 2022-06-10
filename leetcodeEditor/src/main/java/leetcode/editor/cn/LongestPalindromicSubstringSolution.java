@@ -46,26 +46,30 @@ class Solution {
     public String longestPalindrome(String s) {
         char[] ch = s.toCharArray();
         int n = ch.length;
-        int[][] dp = new int[2][n];
-        int max = 0;
-        int endI = 0, endK = 0;
-        dp[ODD][0] = 1;
-        for (int i = 1; i < n; i++) {
-            dp[ODD][i] = 1;
-            if (ch[i] == ch[i - 1]) dp[EVEN][i] = 2;
-            for (int k = 0; k < 2; k++) {
-                int start = i - 1 - dp[k][i - 1];
-                if (start >= 0 && ch[start] == ch[i]) {
-                    dp[k][i] = dp[k][i - 1] + 2;
-                }
-                if (dp[k][i] > max) {
-                    max = dp[k][i];
-                    endI = i;
-                    endK = k;
+        boolean[][] dp = new boolean[n][n];
+        int max = 1;
+        int start = 0;
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = true;
+        }
+        for (int i = 0; i <= n - 2; i++) {
+            if (ch[i] == ch[i + 1]) {
+                dp[i][i + 1] = true;
+                max = 2;
+                start = i;
+            }
+        }
+        for (int cnt = 3; cnt <= n; cnt++) {
+            for (int i = 0; i <= n - cnt; i++) {
+                int j = i + cnt - 1;
+                if (ch[i] == ch[j] && dp[i + 1][j - 1]) {
+                    dp[i][j] = true;
+                    max = cnt;
+                    start = i;
                 }
             }
         }
-        return new String(ch, endI - dp[endK][endI] + 1, dp[endK][endI]);
+        return new String(ch, start, max);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
