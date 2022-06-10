@@ -63,22 +63,14 @@ public class CoinChange2Solution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int change(int amount, int[] coins) {
-        int n = coins.length;
-        int[][] dp = new int[n][amount + 1];
-        for (int i = 0; i < n; i++) {
-            dp[i][0] = 1;
-        }
-        for (int i = 0; i <= amount; i+= coins[0]) {
-            dp[0][i] = 1;
-        }
-        for (int i = 1; i < n; i++) {
-            for (int j = 1; j <= amount; j++) {
-                for (int k = j; k >= 0; k -= coins[i]) {
-                    dp[i][j] += dp[i - 1][k];
-                }
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for (int coin : coins) {
+            for (int i = 0; i <= amount - coin; i++) {
+                dp[i + coin] += dp[i];
             }
         }
-        return dp[n - 1][amount];
+        return dp[amount];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
