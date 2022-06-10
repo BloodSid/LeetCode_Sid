@@ -40,9 +40,6 @@ public class LongestPalindromicSubstringSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    public static final int ODD = 0;
-    public static final int EVEN = 1;
-
     public String longestPalindrome(String s) {
         char[] ch = s.toCharArray();
         int n = ch.length;
@@ -60,14 +57,18 @@ class Solution {
             }
         }
         for (int cnt = 3; cnt <= n; cnt++) {
+            boolean found = false;
             for (int i = 0; i <= n - cnt; i++) {
                 int j = i + cnt - 1;
                 if (ch[i] == ch[j] && dp[i + 1][j - 1]) {
                     dp[i][j] = true;
                     max = cnt;
                     start = i;
+                    found = true;
                 }
             }
+            // 如果max + 1 和 max + 2 的长度都没有回文子串，那么就一定不会有更长的回文子串
+            if (!found && cnt - max >= 2) break;
         }
         return new String(ch, start, max);
     }
