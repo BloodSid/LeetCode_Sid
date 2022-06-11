@@ -55,16 +55,13 @@ class Solution {
     public int minFlipsMonoIncr(String s) {
         char[] ch = s.toCharArray();
         int n = ch.length;
-        int[][] dp = new int[2][n];
-        dp[0][0] = ch[0] == '0' ? 0 : 1;
-        dp[1][0] = ch[0] == '1' ? 0 : 1;
+        int dp0 = ch[0] - '0';
+        int dp1 = ch[1] - '0' ^ 1;
         for (int i = 1; i < n; i++) {
-            if (ch[i] == '1') dp[0][i] = dp[0][i - 1] + 1;
-            else  dp[0][i] = dp[0][i - 1];
-            if (ch[i] == '1') dp[1][i] = Math.min(dp[0][i - 1], dp[1][i - 1]);
-            else dp[1][i] = Math.min(dp[0][i - 1], dp[1][i - 1]) + 1;
+            dp1 = Math.min(dp0, dp1) + (ch[i] - '0' ^ 1);
+            dp0 = dp0 + ch[i] - '0';
         }
-        return Math.min(dp[0][n - 1], dp[1][n - 1]);
+        return Math.min(dp0, dp1);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
