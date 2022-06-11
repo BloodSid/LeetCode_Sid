@@ -80,16 +80,16 @@ public class Solution {
         long cnt = 0;
         long sum = 0;
         int n = nums.length;
-        int l = 0, r = 1;
-        for (; r <= n; r++) {
-            sum += nums[r - 1];
-            for (; l < r; l++) {
-                if (k > sum * (r - l)) {
+        int l = 0, r = 0;
+        for (; r < n; r++) {
+            sum += nums[r];
+            for (; l <= r; l++) {
+                if (k > sum * (r - l + 1)) {
                     break;
                 }
                 sum -= nums[l];
             }
-            cnt += r - l;
+            cnt += r - l + 1;
         }
         return cnt;
     }
