@@ -67,23 +67,25 @@ public class WiggleSubsequenceSolution {
 class Solution {
     public int wiggleMaxLength(int[] nums) {
         int n = nums.length;
+        // 表示上升的子序列
         int[] dp0 = new int[n];
+        // 表示下降的子序列
         int[] dp1 = new int[n];
-        int max = 0;
-        for (int i = 0; i < n; i++) {
-            dp0[i] = 1;
-            dp1[i] = 1;
-            for (int j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
-                    dp0[i] = Math.max(dp0[i], dp1[j] + 1);
-                } else if (nums[j] > nums[i]) {
-                    dp1[i] = Math.max(dp1[i], dp0[j] + 1);
-                }
+        dp0[0] = 1;
+        dp1[0] = 1;
+        for (int i = 1; i < n; i++) {
+            if (nums[i - 1] < nums[i]) {
+                dp0[i] = Math.max(dp0[i - 1], dp1[i - 1] + 1);
+                dp1[i] = dp1[i - 1];
+            } else if (nums[i - 1] > nums[i]) {
+                dp1[i] = Math.max(dp1[i - 1], dp0[i - 1] + 1);
+                dp0[i] = dp0[i - 1];
+            } else {
+                dp0[i] = dp0[i - 1];
+                dp1[i] = dp1[i - 1];
             }
-            max = Math.max(max, dp0[i]);
-            max = Math.max(max, dp1[i]);
         }
-        return max;
+        return Math.max(dp0[n - 1], dp1[n - 1]);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
