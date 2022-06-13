@@ -68,24 +68,17 @@ class Solution {
     public int wiggleMaxLength(int[] nums) {
         int n = nums.length;
         // 表示上升的子序列
-        int[] dp0 = new int[n];
-        // 表示下降的子序列
-        int[] dp1 = new int[n];
-        dp0[0] = 1;
-        dp1[0] = 1;
-        for (int i = 1; i < n; i++) {
-            if (nums[i - 1] < nums[i]) {
-                dp0[i] = Math.max(dp0[i - 1], dp1[i - 1] + 1);
-                dp1[i] = dp1[i - 1];
-            } else if (nums[i - 1] > nums[i]) {
-                dp1[i] = Math.max(dp1[i - 1], dp0[i - 1] + 1);
-                dp0[i] = dp0[i - 1];
-            } else {
-                dp0[i] = dp0[i - 1];
-                dp1[i] = dp1[i - 1];
+        if (n == 1) return 1;
+        int pre = nums[1] - nums[0];
+        int cnt = pre == 0 ? 1 : 2;
+        for (int i = 2; i < n; i++) {
+            int cur = nums[i] - nums[i - 1];
+            if ((pre <= 0 && cur > 0) || (pre >= 0 && cur < 0)) {
+                cnt++;
+                pre = cur;
             }
         }
-        return Math.max(dp0[n - 1], dp1[n - 1]);
+        return cnt;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
