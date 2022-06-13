@@ -50,26 +50,36 @@ package leetcode.editor.cn;
  * 最长递增子序列
  *
  * @author IronSid
- * @since 2022-06-09 23:52:14 
  * @version 1.0
+ * @since 2022-06-09 23:52:14
  */
 public class LongestIncreasingSubsequenceSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int lengthOfLIS(int[] nums) {
         int n = nums.length;
-        int[] dp = new int[n];
-        int max = 0;
-        for (int i = 0; i < n; i++) {
-            dp[i] = 1;
-            for (int j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
+        // end[i]表示长度 i + 1 的LIS的末尾元素的最小值
+        int[] end = new int[n];
+        end[0] = nums[0];
+        int len = 1;
+        for (int i = 1; i < n; i++) {
+            if (nums[i] > end[len - 1]) {
+                end[len] = nums[i];
+                len++;
+            } else {
+                int l = 0, r = len - 1;
+                while (l <= r) {
+                    int mid = l + r >> 1;
+                    if (end[mid] < nums[i]) {
+                        l = mid + 1;
+                    } else {
+                        r = mid - 1;
+                    }
                 }
+                end[l] = nums[i];
             }
-            max = Math.max(max, dp[i]);
         }
-        return max;
+        return len;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
