@@ -30,34 +30,20 @@ public class Solution {
     public int longestSubsequence(String s, int k) {
         char[] ch = s.toCharArray();
         int n = ch.length;
-        // 前导零
-        int[] pre = new int[n];
-        for (int i = 0, cnt = 0; i < n; i++) {
-            pre[i] = cnt;
-            if (ch[i] == '0') cnt++;
-        }
-        // dp[i][j] : ch[i]做序列中的第一个，序列长度 j 子序列的最小值
-        int[][] dp = new int[n][32];
-        int max = 0;
+        // 贪心地选全部的零和最低位的一
+        int len = 0;
         for (int i = 0; i < n; i++) {
-            dp[i][1] = ch[i] - '0';
-            if (dp[i][1] <= k) max = Math.max(max, 1 + pre[i]);
+            if (ch[i] == '0') len++;
         }
-        for (int len = 2; len < 32; len++) {
-            for (int i = n - len; i >= 0; i--) {
-                int min = Integer.MAX_VALUE;
-                for (int i1 = i + 1; i1 <= n - len + 1; i1++) {
-                    min = Math.min(min, dp[i1][len - 1]);
-                }
-                if (ch[i] == '0') {
-                    dp[i][len] = min;
-                } else {
-                    dp[i][len] = min + (1 << (len - 1));
-                }
-                if (dp[i][len] <= k) max = Math.max(max, len + pre[i]);
+        for (int i = n - 1; i >= Math.max(0 , n - 31); i--) {
+            if (ch[i] == '0') continue;
+            if (Integer.parseInt(new String(ch, i, n - i), 2) <= k) {
+                len++;
+            } else {
+                break;
             }
         }
-        return max;
+        return len;
     }
     // T4
     public long sellingWood(int m, int n, int[][] prices) {

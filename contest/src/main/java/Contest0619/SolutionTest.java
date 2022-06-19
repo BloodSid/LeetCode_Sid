@@ -42,6 +42,11 @@ public class SolutionTest {
     */
     @Test
     public void testLongestSubsequence() throws Exception {
+        String s = "1001010";
+        int k = 5;
+        int expected = 5;
+        int actual = solution.longestSubsequence(s, k);
+        assertEquals(expected, actual);
     }
 
     /**
