@@ -82,6 +82,7 @@ class RangeModule {
             }
         }
         // 遍历 {l, r} 之后的区间
+        entry = intervals.higherEntry(left);
         while (entry != null && entry.getKey() <= right) {
             right = Math.max(right, entry.getValue());
             intervals.remove(entry.getKey());
@@ -114,8 +115,9 @@ class RangeModule {
             }
         }
         // 遍历 {l, r} 之后的区间
+        entry = intervals.higherEntry(left);
         while (entry != null && entry.getKey() < right) {
-            if (entry.getKey() <= right) {
+            if (entry.getValue() <= right) {
                 intervals.remove(entry.getKey());
             } else {
                 intervals.remove(entry.getKey());
