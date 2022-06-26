@@ -1,6 +1,8 @@
 package Contest0626;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -70,11 +72,16 @@ public class Solution {
     private int[] xorSum;
     private boolean[] visited;
     private int[] nums;
+    // i 是否是 j 的 sub
+    private boolean[][] isSub;
+    private Deque<Integer> stack;
 
     public int minimumScore(int[] nums, int[][] edges) {
         this.nums = nums;
         int n = nums.length;
         map = new List[n];
+        isSub = new boolean[n][n];
+        stack = new LinkedList<>();
         for (int i = 0; i < n; i++) {
             map[i] = new ArrayList<Integer>();
         }
@@ -95,9 +102,9 @@ public class Solution {
                 int root2 = parent[edges[j][0]] == edges[j][1] ? edges[j][0] : edges[j][1];
                 int x1 = 0, x2 = 0, x3 = 0;
                 // root1 是 root2 的 sub
-                if (isSub(root1, root2)) {
+                if (isSub[root1][root2]) {
                     x1 = xorSum[root1]; x2 = xorSum[root2] ^ xorSum[root1]; x3 = xorSum[0] ^ xorSum[root2];
-                } else if (isSub(root2, root1)) {
+                } else if (isSub[root2][root1]) {
                     // root2 是 root1 的 sub
                     x1 = xorSum[root2]; x2 = xorSum[root1] ^ xorSum[root2]; x3 = xorSum[0] ^ xorSum[root1];
                 } else {
@@ -110,6 +117,10 @@ public class Solution {
     }
 
     private void dfs(int node) {
+        for (Integer pre : stack) {
+            isSub[node][pre] = true;
+        }
+        stack.push(node);
         visited[node] = true;
         int xor = nums[node];
         for (Object o : map[node]) {
@@ -120,14 +131,7 @@ public class Solution {
             xor ^= xorSum[chlid];
         }
         xorSum[node] = xor;
-    }
-
-    // node1 是否 node2 的 sub
-    boolean isSub(int node1, int node2) {
-        // 根节点不是任何节点的子树
-        if (node1 == 0) return false;
-        if (parent[node1] == node2) return true;
-        return isSub(parent[node1], node2);
+        stack.pop();
     }
 
     int getScore(int ... v) {
