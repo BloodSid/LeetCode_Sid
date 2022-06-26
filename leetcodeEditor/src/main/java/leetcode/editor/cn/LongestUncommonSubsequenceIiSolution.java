@@ -38,8 +38,6 @@ package leetcode.editor.cn;
 // 👍 97 👎 0
 
 
-import java.util.HashSet;
-
 /**
  * 最长特殊序列 II
  *
@@ -50,49 +48,34 @@ import java.util.HashSet;
 public class LongestUncommonSubsequenceIiSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-
-    private HashSet<String> sub;
-    private HashSet<String> dup;
-    private StringBuilder sb;
-
     public int findLUSlength(String[] strs) {
-        int len = 0;
-        boolean unique = false;
-        for (int i = 0; i < strs.length; i++) {
-            if (strs[i].length() > len) {
-                len = strs[i].length();
-                unique = true;
-            } else if (strs[i].length() == len) {
-                unique = false;
-            }
-        }
-        if (unique) return len;
-        sub = new HashSet<>();
-        dup = new HashSet<>();
-        sb = new StringBuilder();
-        for (String str : strs) {
-            char[] ch = str.toCharArray();
-            sb.setLength(0);
-            dfs(0, ch);
+        int n = strs.length;
+        char[][] ch = new char[n][];
+        for (int i = 0; i < n; i++) {
+            ch[i] = strs[i].toCharArray();
         }
         int max = -1;
-        for (String s : sub) {
-            if (s.length() <= max) continue;
-            if (!dup.contains(s)) max = s.length();
+        // 如果 str 的一个子序列是“特殊序列”，那 str 也是“特殊序列”，所以检查所有的 str 是不是其他 str 的子序列即可
+        for (int i = 0; i < n; i++) {
+            int j = 0;
+            if (ch[i].length <= max) continue;
+            for (; j < n; j++) {
+                if (i == j) continue;
+                if (isSubseq(ch[i], ch[j])) break;
+            }
+            if (j == n) max = ch[i].length;
         }
         return max;
     }
 
-    void dfs(int i, char[] ch) {
-        if (i == ch.length) {
-            String s = sb.toString();
-            if (!sub.add(s)) dup.add(s);
-            return;
+    boolean isSubseq(char[] c1, char[] c2) {
+        int p1 = 0, p2 = 0;
+        for (; p1 < c1.length && p2 < c2.length; p2++) {
+            if (c1[p1] == c2[p2]) {
+                p1++;
+            }
         }
-        dfs(i + 1, ch);
-        sb.append(ch[i]);
-        dfs(i + 1, ch);
-        sb.setLength(sb.length() - 1);
+        return p1 == c1.length;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
