@@ -45,36 +45,41 @@ public class PermutationsIiSolution {
 class Solution {
 
     List<List<Integer>> res = new ArrayList<>();
-    HashSet<String> set = new HashSet<>();
+    private int[] stack;
+    private boolean[] vis;
+    private int p;
+    private int n;
+    private int[] nums;
 
     public List<List<Integer>> permuteUnique(int[] nums) {
+        this.nums = nums;
         Arrays.sort(nums);
-        dfs(0, nums);
+        n = nums.length;
+        stack = new int[n];
+        vis = new boolean[n];
+        p = 0;
+        dfs(0);
         return res;
     }
 
-    void dfs(int idx, int[] nums) {
-        if (idx == nums.length) {
+    void dfs(int i) {
+        if (i == n) {
             ArrayList<Integer> cur = new ArrayList<>();
-            for (int i = 0; i < nums.length; i++) {
-                cur.add(nums[i]);
+            for (int i1 = 0; i1 < stack.length; i1++) {
+                cur.add(stack[i1]);
             }
-            if (set.add(cur.toString())) res.add(cur);
+            res.add(cur);
             return;
         }
-        for (int i = idx; i < nums.length; i++) {
-            // 重复数字跳过
-            if (i > idx && nums[i] == nums[i - 1]) continue;
-            swap(nums, idx, i);
-            dfs(idx + 1, nums);
-            swap(nums, idx, i);
+        for (int j = 0; j < n; j++) {
+            if (vis[j]) continue;
+            if (j > 0 && vis[j - 1] && nums[j - 1] == nums[j]) continue;
+            stack[p++] = nums[j];
+            vis[j] = true;
+            dfs(i + 1);
+            vis[j] = false;
+            p--;
         }
-    }
-
-    void swap(int[] nums, int i, int j) {
-        int t = nums[i];
-        nums[i] = nums[j];
-        nums[j] = t;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
