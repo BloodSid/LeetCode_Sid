@@ -30,6 +30,8 @@ package leetcode.editor.cn;
 // 👍 418 👎 0
 
 
+import java.util.HashMap;
+
 /**
  * 直线上最多的点数
  *
@@ -45,21 +47,39 @@ class Solution {
         if (n == 1) return 1;
         int max = 2;
         for (int i = 0; i < n; i++) {
+            HashMap<Integer, Integer> map = new HashMap<>();
             for (int j = i + 1; j < n; j++) {
-                int cnt = 2;
-                for (int k = j + 1; k < n; k++) {
-                    if (isOnLine(points[i], points[j], points[k])) {
-                        cnt++;
-                    }
-                }
-                max = Math.max(max, cnt);
+                int[] simplest = simplify(points[i][1] - points[j][1], points[i][0] - points[j][0]);
+                int key = (simplest[0] << 16) | simplest[1];
+                int cnt = map.getOrDefault(key, 0) + 1;
+                map.put(key, cnt);
+                max = Math.max(max, cnt + 1);
             }
         }
         return max;
     }
 
-    boolean isOnLine(int[] i, int[] j, int[] k) {
-        return (i[0] - j[0]) * (i[1] - k[1]) == (i[0] - k[0]) * (i[1] - j[1]);
+    // 简化分数 a / b
+    int[] simplify(int a, int b) {
+        if (a == 0) return new int[]{0, 1};
+        if (b == 0) return new int[]{1, 0};
+        boolean negative = a > 0 != b > 0;
+        if (a < 0) a = -a;
+        if (b < 0) b = -b;
+        int gcd = gcd(a, b);
+        a /= gcd;
+        b /= gcd;
+        // 规定分母必须为正
+        return new int[]{negative ? -a : a, b};
+    }
+
+    int gcd(int a, int b) {
+        while (b != 0) {
+            int t = a;
+            a = b;
+            b = t % b;
+        }
+        return a;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
