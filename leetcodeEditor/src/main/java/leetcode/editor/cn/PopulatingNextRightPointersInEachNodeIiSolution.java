@@ -77,26 +77,37 @@ class Node {
         right = _right;
         next = _next;
     }
-};
+}
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    public static final int N = 6000;
-    private Node[] q = new Node[N];
+    private Node pre;
+    private Node head;
 
     public Node connect(Node root) {
         if (root == null) return null;
-        int tail = 0, head = 1;
-        q[0] = root;
-        while (tail < head) {
-            int size = head;
-            for (; tail < size; tail++) {
-                if (q[tail].left != null) q[head++] = q[tail].left;
-                if (q[tail].right != null) q[head++] = q[tail].right;
-                if (tail != size - 1) q[tail].next = q[tail + 1];
+        // 层序遍历，遍历完一层后，这一层形成一个链表，再利用这个链表填充下一层
+        head = root;
+        while (head != null) {
+            Node cur = head;
+            pre = null;
+            head = null;
+            for (; cur != null; cur = cur.next) {
+                if (cur.left != null) {
+                    add(cur.left);
+                }
+                if (cur.right != null) {
+                    add(cur.right);
+                }
             }
         }
         return root;
+    }
+
+    void add(Node node) {
+        if (head == null) head = node;
+        if (pre != null) pre.next = node;
+        pre = node;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
