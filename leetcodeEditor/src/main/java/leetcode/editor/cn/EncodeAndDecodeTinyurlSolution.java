@@ -56,24 +56,22 @@ public class EncodeAndDecodeTinyurlSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 public class Codec {
 
-    private final char[] ch = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
     private final HashMap<String, String> sTOl = new HashMap<>();
     private final HashMap<String, String> lTOs = new HashMap<>();
-    private final Random random = new Random();
     private final String pre = "http://tinyurl.com/";
 
     // Encodes a URL to a shortened URL.
     public String encode(String longUrl) {
-        int n = 6;
+        int h = longUrl.hashCode();
         while (!lTOs.containsKey(longUrl)) {
-            char[] code = new char[n];
-            for (int i = 0; i < n; i++) {
-                code[i] = ch[random.nextInt(ch.length)];
+            String cur = pre + Integer.toHexString(h).toUpperCase();
+            if (!sTOl.containsKey(cur)) {
+                lTOs.put(longUrl, cur);
+                sTOl.put(cur, longUrl);
+                break;
             }
-            String cur = pre + new String(code);
-            if (sTOl.containsKey(cur)) continue;
-            lTOs.put(longUrl, cur);
-            sTOl.put(cur, longUrl);
+            // 不冲突则结束，若冲突则自增
+            h++;
         }
         return lTOs.get(longUrl);
     }
