@@ -72,15 +72,22 @@ public class Solution {
 
     public int peopleAwareOfSecret(int n, int delay, int forget) {
         int MOD = (int) (1e9 + 7);
-        long[] dp = new long[n];
-        dp[0] = 1;
+        long[][] dp = new long[n][forget];
+        dp[0][0] = 1;
         for (int i = 1; i < n; i++) {
             long t = 0;
-            for (int j = Math.min(0, i - forget + 1); j <= i - delay; j++) {
-                t += dp[j];
+            for (int k = delay - 1; k < forget - 1; k++) {
+                t += dp[i - 1][k];
             }
-            dp[i] = t % MOD;
+            dp[i][0] = t % MOD;
+            for (int j = 1; j < forget; j++) {
+                dp[i][j] = dp[i - 1][j - 1];
+            }
         }
-        return (int) ((dp[n - 1] - dp[n - 1 - forget] + MOD) % MOD);
+        long sum = 0;
+        for (int i = 0; i < forget; i++) {
+            sum += dp[n - 1][i];
+        }
+        return (int) ((sum % MOD + MOD) % MOD);
     }
 }
