@@ -80,9 +80,7 @@ public class Solution {
                 t += dp[i - 1][k];
             }
             dp[i][0] = t % MOD;
-            for (int j = 1; j < forget; j++) {
-                dp[i][j] = dp[i - 1][j - 1];
-            }
+            if (forget - 1 >= 0) System.arraycopy(dp[i - 1], 0, dp[i], 1, forget - 1);
         }
         long sum = 0;
         for (int i = 0; i < forget; i++) {
@@ -90,4 +88,36 @@ public class Solution {
         }
         return (int) ((sum % MOD + MOD) % MOD);
     }
+
+    // T4
+    long[][] dp;
+    int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int MOD = (int) (1e9 + 7);
+    int m, n;
+
+    public int countPaths(int[][] grid) {
+        m = grid.length;
+        n = grid[0].length;
+        dp = new long[m][n];
+        long ans = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                ans += dfs(i, j, grid);
+            }
+        }
+        return (int) (ans % MOD);
+    }
+
+    long dfs(int x, int y, int[][] grid) {
+        if (dp[x][y] != 0) return dp[x][y];
+        long res = 1;
+        for (int[] dir : dirs) {
+            int nx = dir[0] + x, ny = dir[1] + y;
+            if (nx < 0 || nx >= m || ny < 0 || ny >= n || grid[x][y] >= grid[nx][ny]) continue;
+            res += dfs(nx, ny, grid);
+        }
+        dp[x][y] = res % MOD;
+        return dp[x][y];
+    }
+
 }
