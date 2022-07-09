@@ -45,6 +45,8 @@ package leetcode.editor.cn;
 // 👍 285 👎 0
 
 
+import java.util.HashMap;
+
 /**
  * 最长的斐波那契子序列的长度
  *
@@ -59,20 +61,18 @@ class Solution {
         int max = 0;
         int n = arr.length;
         int[][] f = new int[n][n];
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            map.put(arr[i], i);
+        }
         for (int i = 1; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
-                int l = 0, r = i - 1;
                 int target = arr[j] - arr[i];
-                while (l < r) {
-                    int mid = l + r >> 1;
-                    if (arr[mid] < target) {
-                        l = mid + 1;
-                    } else {
-                        r = mid;
-                    }
-                }
-                if (arr[l] == target) {
-                    f[i][j] = f[l][i] + 1;
+                // 若 j 的位置太后，导致 target 不能在 i 之前，剪枝
+                if (target >= arr[i]) break;
+                Integer k = map.getOrDefault(target, -1);
+                if (k != -1 && k < i) {
+                    f[i][j] = f[k][i] + 1;
                     max = Math.max(max, f[i][j]);
                 }
             }
