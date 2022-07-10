@@ -46,48 +46,48 @@ package leetcode.editor.cn;
  *
  * @author IronSid
  * @version 1.0
- * @since 2022-07-10 00:11:52 
+ * @since 2022-07-10 00:11:52
  */
 public class CherryPickupSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
+    public static final int INF = Integer.MIN_VALUE;
     private int[][][] dp;
+    private boolean[][][] vis;
+    private int[][] grid;
+    private int n;
 
     public int cherryPickup(int[][] grid) {
-        int n = grid.length;
-        // 原问题可转化为两个人从起点一起出发，轮流行动。
-        // 假设在第 m 轮，两个人的位置分别为 {i,j}, {i1,j1}, 可得 i + j = m = i1 + j1, 所以三个变量即可表示一个状态
-        dp = new int[n][n][n];
+        this.grid = grid;
+        n = grid.length;
+        dp = new int[2 * n - 1][n][n];
+        vis = new boolean[2 * n - 1][n][n];
         dp[0][0][0] = grid[0][0];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                for (int i1 = Math.max(0, i + j - n + 1); i1 <= Math.min(i + j, n - 1); i1++) {
-                    if (i == 0 && j == 0) continue;
-                    if (grid[i][j] == -1 || grid[i1][i + j - i1] == -1) {
-                        dp[i][j][i1] = -1;
-                        continue;
-                    }
-                    int t = -1;
-                    int[][] keys = {{i - 1, j, i1}, {i, j - 1, i1}, {i - 1, j, i1 - 1}, {i, j - 1, i1 - 1}};
-                    for (int[] k : keys) {
-                        if (k[0] < 0 || k[1] < 0 || k[2] < 0 || k[0] + k[1] - k[2] < 0) continue;
-                        t = Math.max(t, dp[k[0]][k[1]][k[2]]);
-                    }
-                    // 当前状态不可达
-                    if (t == -1) {
-                        dp[i][j][i1] = -1;
-                    } else {
-                        // 两人位置相同，只能摘一个
-                        if (i1 == i) t += grid[i][j];
-                            // 两人位置不同，可以摘两个
-                        else t += grid[i][j] + grid[i1][i + j - i1];
-                    }
-                    dp[i][j][i1] = t;
-                }
-            }
+        vis[0][0][0] = true;
+        dfs(2 * n - 2, n - 1, n - 1);
+        return Math.max(0, dp[2 * n - 2][n - 1][n - 1]);
+    }
+
+    int dfs(int step, int x1, int x2) {
+        // 不妨设 x1 和 x2 分别走上面和下面的路，即 x1 <= x2 始终成立。利用轮换性优化掉一半左右的搜索
+        if (x1 < 0 || x2 < 0 || x2 < x1 || step < 0 || step - x1 < 0 || step - x1 >= n
+                || step - x2 < 0 || step - x2 >= n) return INF;
+        if (vis[step][x1][x2]) return dp[step][x1][x2];
+        vis[step][x1][x2] = true;
+        int max = INF;
+        if (grid[x1][step - x1] != -1 && grid[x2][step - x2] != -1) {
+            max = Math.max(max, dfs(step - 1, x1, x2));
+            max = Math.max(max, dfs(step - 1, x1, x2 - 1));
+            max = Math.max(max, dfs(step - 1, x1 - 1, x2));
+            max = Math.max(max, dfs(step - 1, x1 - 1, x2 - 1));
         }
-        return Math.max(0, dp[n - 1][n - 1][n - 1]);
+        if (max != INF) {
+            max += grid[x1][step - x1];
+            if (x1 != x2) max += grid[x2][step - x2];
+        }
+        dp[step][x1][x2] = max;
+        return max;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
