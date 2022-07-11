@@ -55,8 +55,6 @@ package leetcode.editor.cn;
 // 👍 155 👎 0
 
 
-import java.util.*;
-
 /**
  * 实现一个魔法字典
  *
@@ -68,29 +66,29 @@ public class ImplementMagicDictionarySolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class MagicDictionary {
 
-    private final HashSet<String> set;
+    private char[][] words;
 
     public MagicDictionary() {
-        set = new HashSet<>();
     }
     
     public void buildDict(String[] dictionary) {
-        for (String word : dictionary) {
-            char[] ch = word.toCharArray();
-            for (int i = 0; i < ch.length; i++) {
-                char cur = ch[i];
-                for (char c = 'a'; c <= 'z'; c++) {
-                    if (c == cur) continue;
-                    ch[i] = c;
-                    set.add(new String(ch));
-                }
-                ch[i] = cur;
-            }
+        words = new char[dictionary.length][];
+        for (int i = 0; i < dictionary.length; i++) {
+            words[i] = dictionary[i].toCharArray();
         }
     }
     
     public boolean search(String searchWord) {
-        return set.contains(searchWord);
+        char[] search = searchWord.toCharArray();
+        for (char[] word : words) {
+            if (word.length != search.length) continue;
+            int d = 0;
+            for (int i = 0; d < 2 && i < word.length; i++) {
+                if (word[i] != search[i]) d++;
+            }
+            if (d == 1) return true;
+        }
+        return false;
     }
 }
 
