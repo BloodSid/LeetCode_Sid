@@ -68,48 +68,29 @@ public class ImplementMagicDictionarySolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class MagicDictionary {
 
-    public static final String WILD = "**";
-    private final HashMap<String, String> virtual;
-
+    private final HashSet<String> set;
 
     public MagicDictionary() {
-        virtual = new HashMap<>();
+        set = new HashSet<>();
     }
     
     public void buildDict(String[] dictionary) {
         for (String word : dictionary) {
-            String[] var = virtualize(word);
-            for (String s : var) {
-                // 若有两个单词连接到该虚拟节点，则查询时任何连接到该节点的单词都合法
-                if (virtual.containsKey(s)) {
-                    virtual.put(s, WILD);
-                } else {
-                    // 只有一个单词连接到该虚拟节点。则查询时连接到该节点的单词必须不能和这个单词相同
-                    virtual.put(s, word);
+            char[] ch = word.toCharArray();
+            for (int i = 0; i < ch.length; i++) {
+                char cur = ch[i];
+                for (char c = 'a'; c <= 'z'; c++) {
+                    if (c == cur) continue;
+                    ch[i] = c;
+                    set.add(new String(ch));
                 }
+                ch[i] = cur;
             }
         }
     }
     
     public boolean search(String searchWord) {
-        String[] vir = virtualize(searchWord);
-        for (String s : vir) {
-            String real = virtual.get(s);
-            if (real != null && !searchWord.equals(real)) return true;
-        }
-        return false;
-    }
-
-    String[] virtualize(String s) {
-        char[] ch = s.toCharArray();
-        String[] res = new String[ch.length];
-        for (int i = 0; i < ch.length; i++) {
-            char t = ch[i];
-            ch[i] = '*';
-            res[i] = new String(ch);
-            ch[i] = t;
-        }
-        return res;
+        return set.contains(searchWord);
     }
 }
 
