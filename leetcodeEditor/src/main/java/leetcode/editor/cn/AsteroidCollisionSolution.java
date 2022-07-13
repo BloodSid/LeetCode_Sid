@@ -54,26 +54,23 @@ public class AsteroidCollisionSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int[] asteroidCollision(int[] asteroids) {
-        ArrayDeque<Integer> stack = new ArrayDeque<>();
+        int[] stack = new int[asteroids.length];
+        int p = 0;
         for (int i : asteroids) {
             if (i > 0) {
-                stack.push(i);
+                stack[p++] = i;
             } else {
-                while (!stack.isEmpty() && stack.peek() > 0 && stack.peek() < -i) {
-                    stack.pop();
+                while (p != 0 && stack[p - 1] > 0 && stack[p - 1] < -i) {
+                    p--;
                 }
-                if (!stack.isEmpty() && stack.peek() == -i) {
-                    stack.pop();
-                } else if (stack.isEmpty() || stack.peek() < 0) {
-                    stack.push(i);
+                if (p != 0 && stack[p - 1] == -i) {
+                    p--;
+                } else if (p == 0 || stack[p - 1] < 0) {
+                    stack[p++] = i;
                 }
             }
         }
-        int[] res = new int[stack.size()];
-        int p = stack.size() - 1;
-        for (Integer i : stack) {
-            res[p--] = i;
-        }
+        int[] res = Arrays.copyOf(stack, p);
         return res;
     }
 }
