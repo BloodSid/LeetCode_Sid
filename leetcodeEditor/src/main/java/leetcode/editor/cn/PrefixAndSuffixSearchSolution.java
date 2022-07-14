@@ -38,6 +38,8 @@ package leetcode.editor.cn;
 // 👍 152 👎 0
 
 
+import java.util.HashMap;
+
 /**
  * 前缀和后缀搜索
  *
@@ -50,44 +52,25 @@ public class PrefixAndSuffixSearchSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class WordFilter {
 
-    public static final char MARKER = 'z' + 1;
-    private final Trie root;
+    HashMap<String, Integer> map = new HashMap<>();
 
     public WordFilter(String[] words) {
-        root = new Trie();
-        int weight = 0;
+        int idx = 0;
         for (String word : words) {
-            // 前一个 word 用于枚举该单词所有后缀，后一个 word 则表示该单词所有前缀
-            // 后缀与该单词连接，放入字典树，就等于把该后缀与所有前缀组合放入字典树
-            char[] ch = (word + MARKER + word).toCharArray();
-            for (int i = 0; i < word.length(); i++) {
-                Trie node = root;
-                for (int j = i; j < ch.length; j++) {
-                    if (node.children[ch[j] - 'a'] == null) {
-                        node.children[ch[j] - 'a'] = new Trie();
-                    }
-                    node = node.children[ch[j] - 'a'];
-                    node.weight = weight;
+            for (int i = 1; i <= word.length(); i++) {
+                String suff = word.substring(0, i);
+                for (int j = 0; j < word.length(); j++) {
+                    String pref = word.substring(j);
+                    map.put(suff + '*' + pref, idx);
                 }
             }
-            weight++;
+            idx++;
         }
     }
     
     public int f(String pref, String suff) {
-        // 后缀 + 前缀，在字典树中搜索
-        Trie node = root;
-        char[] ch = (suff + MARKER + pref).toCharArray();
-        for (char c : ch) {
-            if (node.children[c - 'a'] == null) return -1;
-            node = node.children[c - 'a'];
-        }
-        return node.weight;
+        return map.getOrDefault(pref + '*' + suff, -1);
     }
-}
-class Trie {
-    int weight;
-    Trie[] children = new Trie[27];
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
