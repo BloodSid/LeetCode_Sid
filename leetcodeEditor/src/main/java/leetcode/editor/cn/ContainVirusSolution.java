@@ -157,7 +157,7 @@ class Solution {
                 }
                 if (!vis[nx][ny]) {
                     vis[nx][ny] = true;
-                    // 未感染
+                    // 将感染
                     if (g[nx][ny] == UNINFECTED) {
                         next.add(new int[]{nx, ny});
                         // 已感染
@@ -166,6 +166,10 @@ class Solution {
                     }
                 }
             }
+        }
+        // 把将感染的格子的 vis 重置为 false, 避免影响其他感染区域对这些格子的搜索
+        for (int[] p : next) {
+            vis[p[0]][p[1]] = false;
         }
         return walls;
     }
