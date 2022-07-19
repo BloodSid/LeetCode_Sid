@@ -63,27 +63,29 @@ class MyCalendarTwo {
     }
 
     public boolean book(int start, int end) {
-        Integer pre1 = dual.floorKey(start), suf1 = dual.ceilingKey(start);
-        if (pre1 != null && start < dual.get(pre1)) return false;
-        if (suf1 != null && end > suf1) return false;
+        Integer pre = dual.floorKey(start), suf = dual.ceilingKey(start);
+        if (pre != null && start < dual.get(pre)) return false;
+        if (suf != null && end > suf) return false;
+        // 注意：preInterval 和 sufInterval 不能相同，故一个用严格大于，一个用小于等于
         Map.Entry<Integer, Integer> preInterval = single.floorEntry(start);
-        Map.Entry<Integer, Integer> sufInterval = single.ceilingEntry(start);
-        // 和前一个区间重合
-        if (preInterval != null && start < preInterval.getValue()) {
-            // 交集放入 dual
-            dual.put(start, Math.min(preInterval.getValue(), end));
+        Map.Entry<Integer, Integer> sufInterval = single.higherEntry(start);
+        // 和前一个区间重合或相连
+        if (preInterval != null && start <= preInterval.getValue()) {
+            // 交集不为空则放入 dual
+            if (start < preInterval.getValue()) dual.put(start, Math.min(preInterval.getValue(), end));
             // 并集
             start = preInterval.getKey();
             end = Math.max(preInterval.getValue(), end);
             single.remove(preInterval.getKey());
         }
-        // 和后一个区间重合
-        if (sufInterval != null && end > sufInterval.getKey()) {
-            // 交集放入 dual
-            dual.put(sufInterval.getKey(), Math.min(sufInterval.getValue(), end));
+        // 和后一个区间重合或相连
+        while (sufInterval != null && end >= sufInterval.getKey()) {
+            // 交集不为空则放入 dual
+            if (end > sufInterval.getKey()) dual.put(sufInterval.getKey(), Math.min(sufInterval.getValue(), end));
             // 并集
             end = Math.max(sufInterval.getValue(), end);
             single.remove(sufInterval.getKey());
+            sufInterval = single.higherEntry(start);
         }
         single.put(start, end);
         return true;
