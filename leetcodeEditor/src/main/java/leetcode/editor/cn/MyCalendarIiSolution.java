@@ -66,26 +66,21 @@ class MyCalendarTwo {
         Integer pre = dual.floorKey(start), suf = dual.ceilingKey(start);
         if (pre != null && start < dual.get(pre)) return false;
         if (suf != null && end > suf) return false;
-        // 注意：preInterval 和 sufInterval 不能相同，故一个用严格大于，一个用小于等于
+        // preInterval.key小于等于start，表示已有区间里第一个可能重合的
         Map.Entry<Integer, Integer> preInterval = single.floorEntry(start);
-        // 和前一个区间重合或相连
-        if (preInterval != null && start <= preInterval.getValue()) {
+        // 记下原来值
+        int left = start, right = end;
+        // 重合则把遍历的起点设为该区间
+        if (preInterval != null && start <= preInterval.getValue()) start = preInterval.getKey();
+        Map<Integer, Integer> sufIntervals = single.subMap(start, true, end, true);
+        for (Map.Entry<Integer, Integer> sufInterval : sufIntervals.entrySet()) {
+            int l = sufInterval.getKey(), r = sufInterval.getValue();
             // 交集不为空则放入 dual
-            if (start < preInterval.getValue()) dual.put(start, Math.min(preInterval.getValue(), end));
+            int[] overlap = {Math.max(left, l), Math.min(right, r)};
+            if (overlap[0] != overlap[1]) dual.put(overlap[0], overlap[1]);
             // 并集
-            start = preInterval.getKey();
-            end = Math.max(preInterval.getValue(), end);
-            single.remove(preInterval.getKey());
-        }
-        // 和后一个区间重合或相连。 NavigableMap 力扣上默认不导，提交中需显式import
-        Map<Integer, Integer> sufIntervals = single.subMap(start, false, end, true);
-        Iterator<Map.Entry<Integer, Integer>> it = sufIntervals.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Integer, Integer> sufInterval = it.next();
-            // 交集不为空则放入 dual
-            if (end > sufInterval.getKey()) dual.put(sufInterval.getKey(), Math.min(sufInterval.getValue(), end));
-            // 并集
-            end = Math.max(sufInterval.getValue(), end);
+            start = Math.min(start, l);
+            end = Math.max(end, r);
         }
         // 删除被合并的区间
         sufIntervals.clear();
