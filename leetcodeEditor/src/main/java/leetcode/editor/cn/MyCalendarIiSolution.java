@@ -68,7 +68,6 @@ class MyCalendarTwo {
         if (suf != null && end > suf) return false;
         // 注意：preInterval 和 sufInterval 不能相同，故一个用严格大于，一个用小于等于
         Map.Entry<Integer, Integer> preInterval = single.floorEntry(start);
-        Map.Entry<Integer, Integer> sufInterval = single.higherEntry(start);
         // 和前一个区间重合或相连
         if (preInterval != null && start <= preInterval.getValue()) {
             // 交集不为空则放入 dual
@@ -78,15 +77,18 @@ class MyCalendarTwo {
             end = Math.max(preInterval.getValue(), end);
             single.remove(preInterval.getKey());
         }
-        // 和后一个区间重合或相连
-        while (sufInterval != null && end >= sufInterval.getKey()) {
+        // 和后一个区间重合或相连。 NavigableMap 力扣上默认不导，提交中需显式import
+        Map<Integer, Integer> sufIntervals = single.subMap(start, false, end, true);
+        Iterator<Map.Entry<Integer, Integer>> it = sufIntervals.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Integer, Integer> sufInterval = it.next();
             // 交集不为空则放入 dual
             if (end > sufInterval.getKey()) dual.put(sufInterval.getKey(), Math.min(sufInterval.getValue(), end));
             // 并集
             end = Math.max(sufInterval.getValue(), end);
-            single.remove(sufInterval.getKey());
-            sufInterval = single.higherEntry(start);
         }
+        // 删除被合并的区间
+        sufIntervals.clear();
         single.put(start, end);
         return true;
     }
