@@ -46,17 +46,23 @@ public class SetIntersectionSizeAtLeastTwoSolution {
 class Solution {
     public int intersectionSizeTwo(int[][] intervals) {
         Arrays.sort(intervals, (o1, o2) -> o1[1] - o2[1] == 0 ? o2[0] - o1[0] : o1[1] - o2[1]);
-        TreeSet<Integer> set = new TreeSet<>();
+        List<Integer> list = new ArrayList<>();
         for (int[] interval : intervals) {
-            int size = set.subSet(interval[0], interval[1] + 1).size();
+            int size = 0;
+            for (int i = list.size() - 1; i >= 0; i--) {
+                if (list.get(i) >= interval[0]) {
+                    size++;
+                }
+                if (size == 2) break;
+            }
             if (size == 0) {
-                set.add(interval[1]);
-                set.add(interval[1] - 1);
+                list.add(interval[1] - 1);
+                list.add(interval[1]);
             } else if (size == 1) {
-                set.add(interval[1]);
+                list.add(interval[1]);
             }
         }
-        return set.size();
+        return list.size();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
