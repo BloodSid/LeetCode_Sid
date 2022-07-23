@@ -83,43 +83,20 @@ public class Ur2n8PSolution {
 class Solution {
     public boolean sequenceReconstruction(int[] nums, int[][] sequences) {
         int n = nums.length;
-        List<Integer>[] map = new List[n + 1];
-        int[] inCnt = new int[n + 1];
+        Set<Integer>[] map = new Set[n + 1];
         for (int i = 1; i <= n; i++) {
-            map[i] = new ArrayList<>();
+            map[i] = new HashSet<>();
         }
         for (int[] sequence : sequences) {
             for (int i = 1; i < sequence.length; i++) {
                 int from = sequence[i - 1];
                 int to = sequence[i];
                 map[from].add(to);
-                inCnt[to]++;
             }
         }
-        int cur = 0;
-        // 找起点
-        for (int i = 1; i <= n; i++) {
-            // 只能有一个点入度为零
-            if (inCnt[i] == 0 && cur != 0) {
-                return false;
-            } else if (inCnt[i] == 0) {
-                cur = i;
-            }
+        for (int i = 1; i < nums.length; i++) {
+            if (!map[nums[i - 1]].contains(nums[i])) return false;
         }
-        while (!map[cur].isEmpty()) {
-            List<Integer> next = map[cur];
-            int tmp = 0;
-            for (Integer nx : next) {
-                inCnt[nx]--;
-                if (inCnt[nx] == 0 && tmp != 0) {
-                    return false;
-                } else if (inCnt[nx] == 0) {
-                    tmp = nx;
-                }
-            }
-            cur = tmp;
-        }
-        // 拓扑序唯一
         return true;
     }
 }
