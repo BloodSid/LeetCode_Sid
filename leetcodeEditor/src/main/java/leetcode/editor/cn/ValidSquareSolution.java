@@ -52,13 +52,23 @@ public class ValidSquareSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
-        int[][] v = {{p1[0] - p2[0], p1[1] - p2[1]}, {p1[0] - p3[0], p1[1] - p3[1]}, {p1[0] - p4[0], p1[1] - p4[1]}};
-        Arrays.sort(v, ((o1, o2) -> dis(o1) - dis(o2)));
-        return (dis(v[0]) != 0) && (dis(v[0]) == dis(v[1])) && (v[0][0] * v[1][0] + v[0][1] * v[1][1] == 0)
-                && (v[0][0] + v[1][0] == v[2][0] &&  v[0][1] + v[1][1] == v[2][1]);
+        int[][] p = {p1, p2, p3, p4};
+        int n = p.length;
+        int[] list = new int[n * (n - 1) / 2];
+        int k = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                list[k++] = dis(p[i], p[j]);
+            }
+        }
+        Arrays.sort(list);
+        if (list[0] == 0) return false;
+        return list[1] == list[0] && list[2] == list[0] && list[3] == list[0] &&
+                list[4] == 2 * list[0] && list[5] == 2 * list[0];
     }
 
-    int dis(int[] v) {
+    int dis(int[] x, int[] y) {
+        int[] v = {x[0] - y[0], x[1] - y[1]};
         return v[0] * v[0] + v[1] * v[1];
     }
 }
