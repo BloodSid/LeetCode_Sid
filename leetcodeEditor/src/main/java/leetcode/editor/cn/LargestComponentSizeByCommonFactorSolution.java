@@ -67,8 +67,8 @@ public class LargestComponentSizeByCommonFactorSolution {
 class Solution {
 
     public static final int MAX = (int) 1e5;
-    // 缓存所有素数 static
-    int[] primes = new int[(int) 2e4];
+    // 缓存所有数最小的质因子
+    int[] factor = new int[MAX + 1];
     // static
     HashMap<Integer, Integer> pMap = new HashMap<>();
     // static
@@ -80,10 +80,13 @@ class Solution {
         for (int i = 2; i <= MAX; i++) {
             int R = (int) Math.sqrt(i);
             for (int j = 2; j <= R; j++) {
-                if (i % j == 0) continue loop;
+                if (i % j == 0) {
+                    factor[i] = j;
+                    continue loop;
+                }
             }
-            pMap.put(i, size);
-            primes[size++] = i;
+            factor[i] = i;
+            pMap.put(i, size++);
         }
     }
 
@@ -103,12 +106,10 @@ class Solution {
         Arrays.fill(weight, 0, n, 1);
         // 对每个数，将它和它的质因子 union
         for (int i = 0; i < nums.length; i++) {
-            if (pMap.containsKey(nums[i])) {
-                union(i, n + pMap.get(nums[i]));
-            } else {
-                for (int j = 0; j < primes.length && primes[j] <= nums[i] / 2; j++) {
-                    if (nums[i] % primes[j] == 0) union(i, n + j);
-                }
+            int num = nums[i];
+            while (num != 1) {
+                union(i, n + pMap.get(factor[num]));
+                num /= factor[num];
             }
         }
         return maxWeight;
@@ -124,7 +125,7 @@ class Solution {
     void union(int a, int b) {
         int rootA = find(a), rootB = find(b);
         if (rootA != rootB) {
-            // 按权重合并
+            // 按节点序号合并
             int mx = Math.max(rootA, rootB), mn = Math.min(rootA, rootB);
             p[mn] = mx;
             weight[mx] += weight[mn];
