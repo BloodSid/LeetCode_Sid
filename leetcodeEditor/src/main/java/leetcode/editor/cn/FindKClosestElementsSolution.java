@@ -52,43 +52,15 @@ public class FindKClosestElementsSolution {
 class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
         int n = arr.length;
-        int[] diff = new int[n];
-        for (int i = 0; i < n; i++) {
-            diff[i] = Math.abs(arr[i] - x);
-        }
-        // 前缀和
-        int[] preSum = new int[n + 1];
-        for (int i = 1, t = 0; i <= n; i++) {
-            t += diff[i - 1];
-            preSum[i] = t;
-        }
-        // res[i] 对应 arr[i, i + k) 所有元素到 x 距离之和
-        int[] res = new int[n - k + 1];
-        for (int i = 0; i <= n - k; i++) {
-            res[i] = preSum[i + k] - preSum[i];
-        }
         int l = 0, r = n - k;
-        int idx = 0;
-        if (res.length == 1) idx = 0;
-        else if (res.length == 2) idx = res[0] <= res[1] ? 0 : 1;
-        else {
-            while (l <= r) {
-                int mid = l + r >> 1;
-                int pre = Math.max(mid - 1, 0);
-                while (pre > 0 && res[pre] == res[mid]) pre--;
-                int suf = Math.min(mid + 1, n - k);
-                while (suf < n - k && res[suf] == res[mid]) suf++;
-                if (res[mid] > res[suf]) {
-                    l = suf;
-                } else if (res[mid] > res[pre]) {
-                    r = pre;
-                } else {
-                    idx = res[pre] == res[mid] ? pre : pre + 1;
-                    break;
-                }
-            }
+        while (l < r) {
+            int mid = l + r >> 1;
+            // 应该删去头，所以向右找
+            if (x - arr[mid] > arr[mid + k] - x) l = mid + 1;
+            // 应该删去尾，所以向左找；若取等号，删去头尾都可，则优先删尾
+            else r = mid;
         }
-        int start = idx;
+        int start = l;
         // 提交时需导包
         return new AbstractList<Integer>() {
             @Override
