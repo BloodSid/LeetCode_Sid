@@ -62,12 +62,30 @@ class Solution {
             t += diff[i - 1];
             preSum[i] = t;
         }
-        int idx = 0, min = Integer.MAX_VALUE;
+        // res[i] 对应 arr[i, i + k) 所有元素到 x 距离之和
+        int[] res = new int[n - k + 1];
         for (int i = 0; i <= n - k; i++) {
-            int t = preSum[i + k] - preSum[i];
-            if (t < min) {
-                min = t;
-                idx = i;
+            res[i] = preSum[i + k] - preSum[i];
+        }
+        int l = 0, r = n - k;
+        int idx = 0;
+        if (res.length == 1) idx = 0;
+        else if (res.length == 2) idx = res[0] <= res[1] ? 0 : 1;
+        else {
+            while (l <= r) {
+                int mid = l + r >> 1;
+                int pre = Math.max(mid - 1, 0);
+                while (pre > 0 && res[pre] == res[mid]) pre--;
+                int suf = Math.min(mid + 1, n - k);
+                while (suf < n - k && res[suf] == res[mid]) suf++;
+                if (res[mid] > res[suf]) {
+                    l = suf;
+                } else if (res[mid] > res[pre]) {
+                    r = pre;
+                } else {
+                    idx = res[pre] == res[mid] ? pre : pre + 1;
+                    break;
+                }
             }
         }
         int start = idx;
