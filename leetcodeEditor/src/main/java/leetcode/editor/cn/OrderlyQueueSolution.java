@@ -47,19 +47,26 @@ public class OrderlyQueueSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public String orderlyQueue(String s, int k) {
+        int n = s.length();
+        char[] ch = s.toCharArray();
         if (k == 1) {
             // 相当于字符串轮转
-            String res = s;
-            for (int i = 1; i < s.length(); i++) {
-                String rotate = s.substring(i) + s.substring(0, i);
-                if (res.compareTo(rotate) > 0) {
-                    res = rotate;
+            int i = 0, j = 1, l = 0;
+            while (i < n && j < n && l < n) {
+                char a = ch[(i + l) % n], b = ch[(j + l) % n];
+                if (a == b) {
+                    l++;
+                    continue;
                 }
+                else if (a > b) i += l + 1;
+                else j += l + 1;
+                l = 0;
+                if (i == j) i++;
             }
-            return res;
+            i = Math.min(i, j);
+            return s.substring(i) + s.substring(0, i);
         } else {
             // 相当于随意排列
-            char[] ch = s.toCharArray();
             int[] f = new int[128];
             for (char c : ch) {
                 f[c]++;
