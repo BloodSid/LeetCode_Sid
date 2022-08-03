@@ -55,8 +55,6 @@ package leetcode.editor.cn;
 // 👍 37 👎 0
 
 
-import java.util.HashMap;
-
 /**
  * 可移除字符的最大数目
  *
@@ -68,32 +66,23 @@ public class MaximumNumberOfRemovableCharactersSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int maximumRemovals(String s, String p, int[] removable) {
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < removable.length; i++) {
-            map.put(removable[i], i);
-        }
         char[] cs = s.toCharArray();
         int n = cs.length;
         char[] cp = p.toCharArray();
         int l = 1, r = removable.length;
         while (l <= r) {
             int mid = l + r >> 1;
-            boolean isSub = false;
-            // 构造删除后的字符串
-            char[] remove = new char[n - mid];
-            int p1 = 0;
-            for (int i = 0; i < n; i++) {
-                if (map.getOrDefault(i, n) >= mid) {
-                    remove[p1++] = cs[i];
-                }
+            boolean[] del = new boolean[n];
+            for (int i = 0; i < mid; i++) {
+                del[removable[i]] = true;
             }
             int j = 0;
-            for (int i = 0; i < remove.length && j < cp.length; i++) {
-                if (remove[i] == cp[j]) {
+            for (int i = 0; i < cs.length && j < cp.length; i++) {
+                if (!del[i] && cs[i] == cp[j]) {
                     j++;
                 }
             }
-            isSub = j == cp.length;
+            boolean isSub = j == cp.length;
             if (isSub) {
                 l = mid + 1;
             } else {
