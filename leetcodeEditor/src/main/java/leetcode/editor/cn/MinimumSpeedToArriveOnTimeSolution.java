@@ -69,20 +69,26 @@ public class MinimumSpeedToArriveOnTimeSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int minSpeedOnTime(int[] dist, double hour) {
-        int l = 1, r = (int) 1e7;
+        if (dist.length - 1 >= hour) return -1;
+        int l = 1;
+        int max = 0;
+        for (int i = 0; i < dist.length - 1; i++) {
+            max = Math.max(max, dist[i]);
+        }
+        int r = Math.max(max, 100 * dist[dist.length - 1]);
         while (l <= r) {
             int mid = l + r >> 1;
-            double cost = 0;
+            int cost = 0;
             for (int i = 0; i < dist.length - 1; i++) {
                 // 整点发车向上取整
-                cost += Math.ceil((double) dist[i] / mid);
+                cost += (dist[i] - 1) / mid + 1;
             }
             // 最后一趟
-            cost += (double) dist[dist.length - 1] / mid;
-            if (cost > hour) l = mid + 1;
+            double lastCost = (double) dist[dist.length - 1] / mid;
+            if (lastCost + cost > hour) l = mid + 1;
             else r = mid - 1;
         }
-        return l == (int) (1e7 + 1) ? -1: l;
+        return l;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
