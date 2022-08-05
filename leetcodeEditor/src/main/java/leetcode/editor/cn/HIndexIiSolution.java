@@ -50,17 +50,14 @@ public class HIndexIiSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int hIndex(int[] citations) {
-        int l = 0, r = 1000;
+        int n = citations.length;
+        int l = 0, r = n - 1;
         while (l <= r) {
             int mid = l + r >> 1;
-            int cnt = 0;
-            for (int i = 0; i < citations.length; i++) {
-                if (citations[i] >= mid) cnt++;
-            }
-            if (cnt < mid) r = mid - 1;
+            if (citations[mid] >= n - mid) r = mid - 1;
             else l = mid + 1;
         }
-        return r;
+        return n - l;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
