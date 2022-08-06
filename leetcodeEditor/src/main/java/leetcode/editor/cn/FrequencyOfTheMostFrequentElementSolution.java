@@ -60,23 +60,14 @@ class Solution {
     public int maxFrequency(int[] nums, int k) {
         Arrays.sort(nums);
         int n = nums.length;
-        int[] pre = new int[n + 1];
-        for (int i = 1, t = 0; i <= n; i++) {
-            t += nums[i - 1];
-            pre[i] = t;
+        // ans 滑窗的长度, 也代表最大的频数
+        int sum = 0, ans = 0;
+        for (int i = 0; i < n; i++) {
+            sum += nums[i];
+            if (nums[i] * (ans + 1) - sum <= k) ans++;
+            else sum -= nums[i - ans];
         }
-        // 对频数进行二分
-        int l = 0, r = n - 1;
-        while (l <= r) {
-            int mid = l + r >> 1;
-            int min = Integer.MAX_VALUE;
-            for (int i = 0; i < n - mid; i++) {
-                min = Math.min(min, mid * nums[mid + i] - (pre[mid + i] - pre[i]));
-            }
-            if (min > k) r = mid - 1;
-            else l = mid + 1;
-        }
-        return l;
+        return ans;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
