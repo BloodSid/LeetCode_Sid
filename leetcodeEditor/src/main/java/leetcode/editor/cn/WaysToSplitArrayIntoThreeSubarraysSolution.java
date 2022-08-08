@@ -67,12 +67,16 @@ class Solution {
             pre[i + 1] = t;
         }
         long res = 0;
-        for (int i = 1, j = 2, k = 2; i <= n; i++) {
+        /* j 对 i 单调增，k 对 i 单调增，但是无法推断出 k - j 对 i 有单调性
+        也就是说对于某一个第一分割点 i = a 时 k - j < 0, 即没有可行的第二个分割点，
+        不能得出 i = a + 1 时仍有 k - j < 0, 即仍可能有可行的第二分割点，
+        所以不能提前中断对第一分割点的枚举 */
+        for (int i = 1, j = 2, k = 2; i <= n && pre[i] * 3 <= pre[n]; i++) {
             int left = pre[i];
+            j = Math.max(i + 1, j);
             while (j <= n && pre[j] - pre[i] < left) j++;
             if (j > n || pre[n] - pre[j] < pre[j] - pre[i]) continue;
-            while (k <= n && pre[k] - pre[i] <= pre[n] - pre[k]) k++;
-            if (k > n) break;
+            while (k < n  && pre[k] - pre[i] <= pre[n] - pre[k]) k++;
             res += k - j;
         }
         return (int) (res % MOD);
