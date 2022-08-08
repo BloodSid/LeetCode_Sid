@@ -71,14 +71,10 @@ class Solution {
             }
         }
         int tot = 0;
-        for (int ability : worker) {
-            int l = 0, r = jobs.size() - 1;
-            while (l <= r) {
-                int mid = l + r >> 1;
-                if (d[jobs.get(mid)] > ability) r = mid - 1;
-                else l = mid + 1;
-            }
-            if (r >= 0) tot += p[jobs.get(r)];
+        Arrays.sort(worker);
+        for (int i = 0, j = 0, size = jobs.size(); i < worker.length; i++) {
+            while (j < size - 1 && worker[i] >= d[jobs.get(j + 1)]) j++;
+            if (worker[i] >= d[jobs.get(j)]) tot += p[jobs.get(j)];
         }
         return tot;
     }
