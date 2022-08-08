@@ -61,23 +61,31 @@ class Solution {
 
     public int waysToSplit(int[] nums) {
         int n = nums.length;
-        int[] pre = new int[n + 1];
+        int[] p = new int[n + 1];
         for (int i = 0, t = 0; i < n; i++) {
             t += nums[i];
-            pre[i + 1] = t;
+            p[i + 1] = t;
         }
         long res = 0;
-        /* j 对 i 单调增，k 对 i 单调增，但是无法推断出 k - j 对 i 有单调性
-        也就是说对于某一个第一分割点 i = a 时 k - j < 0, 即没有可行的第二个分割点，
-        不能得出 i = a + 1 时仍有 k - j < 0, 即仍可能有可行的第二分割点，
-        所以不能提前中断对第一分割点的枚举 */
-        for (int i = 1, j = 2, k = 2; i <= n && pre[i] * 3 <= pre[n]; i++) {
-            int left = pre[i];
-            j = Math.max(i + 1, j);
-            while (j <= n && pre[j] - pre[i] < left) j++;
-            if (j > n || pre[n] - pre[j] < pre[j] - pre[i]) continue;
-            while (k < n  && pre[k] - pre[i] <= pre[n] - pre[k]) k++;
-            res += k - j;
+        int tot = p[n];
+        for (int i = 1; i < n - 1 && p[i] * 3 <= tot; i++) {
+            int left = p[i];
+            int l = i + 1, r = n - 1;
+            while (l <= r) {
+                int mid = l + r >> 1;
+                if (p[mid] - left < left) l = mid + 1;
+                else r = mid - 1;
+            }
+            int j = l;
+            l = i + 1;
+            r = n - 1;
+            while (l <= r) {
+                int mid = l + r >> 1;
+                if (p[mid] - left <= tot - p[mid]) l = mid + 1;
+                else r = mid - 1;
+            }
+            int k = r;
+            res += k - j + 1;
         }
         return (int) (res % MOD);
     }
