@@ -67,18 +67,13 @@ class Solution {
             pre[i + 1] = t;
         }
         long res = 0;
-        for (int i = 1, j = 2; i <= n; i++) {
+        for (int i = 1, j = 2, k = 2; i <= n; i++) {
             int left = pre[i];
             while (j <= n && pre[j] - pre[i] < left) j++;
-            if (j > n || pre[n] - pre[j] < pre[j] - pre[i]) break;
-            int l = j, r = n - 1;
-            while (l <= r) {
-                int mid = l + r >> 1;
-                if (pre[n] - pre[mid] < pre[mid] - pre[i]) r = mid - 1;
-                else l = mid + 1;
-            }
-            int k = r;
-            res += k - j + 1;
+            if (j > n || pre[n] - pre[j] < pre[j] - pre[i]) continue;
+            while (k <= n && pre[k] - pre[i] <= pre[n] - pre[k]) k++;
+            if (k > n) break;
+            res += k - j;
         }
         return (int) (res % MOD);
     }
