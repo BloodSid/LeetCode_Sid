@@ -61,30 +61,21 @@ class Solution {
 
     public int waysToSplit(int[] nums) {
         int n = nums.length;
+        // 前缀和
         int[] p = new int[n + 1];
         for (int i = 0, t = 0; i < n; i++) {
             t += nums[i];
             p[i + 1] = t;
         }
         long res = 0;
-        int tot = p[n];
-        for (int i = 1; i < n - 1 && p[i] * 3 <= tot; i++) {
+        // 双指针
+        for (int i = 1, j = 2, k = 2; i < n - 1 && p[i] * 3 <= p[n]; i++) {
             int left = p[i];
-            int l = i + 1, r = n - 1;
-            while (l <= r) {
-                int mid = l + r >> 1;
-                if (p[mid] - left < left) l = mid + 1;
-                else r = mid - 1;
-            }
-            int j = l;
-            l = i + 1;
-            r = n - 1;
-            while (l <= r) {
-                int mid = l + r >> 1;
-                if (p[mid] - left <= tot - p[mid]) l = mid + 1;
-                else r = mid - 1;
-            }
-            int k = r;
+            // 两个分割点必须保持前后顺序
+            j = Math.max(i + 1, j);
+            while (j < n - 1 && p[j] - p[i] < left) j++;
+            while (k < n - 1 && p[k + 1] - p[i] <= p[n] - p[k + 1]) k++;
+            // line 21 : 不能使用 if (k < j) break; 提前结束循环
             res += k - j + 1;
         }
         return (int) (res % MOD);
