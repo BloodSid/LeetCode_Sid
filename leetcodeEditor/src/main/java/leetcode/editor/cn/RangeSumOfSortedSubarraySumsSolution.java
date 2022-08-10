@@ -45,7 +45,8 @@ package leetcode.editor.cn;
 // 👍 54 👎 0
 
 
-import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /**
  * 子数组和排序后的区间和
@@ -68,14 +69,21 @@ class Solution {
             t += nums[i];
             p[i + 1] = t;
         }
+        // 初始化每一行数组和的头指针
+        int[] head = new int[n];
+        for (int i = 0; i < n; i++) {
+            head[i] = i + 1;
+        }
+        // 多路归并排序数组和
+        PriorityQueue<Integer> pq = new PriorityQueue<>(n, Comparator.comparingInt(i -> p[head[i]] - p[i]));
+        for (int i = 0; i < n; i++) pq.offer(i);
         int[] sub = new int[m];
         int k = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j <= n; j++) {
-                sub[k++] = p[j] - p[i];
-            }
+        while (!pq.isEmpty()) {
+            int poll = pq.poll();
+            sub[k++] = p[head[poll]++] - p[poll];
+            if (head[poll] <= n) pq.offer(poll);
         }
-        Arrays.sort(sub);
         long sum = 0;
         for (int i = left - 1; i <= right - 1; i++) {
             sum += sub[i];
