@@ -35,8 +35,6 @@ package leetcode.editor.cn;
 // 👍 213 👎 0
 
 
-import java.util.Arrays;
-
 /**
  * 最多能完成排序的块 II
  *
@@ -47,18 +45,24 @@ import java.util.Arrays;
 public class MaxChunksToMakeSortedIiSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+
+    // 栈中记录每个 chunk 的最大值
+    // static
+    int[] stack = new int[2001];
+
     public int maxChunksToSorted(int[] arr) {
-        int n = arr.length;
-        int[] copy = Arrays.copyOf(arr, n);
-        Arrays.sort(copy);
-        int cnt = 0;
-        // sorted(arr)[0,i] 的元素频率和 arr[0,i] 的元素频率相同时，i 是一个分割点
-        long sumDiff = 0;
-        for (int i = 0; i < n; i++) {
-            sumDiff += copy[i] - arr[i];
-            if (sumDiff == 0) cnt++;
+        int p = 0;
+        // 右边的块的所有数字均大于或等于左边的块的所有数字
+        for (int a : arr) {
+            if (p == 0 || a >= stack[p - 1]) {
+                stack[p++] = a;
+            } else {
+                int max = stack[--p];
+                while (p != 0 && a < stack[p - 1]) p--;
+                stack[p++] = max;
+            }
         }
-        return cnt;
+        return p;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
