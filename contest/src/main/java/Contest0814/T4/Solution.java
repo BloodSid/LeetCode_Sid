@@ -32,16 +32,23 @@ public class Solution {
         int ans = 0;
         // 位数相同
         boolean[] vis = new boolean[10];
+        // 从最高位开始找
         for (int i = len - 1, p = 1; i >= 0; i--, p++) {
             int cur = digits.get(i), cnt = 0;
             for (int j = cur - 1; j >= 0; j--) {
+                // 最高位不能取零
                 if (i == len - 1 && j == 0) continue;
+                // 不能取更高位用过的数
                 if (!vis[j]) cnt++;
             }
+            // 在剩下的 (10 - p) 个数中，取 (len - p) 个数进行排列
             int a = 10 - p, b = a - (len - p) + 1;
+            // 若当前位不是最低位：用乘法原理算出方案数；若当前位是最低位则 cnt 为方案数
             ans += b <= a ? cnt * f[b][a] : cnt;
+            // 遇到重复数值则终止
             if (vis[cur]) break;
             vis[cur] = true;
+            // 到最低位时，最后方案数中要加上 n 自身
             if (i == 0) ans++;
         }
         // 位数更少
