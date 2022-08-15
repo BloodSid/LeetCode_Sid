@@ -12,23 +12,32 @@ import java.util.*;
 public class NumberOfDigitOneSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+
+    private char[] s;
+    private int[][] dp;
+
     public int countDigitOne(int n) {
-        int sum = 0;
-        int product = 1;
-        for (int i = 0; i < 10 && product <= n; i++) {
-            int high = n / product;
-            int higher = high / 10;
-            int curr = high % 10;
-            int temp = higher * product;
-            if (curr == 1) {
-                temp += n % product + 1;
-            } else if (curr > 1) {
-                temp += product;
-            }
-            sum += temp;
-            product *= 10;
+        s = Integer.toString(n).toCharArray();
+        for (int i = 0; i < s.length; i++) s[i] -= '0';
+        dp = new int[s.length][s.length];
+        for (int i = 0; i < dp.length; i++) {
+            Arrays.fill(dp[i], -1);
         }
-        return sum;
+        return f(0, 0, true, false);
+    }
+
+    int f(int i, int cnt1, boolean isLimited, boolean isNum) {
+        if (i == s.length) return cnt1;
+        if (!isLimited && isNum && dp[i][cnt1] >= 0) return dp[i][cnt1];
+        int res = 0;
+        if (!isNum) res = f(i + 1, cnt1, false, false);
+        int up = isLimited ? s[i] : 9;
+        int low = isNum ? 0 : 1;
+        for (int d = low; d <= up; d++) {
+            res += f(i + 1, cnt1 + (d == 1 ? 1 : 0), isLimited && d == s[i], true);
+        }
+        if (!isLimited && isNum) dp[i][cnt1] = res;
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
