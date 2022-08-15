@@ -27,6 +27,7 @@ import java.util.*;
 public class NumberOf2sInRangeLcciSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+
     private char[] s;
     private int[][] dp;
 
@@ -37,23 +38,21 @@ class Solution {
         for (int i = 0; i < dp.length; i++) {
             Arrays.fill(dp[i], -1);
         }
-        return f(0, 0, true, false);
+        return f(0, 0, true);
     }
 
-    int f(int i, int cnt2, boolean isLimited, boolean isNum) {
-        if (i == s.length) return cnt2;
-        if (!isLimited && isNum && dp[i][cnt2] >= 0) return dp[i][cnt2];
+    int f(int i, int cnt1, boolean isLimited) {
+        if (i == s.length) return cnt1;
+        if (!isLimited && dp[i][cnt1] >= 0) return dp[i][cnt1];
         int res = 0;
-        if (!isNum) res = f(i + 1, cnt2, false, false);
         int up = isLimited ? s[i] : 9;
-        int low = isNum ? 0 : 1;
+        int low = 0;
         for (int d = low; d <= up; d++) {
-            res += f(i + 1, cnt2 + (d == 2 ? 1 : 0), isLimited && d == s[i], true);
+            res += f(i + 1, cnt1 + (d == 2 ? 1 : 0), isLimited && d == s[i]);
         }
-        if (!isLimited && isNum) dp[i][cnt2] = res;
+        if (!isLimited) dp[i][cnt1] = res;
         return res;
     }
-
 }
 //leetcode submit region end(Prohibit modification and deletion)
 

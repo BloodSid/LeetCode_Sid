@@ -23,20 +23,19 @@ class Solution {
         for (int i = 0; i < dp.length; i++) {
             Arrays.fill(dp[i], -1);
         }
-        return f(0, 0, true, false);
+        return f(0, 0, true);
     }
 
-    int f(int i, int cnt1, boolean isLimited, boolean isNum) {
+    int f(int i, int cnt1, boolean isLimited) {
         if (i == s.length) return cnt1;
-        if (!isLimited && isNum && dp[i][cnt1] >= 0) return dp[i][cnt1];
+        if (!isLimited && dp[i][cnt1] >= 0) return dp[i][cnt1];
         int res = 0;
-        if (!isNum) res = f(i + 1, cnt1, false, false);
         int up = isLimited ? s[i] : 9;
-        int low = isNum ? 0 : 1;
+        int low = 0;
         for (int d = low; d <= up; d++) {
-            res += f(i + 1, cnt1 + (d == 1 ? 1 : 0), isLimited && d == s[i], true);
+            res += f(i + 1, cnt1 + (d == 1 ? 1 : 0), isLimited && d == s[i]);
         }
-        if (!isLimited && isNum) dp[i][cnt1] = res;
+        if (!isLimited) dp[i][cnt1] = res;
         return res;
     }
 }
