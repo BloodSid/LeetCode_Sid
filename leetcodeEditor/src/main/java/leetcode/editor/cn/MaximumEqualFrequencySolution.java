@@ -50,35 +50,21 @@ public class MaximumEqualFrequencySolution {
 class Solution {
     public int maxEqualFreq(int[] nums) {
         int max = 0;
+        // 元素的频率
         HashMap<Integer, Integer> f = new HashMap<>();
-        Integer[] first = new Integer[2];
-        Integer[] last = new Integer[2];
+        // 频率的频率
+        HashMap<Integer, Integer> ff = new HashMap<>();
+        int maxFreq = 0;
         for (int i = 0; i < nums.length; i++) {
-            Integer key = nums[i];
-            int value = f.getOrDefault(key, 0) + 1;
-            f.put(key, value);
-            // 记录极值和次极值
-            if (key == first[0] || key == first[1]) {
-                if (first[1] != null) Arrays.sort(first, (o1, o2) -> f.get(o1) - f.get(o2));
-            } else if (first[0] == null || value < f.get(first[0])) {
-                first[1] = first[0];
-                first[0] = key;
-            } else if (first[1] == null || value < f.get(first[1])) {
-                first[1] = key;
-            }
-            if (key == last[0] || key == last[1]) {
-                if (last[1] != null) Arrays.sort(last, (o1, o2) -> f.get(o2) - f.get(o1));
-            } else if (last[0] == null || value > f.get(last[0])) {
-                last[1] = last[0];
-                last[0] = key;
-            } else if (last[1] == null || value > f.get(last[1])) {
-                last[1] = key;
-            }
-            Integer f0 = f.get(first[0]), f1 = f.get(first[1]), l0 = f.get(last[0]), l1 = f.get(last[1]);
-            // 满足以下条件可使得频数相等 频数只有 “1” 一种 或 频数只有一个 或 频数 a 有多个，b 有一个，且 b = 1 或 a + 1
-            boolean isEqual = (f.size() == 1) || (f0 == 1 && l0 == 1)
-                    || (f0 == 1 && f1 == l0) || (f0 == l1 && l0 == l1 + 1);
-            if (isEqual) {
+            int e = nums[i];
+            int freq = f.getOrDefault(e, 0);
+            ff.put(freq + 1, ff.getOrDefault(freq + 1, 0) + 1);
+            if (freq != 0) ff.put(freq, ff.get(freq) - 1);
+            f.put(e, freq + 1);
+            maxFreq = Math.max(maxFreq, freq + 1);
+            // 满足以下条件可使得频数相等 频数只有 “1” 一种 或 频数 a 有多个，b 有一个，且 b = 1 或 a + 1
+            if (maxFreq == 1 || (ff.get(maxFreq) == 1 && maxFreq + (maxFreq - 1) * ff.get(maxFreq - 1) == i + 1)
+                    || (ff.get(1) == 1 && maxFreq * ff.get(maxFreq) + 1 == i + 1)) {
                 max = Math.max(max, i + 1);
             }
         }
