@@ -36,7 +36,10 @@ package leetcode.editor.cn;
 // 👍 63 👎 0
 
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 /**
  * 最大相等频率
@@ -51,34 +54,26 @@ class Solution {
     public int maxEqualFreq(int[] nums) {
         int max = 0;
         HashMap<Integer, Integer> f = new HashMap<>();
+        // 比较器必须保证两项之间一定有确定的大小，不能相等，否则 remove 会导致不确定的结果。
+        // 所以先比较 f.get(o) 的大小再比较 o 的大小确保两个 key 一定不会相等
+        TreeSet<Integer> q = new TreeSet<>(Comparator.comparingInt((Integer o)-> f.get(o)).thenComparing(o -> o));
         for (int i = 0; i < nums.length; i++) {
             f.put(nums[i], f.getOrDefault(nums[i], 0) + 1);
-            boolean isEqual = true;
-            int c1 = 0, c2 = 0, cc1 = 0, cc2 = 0;
-            // 对频数进行计数
-            for (Integer cnt : f.values()) {
-                if (cnt == c1) {
-                    cc1++;
-                } else if (cnt == c2) {
-                    cc2++;
-                } else if (c1 == 0) {
-                    c1 = cnt;
-                    cc1 = 1;
-                } else if (c2 == 0) {
-                    c2 = cnt;
-                    cc2 = 1;
-                } else {
-                    // 频数超过三种，提前终止
-                    isEqual = false;
-                    break;
-                }
+            // nums[i] 的 key 被修改了，remove 仍然会导致不确定的结果
+            q.remove(nums[i]);
+            q.add(nums[i]);
+            Integer first = null, last = null, secondLast = null, second = null;
+            if (q.size() != 1) {
+                Iterator<Integer> itr = q.iterator();
+                first = f.get(itr.next());
+                second = f.get(itr.next());
+                Iterator<Integer> dItr = q.descendingIterator();
+                last = f.get(dItr.next());
+                secondLast = f.get(dItr.next());
             }
-            // 没有提前终止，说明频数小于等于两种
-            if (isEqual) {
-                // 满足以下条件可使得频数相等 频数只有 “1” 一种 或 频数只有一个 或 频数 a 有多个，b 有一个，且 b = 1 或 a + 1
-                isEqual = (c2 == 0 && c1 == 1) || f.values().size() == 1
-                        || (cc1 == 1 && (c1 == 1 || c1 == c2 + 1)) || (cc2 == 1 && (c2 == 1 || c2 == c1 + 1));
-            }
+            // 满足以下条件可使得频数相等 频数只有 “1” 一种 或 频数只有一个 或 频数 a 有多个，b 有一个，且 b = 1 或 a + 1
+            boolean isEqual = (q.size() == 1) || (first == 1 && last == 1)
+                    || (first == 1 && second == last) || (first == secondLast && last == secondLast + 1);
             if (isEqual) {
                 max = Math.max(max, i + 1);
             }
