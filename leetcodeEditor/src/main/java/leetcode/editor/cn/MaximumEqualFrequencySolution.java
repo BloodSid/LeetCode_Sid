@@ -36,10 +36,7 @@ package leetcode.editor.cn;
 // 👍 63 👎 0
 
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * 最大相等频率
@@ -54,26 +51,33 @@ class Solution {
     public int maxEqualFreq(int[] nums) {
         int max = 0;
         HashMap<Integer, Integer> f = new HashMap<>();
-        // 比较器必须保证两项之间一定有确定的大小，不能相等，否则 remove 会导致不确定的结果。
-        // 所以先比较 f.get(o) 的大小再比较 o 的大小确保两个 key 一定不会相等
-        TreeSet<Integer> q = new TreeSet<>(Comparator.comparingInt((Integer o)-> f.get(o)).thenComparing(o -> o));
+        Integer[] first = new Integer[2];
+        Integer[] last = new Integer[2];
         for (int i = 0; i < nums.length; i++) {
-            f.put(nums[i], f.getOrDefault(nums[i], 0) + 1);
-            // nums[i] 的 key 被修改了，remove 仍然会导致不确定的结果
-            q.remove(nums[i]);
-            q.add(nums[i]);
-            Integer first = null, last = null, secondLast = null, second = null;
-            if (q.size() != 1) {
-                Iterator<Integer> itr = q.iterator();
-                first = f.get(itr.next());
-                second = f.get(itr.next());
-                Iterator<Integer> dItr = q.descendingIterator();
-                last = f.get(dItr.next());
-                secondLast = f.get(dItr.next());
+            Integer key = nums[i];
+            int value = f.getOrDefault(key, 0) + 1;
+            f.put(key, value);
+            // 记录极值和次极值
+            if (key == first[0] || key == first[1]) {
+                if (first[1] != null) Arrays.sort(first, (o1, o2) -> f.get(o1) - f.get(o2));
+            } else if (first[0] == null || value < f.get(first[0])) {
+                first[1] = first[0];
+                first[0] = key;
+            } else if (first[1] == null || value < f.get(first[1])) {
+                first[1] = key;
             }
+            if (key == last[0] || key == last[1]) {
+                if (last[1] != null) Arrays.sort(last, (o1, o2) -> f.get(o2) - f.get(o1));
+            } else if (last[0] == null || value > f.get(last[0])) {
+                last[1] = last[0];
+                last[0] = key;
+            } else if (last[1] == null || value > f.get(last[1])) {
+                last[1] = key;
+            }
+            Integer f0 = f.get(first[0]), f1 = f.get(first[1]), l0 = f.get(last[0]), l1 = f.get(last[1]);
             // 满足以下条件可使得频数相等 频数只有 “1” 一种 或 频数只有一个 或 频数 a 有多个，b 有一个，且 b = 1 或 a + 1
-            boolean isEqual = (q.size() == 1) || (first == 1 && last == 1)
-                    || (first == 1 && second == last) || (first == secondLast && last == secondLast + 1);
+            boolean isEqual = (f.size() == 1) || (f0 == 1 && l0 == 1)
+                    || (f0 == 1 && f1 == l0) || (f0 == l1 && l0 == l1 + 1);
             if (isEqual) {
                 max = Math.max(max, i + 1);
             }
