@@ -51,7 +51,7 @@ package leetcode.editor.cn;
 
 import binaryTree.TreeNode;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
  * 二叉树最大宽度
@@ -65,20 +65,19 @@ public class MaximumWidthOfBinaryTreeSolution {
 class Solution {
 
     private int maxWidth;
-    private long[] min;
+    private ArrayList<Integer> min;
 
     public int widthOfBinaryTree(TreeNode root) {
         maxWidth = 0;
-        min = new long[3000];
-        Arrays.fill(min, Long.MAX_VALUE);
+        min = new ArrayList<>();
         dfs(root, 0,  0);
         return maxWidth;
     }
 
-    void dfs(TreeNode node, long pos, int depth) {
+    void dfs(TreeNode node, int pos, int depth) {
         if (node == null) return;
-        min[depth] = Math.min(min[depth], pos);
-        maxWidth = (int) Math.max(maxWidth, pos - min[depth] + 1);
+        if (min.size() == depth) min.add(pos);
+        maxWidth = Math.max(maxWidth, pos - min.get(depth) + 1);
         dfs(node.left, pos << 1, depth + 1);
         dfs(node.right, (pos << 1) + 1, depth + 1);
     }
