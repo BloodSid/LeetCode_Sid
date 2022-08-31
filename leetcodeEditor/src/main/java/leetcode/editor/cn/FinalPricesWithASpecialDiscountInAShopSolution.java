@@ -56,15 +56,16 @@ class Solution {
     public int[] finalPrices(int[] prices) {
         int n = prices.length;
         int[] res = new int[n];
-        int[] stack = new int[n];
-        int top = 0;
-        for (int i = prices.length - 1; i >= 0; i--) {
-            while (top != 0 && stack[top - 1] > prices[i]) {
-                top--;
+        for (int i = 0; i < n; i++) {
+            int price = prices[i];
+            int discount = 0;
+            for (int j = i + 1; j < n; j++) {
+                if (prices[j] <= price) {
+                    discount = prices[j];
+                    break;
+                }
             }
-            if (top == 0) res[i] = prices[i];
-            else res[i] = prices[i] - stack[top - 1];
-            stack[top++] = prices[i];
+            res[i] = price - discount;
         }
         return res;
     }
