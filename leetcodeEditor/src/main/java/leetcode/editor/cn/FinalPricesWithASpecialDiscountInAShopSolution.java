@@ -43,9 +43,6 @@ package leetcode.editor.cn;
 // 👍 81 👎 0
 
 
-import java.util.Deque;
-import java.util.LinkedList;
-
 /**
  * 商品折扣后的最终价格
  *
@@ -59,16 +56,17 @@ class Solution {
     public int[] finalPrices(int[] prices) {
         int n = prices.length;
         int[] res = new int[n];
-        Deque<Integer> stack = new LinkedList<>();
+        int[] stack = new int[n];
+        int top = 0;
         for (int i = 0; i < prices.length; i++) {
-            while (!stack.isEmpty() && prices[stack.peek()] >= prices[i]) {
-                int poll = stack.poll();
+            while (top != 0 && prices[stack[top - 1]] >= prices[i]) {
+                int poll = stack[--top];
                 res[poll] = prices[poll] - prices[i];
             }
-            stack.push(i);
+            stack[top++] = i;
         }
-        for (Integer i : stack) {
-            res[i] = prices[i];
+        for (int i = 0; i < top; i++) {
+            res[stack[i]] = prices[stack[i]];
         }
         return res;
     }
