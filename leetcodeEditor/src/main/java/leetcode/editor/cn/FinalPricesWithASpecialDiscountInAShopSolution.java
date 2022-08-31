@@ -58,15 +58,13 @@ class Solution {
         int[] res = new int[n];
         int[] stack = new int[n];
         int top = 0;
-        for (int i = 0; i < prices.length; i++) {
-            while (top != 0 && prices[stack[top - 1]] >= prices[i]) {
-                int poll = stack[--top];
-                res[poll] = prices[poll] - prices[i];
+        for (int i = prices.length - 1; i >= 0; i--) {
+            while (top != 0 && stack[top - 1] > prices[i]) {
+                top--;
             }
-            stack[top++] = i;
-        }
-        for (int i = 0; i < top; i++) {
-            res[stack[i]] = prices[stack[i]];
+            if (top == 0) res[i] = prices[i];
+            else res[i] = prices[i] - stack[top - 1];
+            stack[top++] = prices[i];
         }
         return res;
     }
