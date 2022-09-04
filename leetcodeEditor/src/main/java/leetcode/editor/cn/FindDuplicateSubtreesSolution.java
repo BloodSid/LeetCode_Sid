@@ -46,6 +46,7 @@ import binaryTree.TreeNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -59,53 +60,34 @@ public class FindDuplicateSubtreesSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    public static final int OFFSET = 200;
-    public static final int N = 401;
-    private HashMap<String, List<TreeNode>> table = new HashMap<>();
+    // 种子
+    public static final int S1 = 983, S2 = 991, S3 = 997;
+    private static final int OFFSET = 201;
+    // 记录出现过的子树的哈希到子树的映射
+    private HashMap<Integer, TreeNode> seen = new HashMap<>();
+    // 记录重复的子树
+    private HashSet<TreeNode> repeat = new HashSet<>();
 
     public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
         dfs(root);
-        List<TreeNode> res = new ArrayList<>();
-        for (List<TreeNode> list : table.values()) {
-            if (list.size() > 1) res.add(list.get(0));
-        }
-        return res;
+        return new ArrayList<>(repeat);
     }
 
-    void dfs(TreeNode node) {
-        if (node == null) return;
-        String serialize = serialize(node);
-        if (!table.containsKey(serialize)) table.put(serialize, new ArrayList<>());
-        table.get(serialize).add(node);
-        dfs(node.left);
-        dfs(node.right);
-    }
-
-    StringBuilder sb;
-
-    public String serialize(TreeNode root) {
-        if (root == null) {
-            return "X";
-        }
-        sb = new StringBuilder();
-        dfs0(root.left);
-        sb.append(root.val);
-        dfs0(root.right);
-        return sb.toString();
-    }
-
-    void dfs0(TreeNode node) {
-        // 任何子树都被一对括号包起，而树本身不被括号包起
-        sb.append('(');
-        if (node == null) {
-            sb.append('X');
+    int dfs(TreeNode node) {
+        if (node == null) return 0;
+        int left = dfs(node.left);
+        int right = dfs(node.right);
+        // 哈希函数，其中 node.val 加上一个值转化为正数
+        int key = (S1 * left ^ S2 * right ^ S3 * (node.val + OFFSET));
+        // 没出现过加入 seen 中，出现过则把重复子树中的第一个加入 repeat 中
+        if (seen.containsKey(key)) {
+            repeat.add(seen.get(key));
         } else {
-            dfs0(node.left);
-            sb.append(node.val);
-            dfs0(node.right);
+            seen.put(key, node);
         }
-        sb.append(')');
+        return key;
     }
+
 
 }
 //leetcode submit region end(Prohibit modification and deletion)
