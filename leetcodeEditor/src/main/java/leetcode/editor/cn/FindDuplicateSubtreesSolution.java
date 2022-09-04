@@ -43,11 +43,9 @@ package leetcode.editor.cn;
 
 
 import binaryTree.TreeNode;
+import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * 寻找重复的子树
@@ -60,13 +58,11 @@ public class FindDuplicateSubtreesSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    // 种子
-    public static final int S1 = 983, S2 = 991, S3 = 997;
-    private static final int OFFSET = 201;
-    // 记录出现过的子树的哈希到子树的映射
-    private HashMap<Integer, TreeNode> seen = new HashMap<>();
+    // 记录出现过的子树的哈希到子树的映射, String 是 {val, l, r} 形式的唯一表示
+    private HashMap<String, Pair<TreeNode, Integer>> seen = new HashMap<>();
     // 记录重复的子树
     private HashSet<TreeNode> repeat = new HashSet<>();
+    int idx = 0;
 
     public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
         dfs(root);
@@ -75,17 +71,16 @@ class Solution {
 
     int dfs(TreeNode node) {
         if (node == null) return 0;
-        int left = dfs(node.left);
-        int right = dfs(node.right);
-        // 哈希函数，其中 node.val 加上一个值转化为正数
-        int key = (S1 * left ^ S2 * right ^ S3 * (node.val + OFFSET));
-        // 没出现过加入 seen 中，出现过则把重复子树中的第一个加入 repeat 中
+        int[] tuple = {node.val, dfs(node.left), dfs(node.right)};
+        String key = Arrays.toString(tuple);
         if (seen.containsKey(key)) {
-            repeat.add(seen.get(key));
+            Pair<TreeNode, Integer> pair = seen.get(key);
+            repeat.add(pair.getKey());
+            return pair.getValue();
         } else {
-            seen.put(key, node);
+            seen.put(key, new Pair<>(node, ++idx));
+            return idx;
         }
-        return key;
     }
 
 
