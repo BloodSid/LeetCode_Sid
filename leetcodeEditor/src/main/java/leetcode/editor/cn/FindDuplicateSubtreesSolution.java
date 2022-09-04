@@ -45,6 +45,7 @@ package leetcode.editor.cn;
 import binaryTree.TreeNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -60,45 +61,52 @@ class Solution {
 
     public static final int OFFSET = 200;
     public static final int N = 401;
-    private List<TreeNode>[] table = new List[N];
+    private HashMap<String, List<TreeNode>> table = new HashMap<>();
 
     public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
         dfs(root);
         List<TreeNode> res = new ArrayList<>();
-        for (int i = 0; i < N; i++) {
-            if (table[i] == null) continue;
-            int len = table[i].size();
-            boolean[] isDup = new boolean[len];
-            for (int i1 = 0; i1 < len; i1++) {
-                // 已经发现是重复的就跳过
-                if (isDup[i1]) continue;
-                TreeNode cur = table[i].get(i1);
-                boolean flag = false;
-                for (int i2 = i1 + 1; i2 < len; i2++) {
-                    if (equals(cur, table[i].get(i2))) {
-                        isDup[i2] = true;
-                        flag = true;
-                    }
-                }
-                if (flag) res.add(cur);
-            }
+        for (List<TreeNode> list : table.values()) {
+            if (list.size() > 1) res.add(list.get(0));
         }
         return res;
     }
 
     void dfs(TreeNode node) {
         if (node == null) return;
-        if (table[node.val + OFFSET] == null) table[node.val + OFFSET] = new ArrayList<>();
-        table[node.val + OFFSET].add(node);
+        String serialize = serialize(node);
+        if (!table.containsKey(serialize)) table.put(serialize, new ArrayList<>());
+        table.get(serialize).add(node);
         dfs(node.left);
         dfs(node.right);
-
     }
 
-    boolean equals(TreeNode a, TreeNode b) {
-        if (a == null || b == null) return a == b;
-        return a.val == b.val && equals(a.left, b.left) && equals(a.right, b.right);
+    StringBuilder sb;
+
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "X";
+        }
+        sb = new StringBuilder();
+        dfs0(root.left);
+        sb.append(root.val);
+        dfs0(root.right);
+        return sb.toString();
     }
+
+    void dfs0(TreeNode node) {
+        // 任何子树都被一对括号包起，而树本身不被括号包起
+        sb.append('(');
+        if (node == null) {
+            sb.append('X');
+        } else {
+            dfs0(node.left);
+            sb.append(node.val);
+            dfs0(node.right);
+        }
+        sb.append(')');
+    }
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
