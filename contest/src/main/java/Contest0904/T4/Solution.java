@@ -22,18 +22,18 @@ public class Solution {
         for (int i = 0; i < n; i++) {
             empty.add(i);
         }
+        long cur = 0;
         for (int[] meeting : meetings) {
-            long cur = meeting[0], end = meeting[1];
-            if (empty.isEmpty()) {
-                int poll = pq.poll();
-                end = last[poll] + end - cur;
-                cur = last[poll];
-                empty.add(poll);
-            }
+            cur = Math.max(cur, meeting[0]);
+            // 若没有空会议室
+            if (empty.isEmpty()) cur = Math.max(cur, last[pq.peek()]);
+            // 用当前时间更新会议室状态
+            while (!pq.isEmpty() && last[pq.peek()] <= cur) empty.add(pq.poll());
             int first = empty.first();
             empty.remove(first);
+            last[first] = cur + meeting[1] - meeting[0];
+            pq.offer(first);
             cnt[first]++;
-            last[first] = end;
         }
         int res = 0, max = 0;
         for (int i = 0; i < cnt.length; i++) {
