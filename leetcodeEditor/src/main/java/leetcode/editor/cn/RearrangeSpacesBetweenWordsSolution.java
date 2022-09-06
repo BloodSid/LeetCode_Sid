@@ -64,27 +64,42 @@ public class RearrangeSpacesBetweenWordsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public String reorderSpaces(String text) {
-        String[] split = text.trim().split("\\s+");
-        int n = text.length();
-        for (String s : split) {
-            n -= s.length();
-        }
-        int k, j;
-        if (split.length - 1 != 0) {
-            k = n / (split.length - 1);
-            j = n % (split.length - 1);
-        } else {
-            k = 0;
-            j = n;
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < split.length; i++) {
-            sb.append(split[i]);
-            for (int i1 = 0; i1 < (i == split.length - 1 ? j : k); i1++) {
-                sb.append(' ');
+        char[] ch = text.toCharArray();
+        // 单词数和空格数
+        int n = 0, cnt = 0;
+        for (int i = 0; i < ch.length;) {
+            if (ch[i] == ' ') {
+                cnt++;
+                i++;
+            } else {
+                n++;
+                while (i < ch.length && ch[i] != ' ') {
+                    i++;
+                }
             }
         }
-        return sb.toString();
+        char[] res = new char[text.length()];
+        // 中间的空格， 最后的空格
+        int j = 0, k = 0;
+        if (n == 1) {
+            k = cnt;
+        } else {
+            j = cnt / (n - 1);
+            k = cnt % (n - 1);
+        }
+        for (int i = 0, p = 0; i < ch.length;) {
+            if (ch[i] == ' ') i++;
+            else {
+                n--;
+                while (i < ch.length && ch[i] != ' ') {
+                    res[p++] = ch[i++];
+                }
+                for (int i1 = 0; i1 < (n == 0 ? k : j); i1++) {
+                    res[p++] = ' ';
+                }
+            }
+        }
+        return new String(res);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
