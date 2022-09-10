@@ -65,21 +65,19 @@ class Solution {
         // quality 最大的在堆顶
         PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt((Integer o) -> quality[o]).reversed());
         int sum = 0;
-        for (int i = 0; i < k; i++) {
+        for (int i = 0; i < k - 1; i++) {
             pq.offer(keys[i]);
             sum += quality[keys[i]];
         }
-        double maxRate = (double) wage[keys[k - 1]] / quality[keys[k - 1]];
-        // 对于每个 i, 都测试如果把它换进结果集合，结果会不会更小，若更小则贪心地更换
-        for (int i = k; i < n; i++) {
-            if ((double) wage[keys[i]] / quality[keys[i]] * (sum - quality[pq.peek()] + quality[keys[i]])
-                    < maxRate * sum) {
-                maxRate = (double) wage[keys[i]] / quality[keys[i]];
-                sum += quality[keys[i]] - quality[pq.poll()];
-                pq.offer(keys[i]);
-            }
+        double min = 1e12;
+        for (int i = k - 1; i < n; i++) {
+            int idx = keys[i];
+            pq.offer(idx);
+            sum += quality[idx];
+            min = Math.min(min, sum * (double) wage[idx] / quality[idx]);
+            sum -= quality[pq.poll()];
         }
-        return maxRate * sum;
+        return min;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
