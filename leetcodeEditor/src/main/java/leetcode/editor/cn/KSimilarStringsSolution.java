@@ -45,12 +45,38 @@ public class KSimilarStringsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int kSimilarity(String s1, String s2) {
+        // 贪心，把不同的位置找出来，而且如果一次交换能弄对两个位置，就进行交换
         int n = s1.length();
+        int step = 0;
+        char[] c1 = s1.toCharArray();
+        char[] c2 = s2.toCharArray();
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            if (c1[i] != c2[i]) {
+                int j;
+                for (j = i + 1; j < n; j++) {
+                    if (c1[j] == c2[i] && c1[i] == c2[j]) {
+                        c1[i] = c2[i];
+                        c1[j] = c2[j];
+                        step++;
+                        break;
+                    }
+                }
+                if (j == n) {
+                    // 没找到这种交换
+                    sb1.append(c1[i]);
+                    sb2.append(c2[i]);
+                }
+            }
+        }
+        s1 = sb1.toString();
+        s2 = sb2.toString();
+        n = s1.length();
         Deque<Node> q = new ArrayDeque<>();
         Set<String> vis = new HashSet<>();
         q.offer(new Node(s1, 0));
         vis.add(s1);
-        int step = 0;
         // 广度优先搜索
         while (!q.isEmpty()) {
             int size = q.size();
