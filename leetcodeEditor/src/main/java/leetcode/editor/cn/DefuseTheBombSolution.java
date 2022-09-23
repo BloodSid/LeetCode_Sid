@@ -65,6 +65,19 @@ class Solution {
     public int[] decrypt(int[] code, int k) {
         int n = code.length;
         int[] res = new int[n];
+        for (int i = 0; i < n; i++) {
+            int start, end;
+            if (k >= 0) {
+                start = i + 1;
+                end = i + k + 1;
+            } else {
+                start = i + k;
+                end = i;
+            }
+            for (; start < end; start++) {
+                res[i] += code[(start + n) % n];
+            }
+        }
         return res;
     }
 }
