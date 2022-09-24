@@ -38,7 +38,21 @@ public class RotatedDigitsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int rotatedDigits(int n) {
-
+        int[] rot = {0, 0, 1, -1, -1, 1, 1, -1, 0, 1};
+        int cnt = 0;
+        loop:
+        for (int i = 1; i <= n; i++) {
+            int num = i;
+            // 统计 num 中旋转后可得到另一个数的数字
+            int diff = 0;
+            for (; num > 0; num /= 10) {
+                int cur = num % 10;
+                if (rot[cur] == -1) continue loop;
+                diff += rot[cur];
+            }
+            cnt += diff == 0 ? 0 : 1;
+        }
+        return cnt;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
