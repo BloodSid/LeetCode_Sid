@@ -19,8 +19,8 @@ public class Solution {
         map = new HashMap<>();
         for (int[] edge : edges) {
             int a = edge[0], b = edge[1];
-            if(vals[a] > vals[b]) add(a, b);
-            else add(b, a);
+            add(a, b);
+            add(b, a);
         }
         p = new int[n];
         max = new int[n];
@@ -34,12 +34,17 @@ public class Solution {
             f[i] = 1;
         }
         Arrays.sort(nodes, Comparator.comparingInt(k -> vals[k]));
+        // 每个节点只和排序中排在更前面的相邻节点进行 union, 以保证当前节点是联通分量中 val 最大的
+        HashSet<Integer> vis = new HashSet<>();
         for (Integer node : nodes) {
             if (map.containsKey(node)) {
-                for (Integer child : map.get(node)) {
-                    union(child, node);
+                for (Integer next : map.get(node)) {
+                    if (vis.contains(next)) {
+                        union(next, node);
+                    }
                 }
             }
+            vis.add(node);
             cnt += f[find(node)];
         }
         return cnt;
