@@ -24,7 +24,16 @@ public class GetKthMagicNumberLcciSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int getKthMagicNumber(int k) {
-
+        TreeSet<Integer> set = new TreeSet<>();
+        set.add(1);
+        int cur = 0;
+        for (int i = 0; i < k; i++) {
+            cur = set.pollFirst();
+            if (cur <= Integer.MAX_VALUE / 3) set.add(3 * cur);
+            if (cur <= Integer.MAX_VALUE / 5) set.add(5 * cur);
+            if (cur <= Integer.MAX_VALUE / 7) set.add(7 * cur);
+        }
+        return cur;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
