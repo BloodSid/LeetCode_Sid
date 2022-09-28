@@ -11,8 +11,6 @@ package leetcode.editor.cn;
 // 👍 100 👎 0
 
 
-import java.util.*;
-
 /**
  * 第 k 个数
  *
@@ -24,16 +22,16 @@ public class GetKthMagicNumberLcciSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int getKthMagicNumber(int k) {
-        TreeSet<Integer> set = new TreeSet<>();
-        set.add(1);
-        int cur = 0;
-        for (int i = 0; i < k; i++) {
-            cur = set.pollFirst();
-            if (cur <= Integer.MAX_VALUE / 3) set.add(3 * cur);
-            if (cur <= Integer.MAX_VALUE / 5) set.add(5 * cur);
-            if (cur <= Integer.MAX_VALUE / 7) set.add(7 * cur);
+        int[] dp = new int[k];
+        dp[0] = 1;
+        int p3 = 0, p5 = 0, p7 = 0;
+        for (int i = 1; i < k; i++) {
+            dp[i] = (int) Math.min(Math.min(dp[p3] * 3L, dp[p5] * 5L), dp[p7] * 7L);
+            if(dp[i] == dp[p3] * 3L) p3++;
+            if(dp[i] == dp[p5] * 5L) p5++;
+            if(dp[i] == dp[p7] * 7L) p7++;
         }
-        return cur;
+        return dp[k - 1];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
