@@ -27,6 +27,8 @@ package leetcode.editor.cn;
 // 👍 116 👎 0
 
 
+import java.util.Arrays;
+
 /**
  * 旋转数字
  *
@@ -37,8 +39,42 @@ package leetcode.editor.cn;
 public class RotatedDigitsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int rotatedDigits(int n) {
 
+    // 0 表示旋转后和自身相同，1 表示旋转后和自身不同，-1 表示旋转后无效
+    private final int[] rot = new int[]{0, 0, 1, -1, -1, 1, 1, -1, 0, 1};
+    private char[] s;
+    private int[][] dp;
+
+    public int rotatedDigits(int n) {
+        s = Integer.toString(n).toCharArray();
+        for (int i = 0; i < s.length; i++) {
+            s[i] -= '0';
+        }
+        // dp[0] 表示反转后相同的数，dp[1] 表示反转后不同的数
+        dp = new int[2][s.length];
+        Arrays.fill(dp[0], -1);
+        Arrays.fill(dp[1], -1);
+        return f(0, 0, true, false);
+    }
+    int f(int i, int different, boolean isLimited, boolean isNum) {
+        if (i == s.length) return isNum && different == 1 ? 1 : 0;
+        if (!isLimited && isNum && dp[different][i] != -1) return dp[different][i];
+        int res = 0;
+        // 可以跳过当前数位
+        if (!isNum) res = f(i + 1, 0, false, false);
+        int up = isLimited ? s[i] : 9;
+        int low = isNum ? 0 : 1;
+        // 枚举要填入的数字 d
+        for (int d = low; d <= up; d++) {
+            // 旋转后有效，则进行累加
+            if (rot[d] >= 0) {
+                // 如果旋转后相同，则 different 不变；若旋转后不同，则 different 必变为不同
+                res += f(i + 1, rot[d] | different, isLimited && d == s[i], true);
+            }
+        }
+        // 对不受 n 的约束且前面的数位已经填了数字的情况，根据反转后是否相同进行缓存
+        if (!isLimited && isNum) dp[different][i] = res;
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
