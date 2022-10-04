@@ -66,10 +66,15 @@ class Solution {
         // 离散化，以供树状数组使用
         int[] sorted = nums.clone();
         Arrays.sort(sorted);
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        for (int i = 0; i < sorted.length; i++) {
+            if (i == 0 || sorted[i] != sorted[i - 1]) map.put(sorted[i], i);
+        }
         long res = 0;
         for (int i = 0; i < n; i++) {
-            res += bit.query(lowerBound(sorted, nums[i] + diff + 1));
-            bit.add(lowerBound(sorted, nums[i]) + 1);
+            Map.Entry<Integer, Integer> entry = map.ceilingEntry(nums[i] + diff + 1);
+            res += bit.query(entry == null ? n : entry.getValue());
+            bit.add(map.get(nums[i]) + 1);
         }
         return res;
     }
