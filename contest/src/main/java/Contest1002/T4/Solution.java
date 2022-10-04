@@ -1,5 +1,8 @@
 package Contest1002.T4;
 
+import java.util.Iterator;
+import java.util.TreeSet;
+
 /**
  * @author IronSid
  * @since 2022-10-02 10:36
@@ -17,15 +20,24 @@ public class Solution {
                 if (ch[i] == ch[j]) lcp[i][j] = lcp[i + 1][j + 1] + 1;
             }
         }
+        TreeSet<Integer> list = new TreeSet<>((o1, o2) -> {
+            if (dp[o1] == dp[o2]) return o1 - o2;
+            else return dp[o2] - dp[o1];
+        });
+        list.add(0);
         int maxD = 0;
-        for (int j = 0; j < n; j++) {
-            for (int i = Math.max(0, 2 * j - n); i < j; i++) {
-                // 如果没有办法通过若干步操作达到剩余 s[i:] 的状态，则跳过
-                if (i != 0 && dp[i] == 0) continue;
-                // s[i:] 和 s[j:] 有相同前缀，表示从 dp[i] 到 dp[j] 的状态转移成立
-                if (lcp[i][j] >= j - i) dp[j] = Math.max(dp[j], dp[i] + 1);
+        // 将 dp[0] 到 dp[i-1] 排好序，然后从大到小来找合法的转移，这样有一个满足就可跳过后面的遍历
+        for (int i = 1; i < n; i++) {
+            Iterator<Integer> iterator = list.iterator();
+            while (iterator.hasNext()) {
+                Integer next = iterator.next();
+                if (lcp[next][i] >= i - next) {
+                    dp[i] = dp[next] + 1;
+                    list.add(i);
+                    break;
+                }
             }
-            maxD = Math.max(maxD, dp[j]);
+            maxD = Math.max(maxD, dp[i]);
         }
         // 任何位置都可以一步操作删除整个字符串，所以找出步数最大的位置再操作一步就是结果
         return maxD + 1;
