@@ -44,6 +44,8 @@ package leetcode.editor.cn;
 // 👍 6 👎 0
 
 
+import java.util.*;
+
 /**
  * 满足不等式的数对数目
  *
@@ -54,9 +56,62 @@ package leetcode.editor.cn;
 public class NumberOfPairsSatisfyingInequalitySolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    public long numberOfPairs(int[] nums1, int[] nums2, int diff) {
+        int n = nums1.length;
+        int[] nums = new int[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = nums1[i] - nums2[i];
+        }
+        BIT bit = new BIT(n + 1);
+        // 离散化，以供树状数组使用
+        int[] sorted = nums.clone();
+        Arrays.sort(sorted);
+        long res = 0;
+        for (int i = 0; i < n; i++) {
+            res += bit.query(lowerBound(sorted, nums[i] + diff + 1));
+            bit.add(lowerBound(sorted, nums[i]) + 1);
+        }
+        return res;
+    }
 
+    int lowerBound(int[] a, int x) {
+        // 初始化区间为 r = n, 否则当所有元素都比 x 小时，无法正确地返回 n
+        int l = 0, r = a.length;
+        while (l < r) {
+            int mid = l + r >> 1;
+            if (a[mid] < x) l = mid + 1;
+            else r = mid;
+        }
+        return l;
+    }
 }
 
+// 树状数组
+class BIT {
+    private final int[] tree;
+
+    public BIT(int n) {
+        tree = new int[n];
+    }
+
+    // arr[x] 加一
+    public void add(int x) {
+        while (x < tree.length) {
+            tree[x]++;
+            x += x & -x;
+        }
+    }
+
+    // 返回 arr[0:x) 之和
+    public int query(int x) {
+        int res = 0;
+        while (x > 0) {
+            res += tree[x];
+            x &= x - 1;
+        }
+        return res;
+    }
+}
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
