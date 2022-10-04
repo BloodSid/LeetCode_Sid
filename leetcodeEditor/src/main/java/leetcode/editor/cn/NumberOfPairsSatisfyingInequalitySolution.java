@@ -54,7 +54,52 @@ package leetcode.editor.cn;
 public class NumberOfPairsSatisfyingInequalitySolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    private int diff;
+    private int[] temp;
 
+
+    public long numberOfPairs(int[] nums1, int[] nums2, int diff) {
+        this.diff = diff;
+        int n = nums1.length;
+        int[] nums = new int[n];
+        temp = new int[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = nums1[i] - nums2[i];
+        }
+        return mergeSort(nums, 0, n - 1);
+    }
+
+    // 归并排序，并在每次合并前计算出符合不等式 nums[i] <= nums[j] + diff 的数对数量
+    long mergeSort(int[] nums, int left, int right) {
+        if (left >= right) return 0;
+        int mid = left + right >> 1;
+        // 左右两部分各自内部的数对数量
+        long pairs = mergeSort(nums, left, mid) + mergeSort(nums, mid + 1, right);
+        // 左右两部分交叉的数对数量
+        for (int i = left, j = mid + 1; j <= right; j++) {
+            while (i <= mid && nums[i] <= nums[j] + diff) {
+                i++;
+            }
+            pairs += i - left;
+        }
+        // 合并左右两部分为一个有序数列
+        System.arraycopy(nums, left, temp, left, right - left + 1);
+        int p = left;
+        int p1 = left, p2 = mid + 1;
+        while (p1 <= mid && p2 <= right) {
+            if (temp[p1] < temp[p2]) {
+                nums[p++] = temp[p1++];
+            } else {
+                nums[p++] = temp[p2++];
+            }
+        }
+        if (p1 > mid) {
+            System.arraycopy(temp, p2, nums, p, right - p + 1);
+        } else {
+            System.arraycopy(temp, p1, nums, p, right - p + 1);
+        }
+        return pairs;
+    }
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
