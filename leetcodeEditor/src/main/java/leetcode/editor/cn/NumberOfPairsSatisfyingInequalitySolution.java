@@ -44,8 +44,6 @@ package leetcode.editor.cn;
 // 👍 6 👎 0
 
 
-import java.util.*;
-
 /**
  * 满足不等式的数对数目
  *
@@ -56,67 +54,54 @@ import java.util.*;
 public class NumberOfPairsSatisfyingInequalitySolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    private int diff;
+    private int[] temp;
+
+
     public long numberOfPairs(int[] nums1, int[] nums2, int diff) {
+        this.diff = diff;
         int n = nums1.length;
         int[] nums = new int[n];
+        temp = new int[n];
         for (int i = 0; i < n; i++) {
             nums[i] = nums1[i] - nums2[i];
         }
-        BIT bit = new BIT(n + 1);
-        // 离散化，以供树状数组使用
-        int[] sorted = nums.clone();
-        Arrays.sort(sorted);
-        TreeMap<Integer, Integer> map = new TreeMap<>();
-        for (int i = 0; i < sorted.length; i++) {
-            if (i == 0 || sorted[i] != sorted[i - 1]) map.put(sorted[i], i);
-        }
-        long res = 0;
-        for (int i = 0; i < n; i++) {
-            Map.Entry<Integer, Integer> entry = map.ceilingEntry(nums[i] + diff + 1);
-            res += bit.query(entry == null ? n : entry.getValue());
-            bit.add(map.get(nums[i]) + 1);
-        }
-        return res;
+        return mergeSort(nums, 0, n - 1);
     }
 
-    int lowerBound(int[] a, int x) {
-        // 初始化区间为 r = n, 否则当所有元素都比 x 小时，无法正确地返回 n
-        int l = 0, r = a.length;
-        while (l < r) {
-            int mid = l + r >> 1;
-            if (a[mid] < x) l = mid + 1;
-            else r = mid;
+    // 归并排序，并在每次合并前计算出符合不等式 nums[i] <= nums[j] + diff 的数对数量
+    long mergeSort(int[] nums, int left, int right) {
+        if (left >= right) return 0;
+        int mid = left + right >> 1;
+        // 左右两部分各自内部的数对数量
+        long pairs = mergeSort(nums, left, mid) + mergeSort(nums, mid + 1, right);
+        // 左右两部分交叉的数对数量
+        for (int i = left, j = mid + 1; j <= right; j++) {
+            while (i <= mid && nums[i] <= nums[j] + diff) {
+                i++;
+            }
+            pairs += i - left;
         }
-        return l;
-    }
-}
-
-// 树状数组
-class BIT {
-    private final int[] tree;
-
-    public BIT(int n) {
-        tree = new int[n];
-    }
-
-    // arr[x] 加一
-    public void add(int x) {
-        while (x < tree.length) {
-            tree[x]++;
-            x += x & -x;
+        // 合并左右两部分为一个有序数列
+        System.arraycopy(nums, left, temp, left, right - left + 1);
+        int p = left;
+        int p1 = left, p2 = mid + 1;
+        while (p1 <= mid && p2 <= right) {
+            if (temp[p1] < temp[p2]) {
+                nums[p++] = temp[p1++];
+            } else {
+                nums[p++] = temp[p2++];
+            }
         }
-    }
-
-    // 返回 arr[0:x) 之和
-    public int query(int x) {
-        int res = 0;
-        while (x > 0) {
-            res += tree[x];
-            x &= x - 1;
+        if (p1 > mid) {
+            System.arraycopy(temp, p2, nums, p, right - p + 1);
+        } else {
+            System.arraycopy(temp, p1, nums, p, right - p + 1);
         }
-        return res;
+        return pairs;
     }
 }
+
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
