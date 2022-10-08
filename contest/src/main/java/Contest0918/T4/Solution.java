@@ -1,28 +1,45 @@
 package Contest0918.T4;
 
+import java.util.HashMap;
+
 /**
  * @author IronSid
  * @since 2022-09-18 10:28
  */
 public class Solution {
-    public int[] sumPrefixScores(String[] words) {
-        int[] res = new int[words.length];
-        char[][] ws = new char[words.length][];
-        for (int i = 0; i < words.length; i++) {
-            res[i] = words[i].length();
-            ws[i] = words[i].toCharArray();
+
+    private final Trie root = new Trie();
+
+    class Trie {
+        int cnt = 0;
+        HashMap<Character, Trie> children = new HashMap<>();
+    }
+
+    void insert(String s) {
+        Trie cur = root;
+        for (char c : s.toCharArray()) {
+            cur.children.putIfAbsent(c, new Trie());
+            cur = cur.children.get(c);
+            cur.cnt++;
         }
+    }
+
+    int query(String s) {
+        Trie cur = root;
+        int score = 0;
+        for (char c : s.toCharArray()) {
+            cur = cur.children.get(c);
+            score += cur.cnt;
+        }
+        return score;
+    }
+    public int[] sumPrefixScores(String[] words) {
+        for (String word : words) {
+            insert(word);
+        }
+        int[] res = new int[words.length];
         for (int i = 0; i < words.length; i++) {
-            char[] w1 = ws[i];
-            for (int j = i + 1; j < words.length; j++) {
-                char[] w2 = ws[j];
-                int k = 0;
-                for (; k < Math.min(w1.length, w2.length); k++) {
-                    if (w1[k] != w2[k]) break;
-                }
-                res[i] += k;
-                res[j] += k;
-            }
+            res[i] = query(words[i]);
         }
         return res;
     }
