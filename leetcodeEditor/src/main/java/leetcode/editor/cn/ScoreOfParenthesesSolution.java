@@ -44,6 +44,9 @@ package leetcode.editor.cn;
 // 👍 316 👎 0
 
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 /**
  * 括号的分数
  *
@@ -55,23 +58,17 @@ public class ScoreOfParenthesesSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int scoreOfParentheses(String s) {
-        if (s.length() == 2) return 1;
-        int stack = 0;
-        int score = 0;
-        char[] ch = s.toCharArray();
-        int start = 0;
-        for (int i = 0; i < ch.length - 1; i++) {
-            if (ch[i] == '(') stack++;
-            else stack--;
-            if (stack == 0) {
-                score += scoreOfParentheses(s.substring(start, i + 1));
-                start = i + 1;
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.push(0);
+        for (char c : s.toCharArray()) {
+            if (c == '(') stack.push(0);
+            else {
+                Integer pop = stack.pop();
+                int val = pop == 0 ? 1 : 2 * pop;
+                stack.push(stack.pop() + val);
             }
         }
-        // 到结尾时判断是 AB 还是 (A)
-        if (score == 0) return scoreOfParentheses(s.substring(1, s.length() - 1)) * 2;
-        score += scoreOfParentheses(s.substring(start));
-        return score;
+        return stack.pop();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
