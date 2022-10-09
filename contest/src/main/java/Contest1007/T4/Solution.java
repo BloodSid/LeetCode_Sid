@@ -1,6 +1,7 @@
 package Contest1007.T4;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,7 +17,6 @@ public class Solution {
     private int[][] dp;
     private int[][] wordF;
     private String[] words;
-    private HashMap<String, Integer> map = new HashMap<>();
 
     public int Leetcode(String[] words) {
         this.words = words;
@@ -29,12 +29,17 @@ public class Solution {
             }
         }
         dp = new int[1 << s.length][n];
-        return f((1 << s.length) - 1, n - 1);
+        for (int[] ints : dp) {
+            Arrays.fill(ints, -1);
+        }
+        int res = f((1 << s.length) - 1, n - 1);
+        return res == INF ? -1 : res;
     }
 
     int f(int mask, int idx) {
         if (mask == 0) return 0;
         if (idx < 0) return INF;
+        if (dp[mask][idx] != -1) return dp[mask][idx];
         int[] freq = new int[128];
         for (int i = 0; i < s.length; i++) {
             // 根据状态统计当前已经有的字母
@@ -92,38 +97,25 @@ public class Solution {
         sb.setLength(sb.length() - cnt);
     }
 
+    HashMap<String, Integer> map = new HashMap<>();
+
     int minCost(String word, String cards) {
+        if (cards.length() == 0) return 0;
         String key = word + ":" + cards;
         Integer val = map.get(key);
         if (val != null) return val;
-        int cost = 0;
-        boolean[] vis = new boolean[cards.length()];
-        for (int i = 0; i < cards.length(); i++) {
-            int min = INF;
-            int p1 = 0;
-            int p2 = 0;
-            for (int j = 0; j < cards.length(); j++) {
-                if (vis[j]) continue;
-                char card = cards.charAt(j);
-                int left = word.indexOf(card);
-                int right = word.lastIndexOf(card);
-                if (left < min) {
-                    min = left;
-                    p1 = left;
-                    p2 = j;
-                }
-                if (word.length() - 1 - right < min) {
-                    min = word.length() - 1 - right;
-                    p1 = right;
-                    p2 = j;
-                }
+        int n = word.length();
+        int min = INF;
+        for (int i = 0; i < n; i++) {
+            int j = cards.indexOf(word.charAt(i));
+            if (j != -1) {
+                int subCost = minCost(word.substring(0, i) + word.substring(i + 1),
+                        cards.substring(0, j) + cards.substring(j + 1));
+                min = Math.min(min, i * (n - i - 1) + subCost);
             }
-            cost += p1 * (word.length() - p1 - 1);
-            word = word.substring(0, p1) + word.substring(p1 + 1);
-            vis[p2] = true;
         }
-        map.put(key, cost);
-        return cost;
+        map.put(key, min);
+        return min;
     }
 
 }
