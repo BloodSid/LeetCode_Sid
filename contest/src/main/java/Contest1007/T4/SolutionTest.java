@@ -37,9 +37,24 @@ public class SolutionTest {
 
     @Test
     public void testLeetcode2() throws Exception {
-        String[] words = {"axer","qsuec","rg","cod","lauefxbv","oexyzjr","yefttp","gbnpaccl","lj","kineyykk","esecokfl",
-                "qlf","wuxahozg","z","py","ohqpea","nwrtt","ixmvpbsw","jixygsly","cqiudy"};
+        String[] words = {"axer","qsuec","rg","cod","lauefxbv","oexyzjr","yefttp","gbnpaccl","lj","kineyykk","esecokfl", "qlf","wuxahozg","z","py","ohqpea","nwrtt","ixmvpbsw","jixygsly","cqiudy"};
         int expected = 2;
+        int actual = solution.Leetcode(words);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testLeetcode3() throws Exception {
+        String[] words = {"edot","leuj","ceq","hobqmib","vyfdkres","tkfetc","th","slqlclla","hhyljfst"};
+        int expected = 12;
+        int actual = solution.Leetcode(words);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testLeetcode4() throws Exception {
+        String[] words = {"whlesuln"};
+        int expected = -1;
         int actual = solution.Leetcode(words);
         assertEquals(expected, actual);
     }
