@@ -1,129 +1,110 @@
 package Contest1007.T4;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
 
 /**
  * @author IronSid
  * @since 2022-10-07 15:07
  */
 public class Solution {
-
     public static final int INF = Integer.MAX_VALUE;
-    private final char[] s = "cdeeeehllloot".toCharArray();
-    private final char[] keys = "cdehlot".toCharArray();
-    private int[][] dp;
-    private int[][] wordF;
-    private String[] words;
-    private HashMap<String, Integer> map = new HashMap<>();
+    private static final char[] s = "helloleetcode".toCharArray();
+    // 预处理: cost[i][j] 表示长度 i, 取法 j 的单词的最少消耗
+    public static final int MAX_M = 8;
+    private static final int[][] cost = new int[MAX_M + 1][];
 
-    public int Leetcode(String[] words) {
-        this.words = words;
-        int n = words.length;
-        wordF = new int[n][];
-        for (int i = 0; i < wordF.length; i++) {
-            wordF[i] = new int[128];
-            for (char c : words[i].toCharArray()) {
-                wordF[i][c]++;
+    static {
+        Deque<Integer> deque = new ArrayDeque<>();
+        for (int i = 1; i <= MAX_M; i++) {
+            cost[i] = new int[1 << i];
+            for (int j = 0; j < 1 << i; j++) {
+                // 表示需要取走的字母
+                int[] b = new int[i];
+                for (int k = 0; k < i; k++) {
+                    if ((j >> k & 1) == 1) {
+                        deque.offer(k);
+                    }
+                }
+                int c = 0;
+                // 左边和右边已经取出的字母数量
+                int left = 0, right = 0;
+                while (!deque.isEmpty()) {
+                    int first = deque.peekFirst();
+                    int last = deque.peekLast();
+                    // c1, c2 分别是取出 deque 最左和最右的代价
+                    int c1 = (first - left) * (i - first - 1 - right);
+                    int c2 = (last - left) * (i - last - 1 - right);
+                    if (c1 < c2) {
+                        c += c1;
+                        left++;
+                        deque.pollFirst();
+                    } else {
+                        c += c2;
+                        right++;
+                        deque.pollLast();
+                    }
+                }
+                cost[i][j] = c;
             }
         }
-        dp = new int[1 << s.length][n];
-        return f((1 << s.length) - 1, n - 1);
     }
 
-    int f(int mask, int idx) {
-        if (mask == 0) return 0;
-        if (idx < 0) return INF;
-        int[] freq = new int[128];
-        for (int i = 0; i < s.length; i++) {
-            // 根据状态统计当前已经有的字母
-            if ((mask >> i & 1) != 0) freq[s[i]]++;
-        }
-        // 把当前已经有的字母和当前单词的字母取交集
-        for (char key : keys) {
-            freq[key] = Math.min(freq[key], wordF[idx][key]);
-        }
-        List<String> subsets = permute(freq);
-        // 遍历该交集的每一种子集（包括空集和它本身），计算新的 mask 和 取出该子集的分数
-        int min = INF;
-        for (String subset : subsets) {
-            // 计算新 mask
-            int newMask = mask;
-            // s 的指针
-            int p = 0;
-            for (char c : subset.toCharArray()) {
-                for (; p < s.length; p++) {
-                    if ((mask >> p & 1) == 0) continue;
-                    if (s[p] == c) {
-                        newMask -= 1 << p;
-                        p++;
+    // 预处理: next[i][c] 表示已得到状态 i 时，再得到字符 c 之后的状态
+    private static final int[][] next = new int[1 << s.length][26];
+
+    static {
+        for (int i = 0; i < next.length; i++) {
+            for (int c = 0; c < 26; c++) {
+                int j;
+                for (j = 0; j < s.length; j++) {
+                    if ((i >> j & 1) == 0 && s[j] == c + 'a') {
                         break;
                     }
                 }
+                next[i][c] = j == s.length ? -1 : (i | (1 << j));
             }
-            int preF = f(newMask, idx - 1);
-            if (preF == INF) continue;
-            min = Math.min(min, preF + minCost(words[idx], subset));
         }
-        // 取最小值
-        dp[mask][idx] = min;
+    }
+
+    private char[][] w;
+    private int[][] dp;
+
+
+    public int Leetcode(String[] words) {
+        w = new char[words.length][];
+        for (int i = 0; i < words.length; i++) w[i] = words[i].toCharArray();
+        int n = words.length;
+        dp = new int[1 << s.length][n];
+        for (int[] ints : dp) {
+            Arrays.fill(ints, -1);
+        }
+        int res = f(0, 0);
+        return res == INF ? -1 : res;
+    }
+
+    int f(int mask, int idx) {
+        if (mask == (1 << s.length) - 1) return 0;
+        if (idx == w.length) return INF;
+        // 利用 dfs 遍历从 w[idx] 中取字母的所有合法方案
+        if (dp[mask][idx] == -1) dp[mask][idx] = dfs(mask, idx, 0, 0);;
         return dp[mask][idx];
     }
 
-    List<String> permute(int[] freq) {
-        List<String> res = new ArrayList<>();
-        dfs(freq, 0, res, new StringBuilder());
-        return res;
-    }
-
-    void dfs(int[] freq, int kIdx, List<String> list, StringBuilder sb) {
-        if (kIdx == keys.length) {
-            list.add(sb.toString());
-            return;
+    // 利用 next 进行 dfs, 返回最小消耗
+    // mask 表示 s 中取了哪些字母，wordMask 表示 w[i] 中 取了那些字母
+    int dfs(int mask, int i, int wi, int wordMask) {
+        if (wi == w[i].length) {
+            int f = f(mask, i + 1);
+            if (f == INF) return INF;
+            return f + cost[w[i].length][wordMask];
         }
-        char c = keys[kIdx];
-        int cnt = freq[c];
-        dfs(freq, kIdx + 1, list, sb);
-        for (int i = 0; i < cnt; i++) {
-            sb.append(c);
-            dfs(freq, kIdx + 1, list, sb);
-        }
-        sb.setLength(sb.length() - cnt);
+        // 不取 w[i][wi]
+        int min = dfs(mask, i, wi + 1, wordMask);
+        // 取 w[i][wi]
+        int nMask = next[mask][w[i][wi] - 'a'];
+        if (nMask != -1) min = Math.min(min, dfs(nMask, i, wi + 1, wordMask | (1 << wi)));
+        return min;
     }
-
-    int minCost(String word, String cards) {
-        String key = word + ":" + cards;
-        Integer val = map.get(key);
-        if (val != null) return val;
-        int cost = 0;
-        boolean[] vis = new boolean[cards.length()];
-        for (int i = 0; i < cards.length(); i++) {
-            int min = INF;
-            int p1 = 0;
-            int p2 = 0;
-            for (int j = 0; j < cards.length(); j++) {
-                if (vis[j]) continue;
-                char card = cards.charAt(j);
-                int left = word.indexOf(card);
-                int right = word.lastIndexOf(card);
-                if (left < min) {
-                    min = left;
-                    p1 = left;
-                    p2 = j;
-                }
-                if (word.length() - 1 - right < min) {
-                    min = word.length() - 1 - right;
-                    p1 = right;
-                    p2 = j;
-                }
-            }
-            cost += p1 * (word.length() - p1 - 1);
-            word = word.substring(0, p1) + word.substring(p1 + 1);
-            vis[p2] = true;
-        }
-        map.put(key, cost);
-        return cost;
-    }
-
 }
