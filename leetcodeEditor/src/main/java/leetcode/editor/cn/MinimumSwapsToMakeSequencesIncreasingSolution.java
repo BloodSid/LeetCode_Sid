@@ -47,8 +47,6 @@ package leetcode.editor.cn;
 // 👍 248 👎 0
 
 
-import java.util.Arrays;
-
 /**
  * 使序列递增的最小交换次数
  *
@@ -60,32 +58,22 @@ public class MinimumSwapsToMakeSequencesIncreasingSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    private int[][] dp;
-    private int[] n1;
-    private int[] n2;
-
-    public int minSwap(int[] nums1, int[] nums2) {
-        int n = nums1.length;
-        n1 = nums1;
-        n2 = nums2;
-        dp = new int[2][n];
-        Arrays.fill(dp[0], -1);
-        Arrays.fill(dp[1], -1);
-        return Math.min(f(n - 1, 1), f(n - 1, 0));
-    }
-
-    // isOK 表示当前位置是否交换
-    int f(int i, int isOK) {
-        if (i == 0) return isOK;
-        if (dp[isOK][i] != -1) return dp[isOK][i];
-        int min = Integer.MAX_VALUE;
-        // i 与 i - 1 的 isOK 可以相同
-        if (n1[i - 1] < n1[i] && n2[i - 1] < n2[i]) min = Math.min(min, f(i - 1, isOK));
-        // i 与 i - 1 的 isOK 可以不同
-        if (n1[i - 1] < n2[i] && n2[i - 1] < n1[i]) min = Math.min(min, f(i - 1, isOK ^ 1));
-        // 若 i 交换，结果需要加一
-        dp[isOK][i] = min + isOK;
-        return dp[isOK][i];
+    public int minSwap(int[] n1, int[] n2) {
+        int n = n1.length;
+        int[][] dp = new int[2][n];
+        // i = 0 时，若交换则交换次数为1
+        dp[1][0] = 1;
+        for (int i = 1; i < n; i++) {
+            for (int isOK = 0; isOK < 2; isOK++) {
+                int min = Integer.MAX_VALUE;
+                // i 与 i - 1 的 isOK 可以相同
+                if (n1[i - 1] < n1[i] && n2[i - 1] < n2[i]) min = Math.min(min, dp[isOK][i - 1]);
+                // i 与 i - 1 的 isOK 可以不同
+                if (n1[i - 1] < n2[i] && n2[i - 1] < n1[i]) min = Math.min(min, dp[isOK ^ 1][i - 1]);
+                dp[isOK][i] = min + isOK;
+            }
+        }
+        return Math.min(dp[0][n - 1], dp[1][n - 1]);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
