@@ -1,9 +1,7 @@
 package Contest1007.T4;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * @author IronSid
@@ -12,8 +10,29 @@ import java.util.List;
 public class Solution {
 
     public static final int INF = Integer.MAX_VALUE;
-    private final char[] s = "cdeeeehllloot".toCharArray();
-    private final char[] keys = "cdehlot".toCharArray();
+    private static final char[] s = "cdeeeehllloot".toCharArray();
+    private static final char[] keys = "cdehlot".toCharArray();
+    static HashMap<String, Integer> map = new HashMap<>();
+
+    static int minCost(String word, String cards) {
+        if (cards.length() == 0) return 0;
+        String key = word + ":" + cards;
+        Integer val = map.get(key);
+        if (val != null) return val;
+        int n = word.length();
+        int min = INF;
+        for (int i = 0; i < n; i++) {
+            int j = cards.indexOf(word.charAt(i));
+            if (j != -1) {
+                int subCost = minCost(word.substring(0, i) + word.substring(i + 1),
+                        cards.substring(0, j) + cards.substring(j + 1));
+                min = Math.min(min, i * (n - i - 1) + subCost);
+            }
+        }
+        map.put(key, min);
+        return min;
+    }
+
     private int[][] dp;
     private int[][] wordF;
     private String[] words;
@@ -49,72 +68,31 @@ public class Solution {
         for (char key : keys) {
             freq[key] = Math.min(freq[key], wordF[idx][key]);
         }
-        List<String> subsets = permute(freq);
-        // 遍历该交集的每一种子集（包括空集和它本身），计算新的 mask 和 取出该子集的分数
-        int min = INF;
-        for (String subset : subsets) {
-            // 计算新 mask
-            int newMask = mask;
-            // s 的指针
-            int p = 0;
-            for (char c : subset.toCharArray()) {
-                for (; p < s.length; p++) {
-                    if ((mask >> p & 1) == 0) continue;
-                    if (s[p] == c) {
-                        newMask -= 1 << p;
-                        p++;
-                        break;
-                    }
-                }
-            }
-            int preF = f(newMask, idx - 1);
-            if (preF == INF) continue;
-            min = Math.min(min, preF + minCost(words[idx], subset));
-        }
-        // 取最小值
-        dp[mask][idx] = min;
+        // 遍历该交集的每一种子集（包括空集和它本身）
+        dp[mask][idx] = dfs(mask, idx, freq, 0, new StringBuilder());
         return dp[mask][idx];
     }
 
-    List<String> permute(int[] freq) {
-        List<String> res = new ArrayList<>();
-        dfs(freq, 0, res, new StringBuilder());
-        return res;
-    }
-
-    void dfs(int[] freq, int kIdx, List<String> list, StringBuilder sb) {
+    // 返回最小的 cost
+    int dfs(int mask, int idx, int[] freq, int kIdx, StringBuilder sb) {
         if (kIdx == keys.length) {
-            list.add(sb.toString());
-            return;
+            int f = f(mask, idx - 1);
+            return f == INF ? INF : f + minCost(words[idx], sb.toString());
         }
         char c = keys[kIdx];
-        int cnt = freq[c];
-        dfs(freq, kIdx + 1, list, sb);
-        for (int i = 0; i < cnt; i++) {
+        int min = dfs(mask, idx, freq, kIdx + 1, sb);
+        // 找到未取的 c 在 s 中第一次出现的位置
+        int j = 0;
+        for (; j < s.length; j++) {
+            if ((mask >> j & 1) == 1 && s[j] == c) break;
+        }
+        for (int i = 0; i < freq[c]; i++, j++) {
+            // 计算新 mask 和分数
             sb.append(c);
-            dfs(freq, kIdx + 1, list, sb);
+            mask ^= 1 << j;
+            min = Math.min(min, dfs(mask, idx, freq, kIdx + 1, sb));
         }
-        sb.setLength(sb.length() - cnt);
-    }
-
-    HashMap<String, Integer> map = new HashMap<>();
-
-    int minCost(String word, String cards) {
-        if (cards.length() == 0) return 0;
-        String key = word + ":" + cards;
-        Integer val = map.get(key);
-        if (val != null) return val;
-        int n = word.length();
-        int min = INF;
-        for (int i = 0; i < n; i++) {
-            int j = cards.indexOf(word.charAt(i));
-            if (j != -1) {
-                int subCost = minCost(word.substring(0, i) + word.substring(i + 1),
-                        cards.substring(0, j) + cards.substring(j + 1));
-                min = Math.min(min, i * (n - i - 1) + subCost);
-            }
-        }
-        map.put(key, min);
+        sb.setLength(sb.length() - freq[c]);
         return min;
     }
 
