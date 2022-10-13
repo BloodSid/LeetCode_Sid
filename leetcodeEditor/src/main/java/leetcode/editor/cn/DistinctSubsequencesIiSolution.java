@@ -64,21 +64,21 @@ class Solution {
     public int distinctSubseqII(String s) {
         char[] ch = s.toCharArray();
         int n = ch.length;
-        long[] dp = new long[n];
+        int[] dp = new int[n + 1];
         int[] last = new int[128];
         Arrays.fill(last, -1);
+        // 计入空集
+        dp[0] = 1;
         for (int i = 0; i < n; i++) {
-            for (char c = 'a'; c <= 'z'; c++) {
-                if (last[c] != -1) dp[i] += dp[last[c]];
-            }
-            dp[i] = (dp[i] + 1) % MOD;
-            last[ch[i]] = i;
+            int repeat = 0;
+            char c = ch[i];
+            // 当前字母 c，上一个同一个字母 c'，在 c' 的前一个位置上的所有子序列后跟 c 或 c' 可形成重复的子序列，得减去这一部分
+            if (last[c] >= 0) repeat = dp[last[c]];
+            dp[i + 1] = (int) (((long) dp[i] * 2 - repeat + MOD) % MOD);
+            last[c] = i;
         }
-        long res = 0;
-        for (char c = 'a'; c <= 'z'; c++) {
-            if (last[c] != -1) res += dp[last[c]];
-        }
-        return (int) (res % MOD);
+        // 去掉空集
+        return (dp[n] - 1 + MOD) % MOD;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
