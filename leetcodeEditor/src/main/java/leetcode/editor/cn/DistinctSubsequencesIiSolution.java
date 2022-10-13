@@ -46,8 +46,6 @@ package leetcode.editor.cn;
 // 👍 142 👎 0
 
 
-import java.util.Arrays;
-
 /**
  * 不同的子序列 II
  *
@@ -63,22 +61,19 @@ class Solution {
 
     public int distinctSubseqII(String s) {
         char[] ch = s.toCharArray();
-        int n = ch.length;
-        int[] dp = new int[n + 1];
-        int[] last = new int[128];
-        Arrays.fill(last, -1);
-        // 计入空集
-        dp[0] = 1;
-        for (int i = 0; i < n; i++) {
-            int repeat = 0;
-            char c = ch[i];
-            // 当前字母 c，上一个同一个字母 c'，在 c' 的前一个位置上的所有子序列后跟 c 或 c' 可形成重复的子序列，得减去这一部分
-            if (last[c] >= 0) repeat = dp[last[c]];
-            dp[i + 1] = (int) (((long) dp[i] * 2 - repeat + MOD) % MOD);
-            last[c] = i;
+        // dp[c] 表示在之前的字符中，以 c 结束的不同子序列
+        int[] dp = new int[26];
+        for (int i = 0; i < ch.length; i++) {
+            int c = ch[i] - 'a';
+            long sum = 1;
+            for (int j = 0; j < 26; j++) {
+                sum += dp[j];
+            }
+            dp[c] = (int) (sum % MOD);
         }
-        // 去掉空集
-        return (dp[n] - 1 + MOD) % MOD;
+        long res = 0;
+        for (int i : dp) res += i;
+        return (int) (res % MOD);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
