@@ -6,29 +6,13 @@ package Contest1015.T3;
  */
 public class Solution {
     public int minimizeArrayValue(int[] nums) {
-        int n = nums.length;
+        int res = 0;
         long sum = 0;
-        long right = 0;
-        for (int num : nums) {
-            sum += num;
-            right = Math.max(right, num);
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            long avg = (sum - 1 + i + 1) / (i + 1);
+            res = (int) Math.max(res, avg);
         }
-        long left = (sum - 1) / n + 1;
-        while (left <= right) {
-            long mid = left + right >> 1;
-            long gap = 0;
-            int i;
-            for (i = 0; i < n; i++) {
-                if (nums[i] < mid) {
-                    gap += mid - nums[i];
-                } else {
-                    gap -= nums[i] - mid;
-                }
-                if (gap < 0) break;
-            }
-            if (i == n) right = mid - 1;
-            else left = mid + 1;
-        }
-        return (int) left;
+        return res;
     }
 }
