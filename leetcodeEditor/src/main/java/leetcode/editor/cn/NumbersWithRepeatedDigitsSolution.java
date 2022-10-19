@@ -50,27 +50,38 @@ public class NumbersWithRepeatedDigitsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int numDupDigitsAtMostN(int n) {
+        // 计算有多少没有重复数字的数
         int ans = 0;
         List<Integer> list = new ArrayList<>();
         for (int t = n; t > 0; t /= 10) {
             list.add(t % 10);
         }
         int len = list.size();
+        // 记录对应数字是否在 n 中出现过
         boolean[] vis = new boolean[10];
+        // 计算位数和 n 相等的有多少
         for (int i = len - 1, p = 1; i >= 0; i--, p++) {
             int cur = list.get(i);
             int cnt = 0;
+            // 统计在 n 中 cur 的更高位上没有出现过，并且小于 cur 的数字
             for (int j = 0; j < cur; j++) {
+                // 第一位不取零
                 if (j == 0 && i == len - 1) continue;
                 if (!vis[j]) cnt++;
             }
+            // a 表示 cur 下一位上可以用的数，b 表示最后一位可以用的数
             int a = 10 - p, b = a - (len - p) + 1;
+            // 计算在 cur 这一位上使用比 cur 更小的数字，可得到多少不重复的数
             for (int t = a; t >= b; t--) cnt *= t;
             ans += cnt;
+            // 如果 cur 在高位上出现过，不再计算这一位上 cur 取 cur 的情况
             if (vis[cur]) break;
+            // 如果 cur 在更高位上没出现过，则继续循环，计算这一位上取 cur 的情况
             vis[cur] = true;
+            // 计算到最低位，最低位上取 cur 表示 n 自身
             if (i == 0) ans += 1;
         }
+        // 计算位数比 n 少的有多少
         for (int i = 1, t = 9; i < len; i++) {
             ans += t;
             t *= 10 - i;
