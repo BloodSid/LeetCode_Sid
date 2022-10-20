@@ -40,8 +40,6 @@ package leetcode.editor.cn;
 // 👍 190 👎 0
 
 
-import java.util.*;
-
 /**
  * 股票价格跨度
  *
@@ -55,22 +53,21 @@ public class OnlineStockSpanSolution {
 class StockSpanner {
 
     public static final int N = (int) 1e5;
-    private final Deque<Integer> stack;
-    private final List<Integer> p;
+    // static
+    int[] p = new int[N];
+    private int i = 0;
+    // static
+    int[] stack = new int[N];
+    private int j = 0;
 
-    public StockSpanner() {
-        stack = new ArrayDeque<>();
-        p = new ArrayList<>();
-    }
+    public StockSpanner() {}
     
     public int next(int price) {
-        while (!stack.isEmpty() && p.get(stack.peek()) <= price) {
-            stack.pop();
-        }
-        Integer peek = stack.peek();
-        stack.push(p.size());
-        p.add(price);
-        return peek == null ? p.size() : p.size() - 1 - peek;
+        while (j > 0 && p[stack[j - 1]] <= price) j--;
+        int res = i - (j == 0 ? -1 : stack[j - 1]);
+        stack[j++] = i;
+        p[i++] = price;
+        return res;
     }
 }
 
