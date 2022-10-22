@@ -1,7 +1,7 @@
 package Contest1022.T3;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author IronSid
@@ -10,48 +10,29 @@ import java.util.Map;
 public class Solution {
     public int[] arrangeBookshelf(int[] order, int limit) {
         HashMap<Integer, Integer> f = new HashMap<>();
+        int[] res = new int[order.length];
+        int p = 0;
         for (int i : order) {
             f.put(i, f.getOrDefault(i, 0) + 1);
         }
-        int remain = 0;
-        for (Integer value : f.values()) {
-            remain += Math.min(value, limit);
-        }
-        int[] res = new int[remain];
-        // 需要去掉的元素集合
-        HashMap<Integer, Integer> status = new HashMap<>();
-        for (Map.Entry<Integer, Integer> e : f.entrySet()) {
-            status.put(e.getKey(), Math.max(e.getValue() - limit, 0));
-        }
-        // 贪心地选最小的那个元素，即考虑 order[j] 之后可以合法的去除的子序列中，去除了哪个子序列后下一个元素最小
-        int j = 0;
-        for (int i = 0; i < res.length; i++) {
-            int minIdx = 0;
-            int minVal = Integer.MAX_VALUE;
-            HashMap<Integer, Integer> minStatus = null;
-            HashMap<Integer, Integer> minF = null;
-            // 遍历 j 起合法的下一个元素
-            for (; j < order.length; j++) {
-                // 若该元素需要删除的数量等于剩下部分中的数量则必删除
-                if (status.get(order[j]) == f.get(order[j])) continue;
-                if (order[j] < minVal) {
-                    minIdx = j;
-                    minVal = order[j];
-                    minStatus = new HashMap<>(status);
-                    minF = new HashMap<>(f);
-                }
-                // 若该元素需要的删除数量已达到，则该元素不能被删，终止循环
-                if (status.get(order[j]) == 0) break;
-                status.put(order[j], status.get(order[j]) - 1);
-                f.put(order[j], f.get(order[j]) - 1);
+        HashMap<Integer, Integer> inStack = new HashMap<>();
+        for (int e : order) {
+            // 该元素数量已经到达上限，必须删除
+            if (inStack.getOrDefault(e, 0) == limit) {
+                f.put(e, f.get(e) - 1);
+                continue;
             }
-            // 当前位置取最小元素，并复原状态到最小元素的位置
-            res[i] = order[minIdx];
-            status = minStatus;
-            j = minIdx + 1;
-            f = minF;
-            f.put(order[minIdx], f.get(order[minIdx]) - 1);
+            // 和栈顶的元素比较，把栈顶更大且可以删除的元素全部删除
+            while (p > 0 && e < res[p - 1] && f.get(res[p - 1]) > limit) {
+                int peek = res[p - 1];
+                f.put(peek, f.get(peek) - 1);
+                inStack.put(peek, inStack.get(peek) - 1);
+                p--;
+            }
+            // 当前元素入栈
+            res[p++] = e;
+            inStack.put(e, inStack.getOrDefault(e, 0) + 1);
         }
-        return res;
+        return Arrays.copyOf(res, p);
     }
 }
