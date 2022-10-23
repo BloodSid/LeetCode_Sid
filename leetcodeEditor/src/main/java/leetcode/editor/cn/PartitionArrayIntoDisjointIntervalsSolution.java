@@ -52,18 +52,22 @@ public class PartitionArrayIntoDisjointIntervalsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int partitionDisjoint(int[] nums) {
-        int t = Integer.MAX_VALUE;
         int n = nums.length;
-        int[] min = new int[n];
-        for (int i = n - 1; i >= 0; i--) {
-            t = Math.min(nums[i], t);
-            min[i] = t;
-        }
-        for (int i = 0, max = 0; i < n; i++) {
+        // 记录可能的切割点
+        int p = 0;
+        // 记录 [0, p] 的最大值
+        int pMax = nums[0];
+        // 记录 [0, i] 的最大值
+        int max = nums[0];
+        for (int i = 1; i < n - 1; i++) {
             max = Math.max(max, nums[i]);
-            if (i == n - 1 || max <= min[i + 1]) return i + 1;
+            // 若上一个可能的切割点不合法
+            if (nums[i] < pMax) {
+                p = i;
+                pMax = max;
+            }
         }
-        return -1;
+        return p + 1;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
