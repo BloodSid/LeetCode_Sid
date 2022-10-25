@@ -84,24 +84,25 @@ class Solution {
     public int[] avoidFlood(int[] rains) {
         int n = rains.length;
         int[] ans = new int[n];
-        HashSet<Integer> full = new HashSet<>();
-        for (int i = 0, j = 0; i < n; i++) {
-            if (rains[i] == 0) {
-                // 贪心地选取最近会下雨的湖泊抽取
-                j = Math.max(j, i + 1);
-                while (j < n && (rains[j] == 0 || !full.contains(rains[j]))) j++;
-                if (j < n) {
-                    ans[i] = rains[j];
-                    full.remove(rains[j]);
-                } else {
-                    // 没有可抽的
-                    ans[i] = 1;
-                }
-            } else {
+        HashMap<Integer, Integer> last = new HashMap<>();
+        TreeSet<Integer> dry = new TreeSet<>();
+        for (int i = 0; i < n; i++) {
+            if (rains[i] > 0) {
                 ans[i] = -1;
-                if (full.contains(rains[i])) return new int[0];
-                full.add(rains[i]);
+                // 贪心地选第一个可以抽水的日期
+                if (last.containsKey(rains[i])) {
+                    Integer d = dry.higher(last.get(rains[i]));
+                    if (d == null) return new int[0];
+                    ans[d] = rains[i];
+                    dry.remove(d);
+                }
+                last.put(rains[i], i);
+            } else {
+                dry.add(i);
             }
+        }
+        for (Integer integer : dry) {
+            ans[integer] = 1;
         }
         return ans;
     }
