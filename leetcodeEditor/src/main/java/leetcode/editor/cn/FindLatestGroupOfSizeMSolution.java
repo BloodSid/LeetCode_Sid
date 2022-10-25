@@ -62,8 +62,7 @@ package leetcode.editor.cn;
 // 👍 66 👎 0
 
 
-import java.util.*;
-import java.util.stream.IntStream;
+import java.util.TreeSet;
 
 /**
  * 查找大小为 M 的最新分组
@@ -76,52 +75,24 @@ public class FindLatestGroupOfSizeMSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    private int[] p;
-    private int[] w;
-
     public int findLatestStep(int[] arr, int m) {
+        TreeSet<Integer> set = new TreeSet<>();
         int n = arr.length;
-        p = IntStream.range(0, n + 1).toArray();
-        w = new int[n + 1];
-        Arrays.fill(w, 1);
-        int[] s = new int[n + 1];
-        int lastest = -1;
-        HashMap<Integer, Integer> wc = new HashMap<>();
-        for (int i = 0; i < arr.length; i++) {
+        // m 大小恰为字符串长度
+        if (n == m) return n;
+        set.add(0);
+        set.add(n + 1);
+        // 若存在连续的 m 个，则总数至少有 m 个
+        for (int i = n - 1; i >= m - 1; i--) {
             int cur = arr[i];
-            s[cur] = 1;
-            if (cur > 0 && s[cur - 1] == 1) {
-                int w1 = w[find(cur - 1)];
-                union(cur, cur - 1);
-                wc.put(w1, wc.get(w1) - 1);
-            }
-            if (cur < n && s[cur + 1] == 1) {
-                int w2 = w[find(cur + 1)];
-                union(cur, cur + 1);
-                wc.put(w2, wc.get(w2) - 1);
-            }
-            int weight = w[find(cur)];
-            wc.put(weight, wc.getOrDefault(weight, 0) + 1);
-            if (wc.containsKey(m) && wc.get(m) > 0) lastest = i + 1;
+            int lower = set.lower(cur);
+            int higher = set.higher(cur);
+            int p1 = higher - cur - 1;
+            int p2 = cur - lower - 1;
+            if (p1 == m || p2 == m) return i;
+            set.add(cur);
         }
-        return lastest;
-    }
-
-    void union(int x, int y) {
-        int rx = find(x);
-        int ry = find(y);
-        if (w[rx] > w[ry]) {
-            p[ry] = rx;
-            w[rx] += w[ry];
-        } else {
-            p[rx] = ry;
-            w[ry] += w[rx];
-        }
-    }
-
-    int find(int x) {
-        if (p[x] != x) p[x] = find(p[x]);
-        return p[x];
+        return -1;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
