@@ -13,5 +13,6 @@ import java.util.*;
  * @since $!velocityTool.date() $!velocityTool.time()
  */
 public class $!velocityTool.camelCaseName(${question.titleSlug})Solution {
+static
 ${question.code}
 }
