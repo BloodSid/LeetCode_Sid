@@ -74,23 +74,34 @@ import java.util.TreeSet;
 public class FindLatestGroupOfSizeMSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-
     public int findLatestStep(int[] arr, int m) {
-        TreeSet<Integer> set = new TreeSet<>();
+        // 逆向模拟， 用 TreeMap 记录区间
+        TreeSet<int[]> its = new TreeSet<int[]>((o1, o2) -> o1[0] - o2[0]);
         int n = arr.length;
         // m 大小恰为字符串长度
         if (n == m) return n;
-        set.add(0);
-        set.add(n + 1);
-        // 若存在连续的 m 个，则总数至少有 m 个
+        its.add(new int[]{-1, -1});
+        its.add(new int[]{n + 1, n + 1});
+        its.add(new int[]{1, n});
+        // 逆向合并过程为分割过程。若存在连续的 m 个，则总数至少有 m 个。
         for (int i = n - 1; i >= m - 1; i--) {
             int cur = arr[i];
-            int lower = set.lower(cur);
-            int higher = set.higher(cur);
-            int p1 = higher - cur - 1;
-            int p2 = cur - lower - 1;
-            if (p1 == m || p2 == m) return i;
-            set.add(cur);
+            int[] it = its.floor(new int[]{cur});
+            // it[0] <= cur <= it[1]，找到 cur 在哪个区间中
+            if (cur > it[1]) {
+                continue;
+            }
+            // 分割后的区间长度若为 m, 则前一步是存在长度 m 的分组的最后步骤
+            if (it[1] - cur == m || cur - it[0] == m) return i;
+            // 更新区间
+            if (cur == it[0]) it[0]++;
+            else if (cur == it[1]) it[1]--;
+            else {
+                its.remove(it);
+                // 只维护长度大于 m 的区间
+                if (it[1] - cur > m) its.add(new int[]{cur + 1, it[1]});
+                if (cur - it[0] > m) its.add(new int[]{it[0], cur - 1});
+            }
         }
         return -1;
     }
