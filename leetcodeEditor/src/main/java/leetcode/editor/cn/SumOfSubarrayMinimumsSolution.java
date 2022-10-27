@@ -34,9 +34,6 @@ package leetcode.editor.cn;
 // 👍 432 👎 0
 
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 /**
  * 子数组的最小值之和
  *
@@ -58,19 +55,20 @@ class Solution {
         // next[i] 表示下一个小于等于 arr[i] 的元素位置
         int[] next = new int[n];
         // 单调栈，栈底到栈顶单调增
-        Deque<Integer> stack = new ArrayDeque<>();
+        int[] stack = new int[n];
+        int p = 0;
         for (int i = 0; i < n; i++) {
             int cur = arr[i];
-            while (!stack.isEmpty() && arr[stack.peek()] >= cur) {
+            while (p > 0 && arr[stack[p - 1]] >= cur) {
                 // 找到小于等于栈顶元素的元素，栈顶元素才出栈，栈顶元素的 next 就是当前元素
-                next[stack.pop()] = i;
+                next[stack[--p]] = i;
             }
             // 大于等于当前元素的栈顶元素都出栈，最后栈顶元素就是严格小于当前元素的上一个元素
-            pre[i] = stack.isEmpty() ? -1 : stack.peek();
-            stack.push(i);
+            pre[i] = p == 0 ? -1 : stack[p - 1];
+            stack[p++] = i;
         }
-        while (!stack.isEmpty()) {
-            next[stack.pop()] = n;
+        while (p > 0) {
+            next[stack[--p]] = n;
         }
         // 计算每个数作为子数组的最小值对结果的贡献
         long sum = 0;
