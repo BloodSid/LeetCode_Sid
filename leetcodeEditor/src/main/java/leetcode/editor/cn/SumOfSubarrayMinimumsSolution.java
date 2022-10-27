@@ -61,23 +61,16 @@ class Solution {
         Deque<Integer> stack = new ArrayDeque<>();
         for (int i = 0; i < n; i++) {
             int cur = arr[i];
-            // 找到小于等于栈顶元素的元素，栈顶元素才出栈
             while (!stack.isEmpty() && arr[stack.peek()] >= cur) {
+                // 找到小于等于栈顶元素的元素，栈顶元素才出栈，栈顶元素的 next 就是当前元素
                 next[stack.pop()] = i;
             }
+            // 大于等于当前元素的栈顶元素都出栈，最后栈顶元素就是严格小于当前元素的上一个元素
+            pre[i] = stack.isEmpty() ? -1 : stack.peek();
             stack.push(i);
         }
         while (!stack.isEmpty()) {
             next[stack.pop()] = n;
-        }
-        for (int i = 0; i < n; i++) {
-            int cur = arr[i];
-            // 大于等于当前元素的栈顶元素都出栈，最后栈顶元素就是严格小于当前元素的上一个元素
-            while (!stack.isEmpty() && arr[stack.peek()] >= cur) {
-                stack.pop();
-            }
-            pre[i] = stack.isEmpty() ? -1 : stack.peek();
-            stack.push(i);
         }
         // 计算每个数作为子数组的最小值对结果的贡献
         long sum = 0;
