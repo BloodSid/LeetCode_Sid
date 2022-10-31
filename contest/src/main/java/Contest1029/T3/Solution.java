@@ -1,8 +1,8 @@
 package Contest1029.T3;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.List;
 
 /**
  * @author IronSid
@@ -10,22 +10,26 @@ import java.util.TreeMap;
  */
 public class Solution {
     public int destroyTargets(int[] nums, int space) {
-        TreeMap<Integer, Integer> f = new TreeMap<>();
+        // 同余分组
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
         for (int num : nums) {
-            f.put(num, f.getOrDefault(num, 0) + 1);
+            int key = num % space;
+            map.putIfAbsent(key, new ArrayList<>());
+            map.get(key).add(num);
         }
-        // 储存同余的 num 数量
-        HashMap<Integer, Integer> dp = new HashMap<>();
-        int maxCnt = 0;
-        int minKey = 0;
-        for (Integer key : f.descendingKeySet()) {
-            int cnt = f.get(key) + dp.getOrDefault(key % space, 0);
-            if (cnt >= maxCnt) {
-                maxCnt = cnt;
-                minKey = key;
+        int max = 0;
+        int ans = 0;
+        for (List<Integer> value : map.values()) {
+            int m = value.size();
+            int min = Integer.MAX_VALUE;
+            for (Integer v : value) {
+                min = Math.min(min, v);
             }
-            dp.put(key % space, cnt);
+            if (m > max || m == max && min < ans) {
+                max = m;
+                ans = min;
+            }
         }
-        return minKey;
+        return ans;
     }
 }
