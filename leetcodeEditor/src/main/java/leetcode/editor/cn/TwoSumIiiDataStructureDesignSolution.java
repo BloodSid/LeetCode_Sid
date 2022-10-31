@@ -55,23 +55,34 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class TwoSum {
 
-    private final HashSet<Integer> sums;
-    private final HashSet<Integer> nums;
+    private final TreeSet<Integer> nums;
+    private final TreeSet<Integer> dup;
 
     public TwoSum() {
-        nums = new HashSet<>();
-        sums = new HashSet<>();
+        nums = new TreeSet<>();
+        dup = new TreeSet<>();
     }
     
     public void add(int number) {
-        for (Integer num : nums) {
-            sums.add(num + number);
+        if (!nums.add(number)) {
+            dup.add(number);
         }
-        nums.add(number);
     }
     
     public boolean find(int value) {
-        return sums.contains(value);
+        if (value % 2 == 0 && dup.contains(value / 2)) return true;
+        Integer[] a = nums.toArray(new Integer[0]);
+        for (int i = 0, j = a.length - 1; i < j; ) {
+            int sum = a[i] + a[j];
+            if (sum > value) {
+                j--;
+            } else if (sum < value) {
+                i++;
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
