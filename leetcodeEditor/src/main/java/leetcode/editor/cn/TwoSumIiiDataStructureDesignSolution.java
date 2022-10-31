@@ -56,11 +56,11 @@ static
 class TwoSum {
 
     private final TreeSet<Integer> nums;
-    private final TreeSet<Integer> dup;
+    private final HashSet<Integer> dup;
 
     public TwoSum() {
         nums = new TreeSet<>();
-        dup = new TreeSet<>();
+        dup = new HashSet<>();
     }
     
     public void add(int number) {
@@ -70,16 +70,14 @@ class TwoSum {
     }
     
     public boolean find(int value) {
-        if (value % 2 == 0 && dup.contains(value / 2)) return true;
-        Integer[] a = nums.toArray(new Integer[0]);
-        for (int i = 0, j = a.length - 1; i < j; ) {
-            int sum = a[i] + a[j];
-            if (sum > value) {
-                j--;
-            } else if (sum < value) {
-                i++;
-            } else {
-                return true;
+        for (Integer num : nums) {
+            if (num > value / 2) break;
+            if (nums.contains(value - num)) {
+                if (num * 2 != value) {
+                    return true;
+                } else if (dup.contains(num)) {
+                    return true;
+                }
             }
         }
         return false;
