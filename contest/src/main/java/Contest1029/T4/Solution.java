@@ -9,36 +9,27 @@ import java.util.*;
 public class Solution {
     public int[] secondGreaterElement(int[] nums) {
         int n = nums.length;
-        // 记录下一个更大元素的位置
+        // 记录下两个更大元素的位置
         int[] next = new int[n];
-        Deque<Integer> stack = new ArrayDeque<>();
-        for (int i = n - 1; i >= 0; i--) {
+        Deque<Integer> t = new ArrayDeque<>();
+        Deque<Integer> s = new ArrayDeque<>();
+        for (int i = 0; i < nums.length; i++) {
             int cur = nums[i];
-            while (!stack.isEmpty() && nums[stack.peek()] <= cur) {
-                stack.pop();
+            while (!s.isEmpty() && nums[s.peek()] < cur) {
+                next[s.pop()] = cur;
             }
-            next[i] = stack.isEmpty() ? n : stack.peek();
-            stack.push(i);
-        }
-        // 记录下两个更大元素
-        int[] next2 = new int[n];
-        // 储存元素的位置，依次元素的大小顺序，元素的位置逆序排列
-        TreeSet<Integer> set = new TreeSet<>((o1, o2) -> nums[o1] == nums[o2] ? o2 - o1 : nums[o1] - nums[o2]);
-        List<Integer> rm = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            rm.clear();
-            for (Integer pre : set.headSet(i)) {
-                if (next[pre] != i) {
-                    next2[pre] = nums[i];
-                    rm.add(pre);
-                }
+            List<Integer> temp = new ArrayList<>();
+            while (!t.isEmpty() && nums[t.peek()] < cur) {
+                temp.add(t.pop());
             }
-            rm.forEach(set::remove);
-            set.add(i);
+            t.push(i);
+            // 把 t 中一次出栈的元素保持原有顺序加入 s
+            for (int j = temp.size() - 1; j >= 0; j--) {
+                s.push(temp.get(j));
+            }
         }
-        for (Integer pre : set) {
-            next2[pre] = -1;
-        }
-        return next2;
+        for (Integer i : t) next[i] = -1;
+        for (Integer i : s) next[i] = -1;
+        return next;
     }
 }
