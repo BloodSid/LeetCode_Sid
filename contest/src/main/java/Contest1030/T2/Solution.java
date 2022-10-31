@@ -3,6 +3,7 @@ package Contest1030.T2;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author IronSid
@@ -10,41 +11,34 @@ import java.util.List;
  */
 public class Solution {
     public List<List<String>> mostPopularCreator(String[] creators, String[] ids, int[] views) {
+        int n = creators.length;
+        HashMap<String, Long> sum = new HashMap<>();
+        HashMap<String, String> id = new HashMap<>();
+        HashMap<String, Integer> maxV = new HashMap<>();
+        long maxSum = 0;
+        for (int i = 0; i < n; i++) {
+            String cur = creators[i];
+            if (sum.containsKey(cur)) {
+                sum.put(cur, sum.get(cur) + views[i]);
+                if (maxV.get(cur) < views[i] || maxV.get(cur) == views[i] && id.get(cur).compareTo(ids[i]) > 0) {
+                    maxV.put(cur, views[i]);
+                    id.put(cur, ids[i]);
+                }
+            } else {
+                sum.put(cur, (long) views[i]);
+                id.put(cur, ids[i]);
+                maxV.put(cur, views[i]);
+            }
+            maxSum = Math.max(maxSum, sum.get(cur));
+        }
         List<List<String>> res = new ArrayList<>();
-        HashMap<String, List<Integer>> hotIdx = new HashMap<>();
-        HashMap<String, Long> v = new HashMap<>();
-        long n = creators.length;
-        long hotest = 0;
-        for (int i = 0; i < n; i++) {
-            long view = v.getOrDefault(creators[i], 0L) + views[i];
-            hotest = Math.max(hotest, view);
-            v.put(creators[i], view);
-        }
-        for (int i = 0; i < n; i++) {
-            if (v.get(creators[i]) == hotest) {
-                if (hotIdx.get(creators[i]) == null) {
-                    hotIdx.put(creators[i], new ArrayList<>());
-                }
-                hotIdx.get(creators[i]).add(i);
+        for (Map.Entry<String, Long> entry : sum.entrySet()) {
+            if (entry.getValue() == maxSum) {
+                List<String> list = new ArrayList<>();
+                list.add(entry.getKey());
+                list.add(id.get(entry.getKey()));
+                res.add(list);
             }
-        }
-        for (String s : hotIdx.keySet()) {
-            List<String> t = new ArrayList<>();
-            t.add(s);
-            int max = -1;
-            String maxVideo = null;
-            for (Integer idx : hotIdx.get(s)) {
-                if (views[idx] > max) {
-                    max = views[idx];
-                    maxVideo = ids[idx];
-                } else if (views[idx] == max) {
-                    if (ids[idx].compareTo(maxVideo) < 0) {
-                        maxVideo = ids[idx];
-                    }
-                }
-            }
-            t.add(maxVideo);
-            res.add(t);
         }
         return res;
     }
