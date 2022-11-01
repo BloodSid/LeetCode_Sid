@@ -78,8 +78,12 @@ public class MinimumNumberOfDaysToMakeMBouquetsSolution {
 class Solution {
     public int minDays(int[] bloomDay, int m, int k) {
         int n = bloomDay.length;
-        if (m * k > n) return -1;
-        int l = 1, r = (int) 1e9;
+        if ((long) m * k > n) return -1;
+        int max = 0;
+        for (int d : bloomDay) {
+            max = Math.max(max, d);
+        }
+        int l = 1, r = max;
         while (l <= r) {
             int mid = l + r >> 1;
             int cnt = 0;
