@@ -39,6 +39,8 @@ package leetcode.editor.cn;
 // 👍 35 👎 0
 
 
+import java.util.Arrays;
+
 /**
  * 统计数组中好三元组数目
  *
@@ -50,7 +52,8 @@ public class CountGoodTripletsInAnArraySolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    private int[] t;
+    private int[] temp;
+    private int[] less;
 
     public long goodTriplets(int[] nums1, int[] nums2) {
         int n = nums1.length;
@@ -64,41 +67,54 @@ class Solution {
         for (int i = 0; i < n; i++) {
             arr[i] = p[nums2[i]];
         }
+        temp = new int[n];
+        // cur 左侧更小的元素的数量为 less[cur]
+        less = new int[n];
         // 若 arr 中有 i < j < k 且 arr[i] < arr[j] < arr[k] 说明它们对应的数字在两个数组中出现顺序一致
-        // 树状数组
-        t = new int[n + 1];
         long res = 0;
+        mergeSort(Arrays.copyOf(arr, n), 0, n - 1);
         for (int i = 0; i < n; i++) {
             int cur = arr[i];
-            // 求出 cur 左侧更小的元素的数量
-            int less = query(cur + 1);
             // 求出 cur 左侧更大的元素的数量，由于比 cur 更大的元素总数是 n-1-cur 个，可知 cur 右侧更大的元素的数量
-            int more = n - 1 - cur - (i - less);
+            int more = n - 1 - cur - (i - less[cur]);
             // 两个数量相乘，即为 arr[i] 作为中间元素的三元组数量
-            res += (long) less * more;
-            add(cur + 1);
+            res += (long) less[cur] * more;
+
         }
-        // 求出 arr 中的元素右侧更大的元素的数量，两个数量相乘，即为 arr[i] 作为中间元素的三元组数量
         return res;
     }
 
-    // arr[x] 加一 (x = 1,2,3,...,len-1) len 是 t 的长度
-    void add(int x) {
-        while (x < t.length) {
-            t[x]++;
-            x += x & -x;
+    // 归并排序，并在每次合并前求出每个右半元素在左半中更小元素的数量
+    void mergeSort(int[] nums, int left, int right) {
+        if (left >= right) return;
+        int mid = left + right >> 1;
+        // 递归
+        mergeSort(nums, left, mid);
+        mergeSort(nums, mid + 1, right);
+        // 双指针 求出每个右半元素在左半中更小元素的数量
+        for (int r = mid + 1, l = left; r <= right; r++) {
+            int cur = nums[r];
+            while (l <= mid && nums[l] <= nums[r]) l++;
+            less[cur] += l - left;
+        }
+        // 合并左右两部分为一个有序数列
+        System.arraycopy(nums, left, temp, left, right - left + 1);
+        int p = left;
+        int p1 = left, p2 = mid + 1;
+        while (p1 <= mid && p2 <= right) {
+            if (temp[p1] < temp[p2]) {
+                nums[p++] = temp[p1++];
+            } else {
+                nums[p++] = temp[p2++];
+            }
+        }
+        if (p1 > mid) {
+            System.arraycopy(temp, p2, nums, p, right - p + 1);
+        } else {
+            System.arraycopy(temp, p1, nums, p, right - p + 1);
         }
     }
 
-    // 返回 arr[1:x] 之和
-    int query(int x) {
-        int res = 0;
-        while (x > 0) {
-            res += t[x];
-            x &= x - 1;
-        }
-        return res;
-    }
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
