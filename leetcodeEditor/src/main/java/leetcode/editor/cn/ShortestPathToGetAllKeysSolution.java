@@ -76,23 +76,17 @@ static
 class Solution {
 
     public static final int[][] DIRS = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-    public static final int INF = (int) 1e9;
-    char[][] g;
-    private int n;
-    private int m;
-    private int[][] k;
 
     public int shortestPathAllKeys(String[] grid) {
-        g = new char[grid.length][];
+        char[][] g = new char[grid.length][];
         for (int i = 0; i < g.length; i++) {
             g[i] = grid[i].toCharArray();
         }
-        m = g.length;
-        n = g[0].length;
+        int m = g.length;
+        int n = g[0].length;
         int sx = 0, sy = 0;
-        // 钥匙最多六把
-        k = new int[6][];
-        int status = 0;
+        // 用 status 的二进制表示钥匙，0表示钥匙已获得，1表示钥匙未获得
+        int originStatus = 0;
         // 记录起点和钥匙的位置
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -101,58 +95,47 @@ class Solution {
                     sx = i;
                     sy = j;
                 } else if (c >= 'a' && c <= 'f') {
-                    k[c - 'a'] = new int[]{i, j};
-                    status |= 1 << c - 'a';
+                    originStatus |= 1 << c - 'a';
                 }
             }
         }
-        int res = dfs(status, sx, sy);
-        return res >= INF ? -1 : res;
+        // 广度优先遍历
+        Deque<int[]> q = new ArrayDeque<>();
+        // 初始状态
+        q.offer(new int[]{sx, sy, originStatus});
+        boolean[][][] vis = new boolean[m][n][1 << 6];
+        vis[sx][sy][originStatus] = true;
+        int level = 0;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            for (int i1 = 0; i1 < size; i1++) {
+                int[] poll = q.poll();
+                int x = poll[0], y = poll[1], status = poll[2];
+                // 所有钥匙全找到
+                if (poll[2] == 0) return level;
+                for (int[] dir : DIRS) {
+                    int nx = x + dir[0], ny = y + dir[1];
+                    int newStatus = status;
+                    if (nx < 0 || nx >= m || ny < 0 || ny >= n) continue;
+                    // 相邻点是墙则跳过
+                    if (g[nx][ny] == '#') continue;
+                    // 相邻点是锁且钥匙未获得则跳过
+                    if (g[nx][ny] >= 'A' && g[nx][ny] <= 'F' && ((status >> g[nx][ny] - 'A') & 1) == 1) continue;
+                    // 相邻点是钥匙, 则把对应二进制位置为零
+                    if (g[nx][ny] >= 'a' && g[nx][ny] <= 'f') {
+                        newStatus &= ~(1 << g[nx][ny] - 'a');
+                    }
+                    // 相邻点访问过
+                    if (vis[nx][ny][newStatus]) continue;
+                    q.offer(new int[]{nx, ny, newStatus});
+                    vis[nx][ny][newStatus] = true;
+                }
+            }
+            level++;
+        }
+        return -1;
     }
 
-    // 用 status 的二进制表示钥匙，0表示钥匙已获得，1表示钥匙未获得
-    int dfs(int status, int x, int y) {
-        // 全部找到
-        if (status == 0) return 0;
-        // 枚举未得到的钥匙
-        int res = INF;
-        for (int i = 0; i < 6; i++) {
-            if ((status >> i & 1) == 0) continue;
-            int desX = k[i][0], desY = k[i][1];
-            // 广度优先遍历找到从 {x, y} 到 {desX, dexY} 的最短路径 level
-            Deque<int[]> q = new ArrayDeque<>();
-            q.offer(new int[]{x, y});
-            boolean[][] vis = new boolean[m][n];
-            vis[x][y] = true;
-            int step = INF;
-            int level = 0;
-            loop:
-            while (!q.isEmpty()) {
-                int size = q.size();
-                for (int i1 = 0; i1 < size; i1++) {
-                    int[] poll = q.poll();
-                    if (poll[0] == desX && poll[1] == desY) {
-                        step = level;
-                        break loop;
-                    }
-                    for (int[] dir : DIRS) {
-                        int nx = poll[0] + dir[0], ny = poll[1] + dir[1];
-                        if (nx < 0 || nx >= m || ny < 0 || ny >= n || vis[nx][ny]) continue;
-                        // 相邻点是墙则跳过
-                        if (g[nx][ny] == '#') continue;
-                        // 相邻点是锁且钥匙未获得则跳过
-                        if (g[nx][ny] >= 'A' && g[nx][ny] <= 'F' && ((status >> g[nx][ny] - 'A') & 1) == 1) continue;
-                        q.offer(new int[]{nx, ny});
-                        vis[nx][ny] = true;
-                    }
-                }
-                level++;
-            }
-            // 用找剩下的钥匙的最短路径更新最小值
-            res = Math.min(res, step + dfs(status ^ (1 << i), desX, desY));
-        }
-        return res;
-    }
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
