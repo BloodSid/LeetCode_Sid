@@ -48,9 +48,8 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    public static final int DOWN_EMPTY = 0;
-    public static final int UP_EMPTY = 1;
-    public static final int FULL = 2;
+    public static final int HALF = 0;
+    public static final int FULL = 1;
     public static final int MOD = (int) (1e9 + 7);
 
     public int numTilings(int n) {
@@ -59,16 +58,15 @@ class Solution {
         long[][] dp = new long[3][n];
         // 多米诺竖放
         dp[FULL][0] = 1;
-        // 托米诺
-        dp[DOWN_EMPTY][1] = dp[UP_EMPTY][1] = 1;
+        // 两种托米诺的放法
+        dp[HALF][1] = 2;
         // 两块多米诺横放或竖放
         dp[FULL][1] = 2;
         for (int i = 2; i < n; i++) {
             // 托米诺的 + 多米诺的放法
-            dp[DOWN_EMPTY][i] = (dp[FULL][i - 2] + dp[UP_EMPTY][i - 1]) % MOD;
-            dp[UP_EMPTY][i] = (dp[FULL][i - 2] + dp[DOWN_EMPTY][i - 1]) % MOD;
+            dp[HALF][i] = (2 * dp[FULL][i - 2] + dp[HALF][i - 1]) % MOD;
             // 两种托米诺的放法 + 一块多米诺的竖放方法 + 两块多米诺的横放
-            dp[FULL][i] = (dp[DOWN_EMPTY][i - 1] + dp[UP_EMPTY][i - 1] + dp[FULL][i - 1] + dp[FULL][i - 2]) % MOD;
+            dp[FULL][i] = (dp[HALF][i - 1] + dp[FULL][i - 1] + dp[FULL][i - 2]) % MOD;
         }
         return (int) dp[FULL][n - 1];
     }
