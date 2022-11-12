@@ -10,33 +10,20 @@ public class Solution {
         char[] ch = message.toCharArray();
         int n = ch.length;
         // 对位数为 1，2，3，4，5 的 b 分组考虑
-        for (int len = 1, low = 1; len <= 5; len++, low *= 10) {
-            if (low > n) break;
-            if (3 + len * 2 > limit) break;
-            // 对分成的部分的数量进行二分
-            int l = low, r = 10 * low - 1;
-            while (l <= r) {
-                int mid = l + r >> 1;
-                //  sum 数字部分的总长
-                int sum = mid * Integer.toString(mid).length();
-                // 1 到 mid 的总长
-                for (int i = 1, j = 1; i <= mid; i *= 10, j++) {
-                    sum += j * (Math.min(mid + 1, 10 * i) - i);
-                }
-                boolean flag = n + mid * 3 + sum <= mid * limit;
-                if (flag) {
-                    r = mid - 1;
-                } else {
-                    l = mid + 1;
-                }
-            }
-            // 找到最小分法
-            if (l != 10 * low) {
-                String[] res = new String[l];
-                for (int i = 0, p = 0; i < l; i++) {
-                    String s = "<" + (i + 1) + "/" + l + ">";
-                    res[i] = new String(ch, p, Math.min(n - p, limit - s.length())) + s;
-                    p += limit - s.length();
+        // 模拟变动数字的长度
+        StringBuilder sb = new StringBuilder();
+        for (int b = 1; b <= n; b++) {
+            String s = "" + b;
+            sb.append(b);
+            int len = s.length();
+            // 3 表示 "</>"
+            if (sb.length() <= b * (limit - len - 3) - n) {
+                // 找到合法的 b ，拼接结果
+                String[] res = new String[b];
+                for (int i = 0, p = 0; i < b; i++) {
+                    String t = "<" + (i + 1) + "/" + b + ">";
+                    res[i] = new String(ch, p, Math.min(n - p, limit - t.length())) + t;
+                    p += limit - t.length();
                 }
                 return res;
             }
