@@ -20,8 +20,8 @@ public class Solution {
                 //  sum 数字部分的总长
                 int sum = mid * Integer.toString(mid).length();
                 // 1 到 mid 的总长
-                for (int i = 1, j = 1; i <= n; i *= 10, j++) {
-                    sum += j * (Math.min(n + 1, 10 * i) - i);
+                for (int i = 1, j = 1; i <= mid; i *= 10, j++) {
+                    sum += j * (Math.min(mid + 1, 10 * i) - i);
                 }
                 boolean flag = n + mid * 3 + sum <= mid * limit;
                 if (flag) {
