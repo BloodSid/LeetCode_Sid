@@ -59,41 +59,17 @@ public class GlobalAndLocalInversionsSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-
-    private int[] t;
-
     public boolean isIdealPermutation(int[] nums) {
         int n = nums.length;
-        int local = 0;
-        for (int i = 0; i < n - 1; i++) {
-            if (nums[i] > nums[i + 1]) local++;
+        int min = Integer.MAX_VALUE;
+        for (int i = n - 3; i >= 0; i--) {
+            min = Math.min(min, nums[i + 2]);
+            // 若 nums[i] > min(nums[i+2:]) 则必然存在不属于局部倒置的全局倒置
+            if (nums[i] > min) return false;
         }
-        int global = 0;
-        t = new int[n + 1];
-        for (int i = nums.length - 1; i >= 0; i--) {
-            if (global > local) break;
-            // 找当前元素之后更小的元素有几个
-            global += query(nums[i]);
-            add(nums[i] + 1);
-        }
-        return global == local;
+        return true;
     }
 
-    void add(int x) {
-        while (x < t.length) {
-            t[x]++;
-            x += x & -x;
-        }
-    }
-
-    int query(int x) {
-        int res = 0;
-        while (x > 0) {
-            res += t[x];
-            x &= x - 1;
-        }
-        return res;
-    }
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
