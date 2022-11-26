@@ -81,26 +81,27 @@ class Solution {
             add(e[0], e[1], e[2] + 1);
             add(e[1], e[0], e[2] + 1);
         }
-        // 迪杰斯特拉算法
-        // 表示该点是否已经找到最短路
-        boolean[] u = new boolean[n];
-        // 最短路的长度
+        // 迪杰斯特拉算法 dist 表示最短路的长度
         int[] dist = new int[n];
-        Arrays.fill(dist, 1, n, INF);
+        int start = 0;
+        Arrays.fill(dist, INF);
+        dist[start] = 0;
         // {node, dist}
         PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
-        pq.offer(new int[]{0, 0});
+        pq.offer(new int[]{start, 0});
         while (!pq.isEmpty()) {
             int[] poll = pq.poll();
-            int node = poll[0]; int d = poll[1];
-            if (u[node]) continue;
-            // if (d > maxMoves) break;
-            u[node] = true;
-            dist[node] = d;
-            for (int[] ne : map[node]) {
-                int next = ne[0], val = ne[1];
-                if (u[next]) continue;
-                pq.offer(new int[]{next, d + val});
+            int x = poll[0]; int d = poll[1];
+            // 若 d 大于上限提前结束
+            if (d > maxMoves) break;
+            if (d > dist[x]) continue;
+            for (int[] ne : map[x]) {
+                int y = ne[0];
+                int newDist = d + ne[1];
+                if (newDist < dist[y]) {
+                    dist[y] = newDist;
+                    pq.offer(new int[]{y, newDist});
+                }
             }
         }
         int res = 0;
