@@ -53,8 +53,9 @@ static
 class Solution {
     public int minOperations(String s) {
         int op1 = 0, op2 = 0;
-        for (int i = 0; i < s.length(); i++) {
-            if (((s.charAt(i) & 1) ^ (i & 1)) == 0) op1++;
+        char[] c = s.toCharArray();
+        for (int i = 0; i < c.length; i++) {
+            if (((c[i] ^ i) & 1) == 0) op1++;
             else op2++;
         }
         return Math.min(op1, op2);
