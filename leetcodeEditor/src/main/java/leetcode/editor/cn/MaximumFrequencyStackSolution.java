@@ -63,46 +63,36 @@ static
 class FreqStack {
 
     // 存每个数字的 idx
-    private final HashMap<Integer, Deque<Integer>> f;
-    // 存所有的数字
-    private final TreeSet<Integer> set;
-    int idx = 0;
+    private final HashMap<Integer, Integer> f;
+    // 存所有频率对应的栈序列
+    private final HashMap<Integer, Deque<Integer>> s;
+    // 维护频率的最大值
+    int maxF = 0;
 
     public FreqStack() {
         f = new HashMap<>();
-        set = new TreeSet<>((o1, o2) -> {
-            Deque<Integer> stack1 = f.get(o1);
-            Deque<Integer> stack2 = f.get(o2);
-            int s1 = stack1 == null ? 0 : stack1.size();
-            int s2 = stack2 == null ? 0 : stack2.size();
-            if (s1 == s2) {
-                // 根据比较器在下文中被调用的时机，可以断言两个栈不会同时为 null 或空，
-                // 也就不存在 s1 = s2 = 0 导致 peek 为 null 的情况
-                assert stack1 != null && !stack1.isEmpty();
-                return stack2.peek() - stack1.peek();
-            } else {
-                return s2 - s1;
-            }
-        });
+        s = new HashMap<>();
     }
     
     public void push(int val) {
-        set.remove(val);
-        if (!f.containsKey(val)) {
-            f.put(val, new ArrayDeque<>());
+        int freq = f.getOrDefault(val, 0) + 1;
+        f.put(val, freq);
+        if (!s.containsKey(freq)) {
+            s.put(freq, new ArrayDeque<>());
         }
-        f.get(val).push(idx++);
-        set.add(val);
+        maxF = Math.max(maxF, freq);
+        // 此时在 s[1:freq] 中都有一个 val 元素
+        s.get(freq).push(val);
     }
     
     public int pop() {
-        int res = set.first();
-        set.remove(res);
-        Deque<Integer> stack = f.get(res);
-        stack.pop();
-        // 若该元素还有剩余，则再次加入 set
-        if (stack.size() != 0) {
-            set.add(res);
+        Deque<Integer> stack = s.get(maxF);
+        // 从频率最大的栈序列出栈
+        int res = stack.pop();
+        f.put(res, maxF - 1);
+        // 若元素出栈后栈为空，则最大频率自减一
+        if (stack.size() == 0) {
+            maxF--;
         }
         return res;
     }
