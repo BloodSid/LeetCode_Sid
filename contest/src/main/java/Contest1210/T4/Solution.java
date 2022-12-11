@@ -46,7 +46,7 @@ public class Solution {
             for (int i = 0, j = 0; i < n && j < request; i++) {
                 if (!set.contains(i) && nums1[i] != mode && nums2[i] != mode) {
                     sum += i;
-                    request++;
+                    j++;
                 }
             }
         }
