@@ -1,41 +1,29 @@
 package Contest1211.T3;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
-
 /**
  * @author IronSid
  * @since 2022-12-11 10:52
  */
 public class Allocator {
 
-    // 记录空闲的空间
-    private final TreeSet<int[]> free;
-    // 记录占用的空间
-    private final HashMap<Integer, List<int[]>> m;
-    private int n;
+    private final int[] mem;
 
     public Allocator(int n) {
-        this.n = n;
-        free = new TreeSet<>((o1, o2) -> o1[0] - o2[0]);
-        free.add(new int[]{0, n - 1});
-        m = new HashMap<>();
+        mem = new int[n];
     }
 
     public int allocate(int size, int mID) {
-        // 从左到右遍历空闲的空间
-        for (int[] ints : free) {
-            int left = ints[0];
-            int right = ints[1];
-            if (right - left + 1 >= size) {
-                free.remove(ints);
-                // 若不是恰好占满，则把剩余空间加回 free
-                if (right - left + 1 != size) free.add(new int[]{left + size, right});
-                if (!m.containsKey(mID)) m.put(mID, new ArrayList<>());
-                m.get(mID).add(new int[]{left, left + size - 1});
-                return left;
+        for (int i = 0, t = 0; i < mem.length; i++) {
+            if (mem[i] == 0) {
+                t++;
+                if (t == size) {
+                    for (int j = i - t + 1; j <= i; j++) {
+                        mem[j] = mID;
+                    }
+                    return i - t + 1;
+                }
+            } else {
+                t = 0;
             }
         }
         return -1;
@@ -43,23 +31,11 @@ public class Allocator {
 
     public int free(int mID) {
         int sum = 0;
-        List<int[]> list = m.remove(mID);
-        if (list == null) return 0;
-        for (int[] ints : list) {
-            int left = ints[0];
-            int right = ints[1];
-            sum += right - left + 1;
-            int[] lower = free.lower(ints);
-            if (lower != null && lower[1] + 1 == left) {
-                free.remove(lower);
-                left = lower[0];
+        for (int i = 0; i < mem.length; i++) {
+            if (mem[i] == mID) {
+                sum++;
+                mem[i] = 0;
             }
-            int[] higher = free.higher(ints);
-            if (higher != null && higher[0] - 1 == right) {
-                free.remove(higher);
-                right = higher[1];
-            }
-            free.add(new int[]{left, right});
         }
         return sum;
     }
