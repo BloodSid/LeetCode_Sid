@@ -45,9 +45,6 @@ package leetcode.editor.cn;
 // 👍 56 👎 0
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 寻找图中是否存在路径
  *
@@ -60,30 +57,36 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
-    private int destination;
-    private boolean[] vis;
-    private List<Integer>[] map;
+    private int[] p;
 
     public boolean validPath(int n, int[][] edges, int source, int destination) {
-        this.destination = destination;
-        vis = new boolean[n];
-        map = new List[n];
-        for (int i = 0; i < n; i++) map[i] = new ArrayList<>();
-        for (int[] edge : edges) {
-            map[edge[0]].add(edge[1]);
-            map[edge[1]].add(edge[0]);
+        p = new int[n];
+        for (int i = 0; i < n; i++) {
+            p[i] = i;
         }
-        return dfs(source);
+        for (int[] edge : edges) {
+            union(edge[0], edge[1]);
+            if (find(source) == find(destination)) return true;
+        }
+        return find(source) == find(destination);
     }
 
-    boolean dfs(int o) {
-        if (o == destination) return true;
-        vis[o] = true;
-        for (Integer child : map[o]) {
-            if (!vis[child] && dfs(child)) return true;
+    // 路径压缩
+    int find(int x) {
+        if (x != p[x]) {
+            p[x] = find(p[x]);
         }
-        return false;
+        return p[x];
     }
+
+    void union(int x, int y) {
+        int rx = find(x);
+        int ry = find(y);
+        if (rx != ry) {
+            p[rx] = ry;
+        }
+    }
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
