@@ -63,6 +63,7 @@
         <module>contest0205</module>
         <module>HJ</module>
         <module>contest</module>
+        <module>contest2023</module>
     </modules>
 
     <properties>
