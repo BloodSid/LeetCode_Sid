@@ -13,7 +13,7 @@ public class BuildDir {
 
     public static void main(String[] args) {
         String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMdd"));
-        String contest = "contest/src/main/java/Contest" + date;
+        String contest = "contest2023/src/main/java/Contest" + date;
         int idx = 0;
         String suffix = "";
         while(new File(contest + suffix).exists()) {
