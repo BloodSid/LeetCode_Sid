@@ -51,8 +51,6 @@ package leetcode.editor.cn;
 // 👍 28 👎 0
 
 
-import java.util.stream.IntStream;
-
 /**
  * 还原排列的最少操作步数
  *
@@ -65,27 +63,20 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int reinitializePermutation(int n) {
-        int cnt = 0;
-        int[] arr = IntStream.range(0, n).toArray();
-        while (true) {
-            int[] t = new int[n];
-            for (int i = 0; i < n; i++) {
-                if (i % 2 == 0) t[i] = arr[i / 2];
-                else t[i] = arr[n / 2 + (i - 1) / 2];
+        int max = 0;
+        boolean[] vis = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            if (vis[i]) continue;
+            int cnt = 0;
+            for (int j = i; !vis[j]; ) {
+                vis[j] = true;
+                cnt++;
+                if (j % 2 == 0) j /= 2;
+                else j = n / 2 + (j - 1) / 2;
             }
-            arr = t;
-            cnt++;
-            // 验证是否还原
-            boolean flag = true;
-            for (int i = 0; i < n; i++) {
-                if (i != arr[i]) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag) break;
+            max = Math.max(max, cnt);
         }
-        return cnt;
+        return max;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
