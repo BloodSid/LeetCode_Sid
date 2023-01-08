@@ -1,6 +1,6 @@
 package Contest0108.T4;
 
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.PriorityQueue;
 
 /**
@@ -8,65 +8,47 @@ import java.util.PriorityQueue;
  * @since 2023-01-08 10:29
  */
 public class Solution {
+
+    private static final int INF = Integer.MAX_VALUE;
+
     public int findCrossingTime(int n, int k, int[][] time) {
-        int[][] t = new int[k][];
-        for (int i = 0; i < time.length; i++) {
-            t[i] = new int[5];
-            t[i][0] = i;
-            System.arraycopy(time[i], 0, t[i], 1, 4);
-        }
-        // 两边的等待队列
-        Comparator<int[]> comparator
-                = (o1, o2) -> o1[1] + o1[3] != o2[1] + o2[3] ? o2[1] + o2[3] - o1[1] - o1[3] : o2[0] - o1[0];
-        PriorityQueue<int[]> left = new PriorityQueue<>(comparator);
-        PriorityQueue<int[]> right = new PriorityQueue<>(comparator);
-        for (int[] ints : t) {
-            left.add(ints);
-        }
-        int last = 0;
+        // 稳定排序。所以排序后数组按过桥时间递增，时间相同按原来的下标递增，所以效率由高到低排序
+        Arrays.sort(time, (o1, o2) -> o1[0] + o1[2] - o2[0] - o2[2]);
+        // 存储 idx, 记录两侧等待过桥的工人，idx大，效率低的优先
+        PriorityQueue<Integer> left = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        PriorityQueue<Integer> right = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        for (int i = 0; i < k; i++) left.offer(i);
         // {idx, time} 记录到达桥边时间
         PriorityQueue<int[]> la = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
         PriorityQueue<int[]> ra = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
         int now = 0;
-        for (int i = 0; i < n; i++) {
-            // 左边没有工人，则需要跳到右边有工人回到桥边的时间
-            if (left.isEmpty() && la.isEmpty() && right.isEmpty()) {
-                now = Math.max(now, ra.peek()[1]);
+        for (int moved = 0; moved < n; ) {
+            // 如果没有人正在等过桥
+            if (right.isEmpty() && left.isEmpty()) {
+                now = Math.min(ra.isEmpty() ? INF : ra.peek()[1], la.isEmpty() ? INF : la.peek()[1]);
             }
-            // 用时间 now 从 ra 中更新 right
-            while (!ra.isEmpty() && ra.peek()[1] <= now) right.add(t[ra.poll()[0]]);
-            // 右边没有等待的过桥的工人时，左边的工人才能过桥
-            while (!right.isEmpty()) {
+            while (!ra.isEmpty() && ra.peek()[1] <= now) right.add(ra.poll()[0]);
+            while (!la.isEmpty() && la.peek()[1] <= now) left.add(la.poll()[0]);
+            if (!right.isEmpty()) {
                 // 右边的工人先过桥
-                int[] poll = right.poll();
-                int idx = poll[0], rtl = poll[3], pn = poll[4];
+                int poll = right.poll();
+                int rtl = time[poll][2], pn = time[poll][3];
                 now += rtl;
-                last = now;
-                la.add(new int[]{idx, now + pn});
-                // 用时间 now 从 ra 中更新 right
-                while (!ra.isEmpty() && ra.peek()[1] <= now) right.add(t[ra.poll()[0]]);
+                la.add(new int[]{poll, now + pn});
+            } else {
+                // 右边没有等待的过桥的工人时，左边的工人可以过桥
+                int poll = left.poll();
+                int ltr = time[poll][0], po = time[poll][1];
+                now += ltr;
+                moved++;
+                ra.add(new int[]{poll, now + po});
             }
-            // 左边没有等待的工人，跳到左边有工人回到桥边的时间
-            if (left.isEmpty()) {
-                now = la.peek()[1];
-            }
-            while (!la.isEmpty() && la.peek()[1] <= now) left.add(t[la.poll()[0]]);
-            // 选出左边效率最低的人过桥
-            int[] poll = left.poll();
-            int idx = poll[0], ltr = poll[1], po = poll[2];
-            now += ltr;
-            ra.add(new int[]{idx, now + po});
         }
-        // 右边剩下的全返回左边
-        while (!right.isEmpty() || !ra.isEmpty()) {
-            // 如果右边桥头是空的，则需要跳到右边有工人回到桥边的时间
-            if (right.isEmpty()) now = Math.max(now, ra.peek()[1]);
-            while (!ra.isEmpty() && ra.peek()[1] <= now) right.add(t[ra.poll()[0]]);
-            int[] poll = right.poll();
-            int rtl = poll[3];
-            now += rtl;
-            last = now;
+        // 前面的循环结束时，最后肯定是左边的一个工人过桥，所以right 必为空。则处理ra中的所有工人回到左边的时间可得结果
+        while (!ra.isEmpty()) {
+            int[] poll = ra.poll();
+            now = Math.max(now, poll[1]) + time[poll[0]][2];
         }
-        return last;
+        return now;
     }
 }
