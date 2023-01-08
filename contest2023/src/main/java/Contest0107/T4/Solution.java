@@ -38,7 +38,7 @@ public class Solution {
                         break;
                     } else {
                         // 剩余电站够，则分配到最右边
-                        add(i + range + 1, mid - sum);
+                        add(Math.min(n - 1, i + range) + 1, mid - sum);
                         remain -= mid - sum;
                     }
                 }
