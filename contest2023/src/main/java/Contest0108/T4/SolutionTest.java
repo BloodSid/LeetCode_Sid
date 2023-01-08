@@ -60,4 +60,15 @@ public class SolutionTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testFindCrossingTime4() throws Exception {
+        int n = 8;
+        int k = 5;
+        String s = "[[10,8,4,7],[10,6,9,10],[3,7,4,6],[7,3,9,10],[10,6,3,5]]";
+        int[][] time = JSON.parseArray(s, int[].class).toArray(new int[0][]);
+        int expected = 133;
+        int actual = solution.findCrossingTime(n, k, time);
+        assertEquals(expected, actual);
+    }
+
 }
