@@ -63,20 +63,18 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int reinitializePermutation(int n) {
-        int max = 0;
-        boolean[] vis = new boolean[n];
-        for (int i = 0; i < n; i++) {
-            if (vis[i]) continue;
-            int cnt = 0;
-            for (int j = i; !vis[j]; ) {
-                vis[j] = true;
-                cnt++;
-                if (j % 2 == 0) j /= 2;
-                else j = n / 2 + (j - 1) / 2;
-            }
-            max = Math.max(max, cnt);
+        // 每次操作，位置 i 的元素的新位置是 2*i mod (n-1)，k 次操作位置是 2^k mod (n-1)
+        // 则求满足 2^k === 1 mod (n-1) 的最小的k ，k 次操作即可可让数组复原。
+        // n-1 和 2 互质根据欧拉定理，k <= n-1，则时间复杂度 O(n)
+        if (n == 2) return 1;
+        int k = 0;
+        int i = 1;
+        while (true) {
+            i = 2 * i % (n - 1);
+            k++;
+            if (i == 1) break;
         }
-        return max;
+        return k;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
