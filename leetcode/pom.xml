@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>LeetCode_sid</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>leetcode</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>35.SearchInsertPosition</module>
+        <module>916.WordSubsets</module>
+        <module>814.BinaryTreePruning</module>
+        <module>1162.AsFarFromLandAsPossible</module>
+        <module>1417.ReformatTheString</module>
+        <module>887.SuperEggDrop</module>
+        <module>59.SpiralMatrixII</module>
+        <module>54.SpiralMatrix</module>
+        <module>877.StoneGame</module>
+        <module>273.IntegerToEnglishWords</module>
+        <module>767.ReorganizeString</module>
+        <module>647.PalindromicSubstrings</module>
+        <module>5.LongestPalindromicSubstring</module>
+        <module>37.SudokuSolver</module>
+        <module>36.ValidSudoku</module>
+        <module>3.LongestSubstringWithoutRepeatingCharacters</module>
+        <module>322.CoinChange</module>
+    </modules>
+
+
+
+</project>

@@ -6,8 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="814.BinaryTreePruning" />
         <module name="HJ" />
+        <module name="814.BinaryTreePruning" />
         <module name="647.PalindromicSubstrings" />
         <module name="HJ16" />
         <module name="BinaryTree" />
@@ -16,16 +16,14 @@
         <module name="273.IntegerToEnglishWords" />
         <module name="54.SpiralMatrix" />
         <module name="5.LongestPalindromicSubstring" />
-        <module name="contest0123" />
         <module name="contest2023" />
-        <module name="Sort" />
         <module name="36.ValidSudoku" />
+        <module name="Sort" />
         <module name="35.SearchInsertPosition" />
         <module name="877.StoneGame" />
         <module name="767.ReorganizeString" />
-        <module name="LargestIntArray" />
         <module name="37.SudokuSolver" />
-        <module name="contest0205" />
+        <module name="LargestIntArray" />
         <module name="HJ45" />
         <module name="contest" />
         <module name="322.CoinChange" />
@@ -43,5 +41,9 @@
         <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="leetcode (1)" target="1.8" />
+      <module name="leetcode (2)" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

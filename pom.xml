@@ -28,47 +28,19 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>35.SearchInsertPosition</module>
-        <module>916.WordSubsets</module>
-        <module>814.BinaryTreePruning</module>
-        <module>BinaryTree</module>
-        <module>1162.AsFarFromLandAsPossible</module>
-        <module>1417.ReformatTheString</module>
-        <module>HJ16</module>
-        <module>887.SuperEggDrop</module>
-        <module>Sort</module>
-        <module>HJ28_Prime</module>
-        <module>HJ43_BFS</module>
-        <module>HJ44_Sudoku</module>
-        <module>HJ45</module>
-        <module>59.SpiralMatrixII</module>
-        <module>54.SpiralMatrix</module>
-        <module>877.StoneGame</module>
-        <module>LargestIntArray</module>
-        <module>273.IntegerToEnglishWords</module>
-        <module>767.ReorganizeString</module>
-        <module>HJ95_DoubleTORMB</module>
-        <module>647.PalindromicSubstrings</module>
-        <module>5.LongestPalindromicSubstring</module>
-        <module>37.SudokuSolver</module>
-        <module>36.ValidSudoku</module>
-        <module>HJ98_SimpleVendingSystem</module>
-        <module>3.LongestSubstringWithoutRepeatingCharacters</module>
-        <module>322.CoinChange</module>
-        <module>leetcodeEditor</module>
-        <module>59.SpiralMatrixII</module>
-        <module>LinkedList</module>
-        <module>contest0123</module>
-        <module>NextPermutation</module>
-        <module>contest0205</module>
-        <module>HJ</module>
         <module>contest</module>
         <module>contest2023</module>
+        <module>lcUtils</module>
+        <module>leetcodeEditor</module>
+        <module>leetcode</module>
+        <module>nowcoder</module>
     </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.report.outputEncoding>UTF-8</project.report.outputEncoding>
     </properties>
     <repositories>
         <repository>
