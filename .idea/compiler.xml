@@ -41,9 +41,5 @@
         <module name="1417.ReformatTheString" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="leetcode (1)" target="1.8" />
-      <module name="leetcode (2)" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
