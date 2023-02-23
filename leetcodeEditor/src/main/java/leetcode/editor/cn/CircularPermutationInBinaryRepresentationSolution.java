@@ -47,20 +47,27 @@ import java.util.*;
 public class CircularPermutationInBinaryRepresentationSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
+// import java.util.AbstractList 在力扣提交时必须加上
 class Solution {
     public List<Integer> circularPermutation(int n, int start) {
         int m = 1 << n;
-        List<Integer> list = new ArrayList<>(m);
-        list.add(start);
+        int[] res = new int[m];
         // 利用格雷编码对称性进行构造
-        for (int i = 0; i < n; i++) {
-            int len = list.size();
-            for (int j = len - 1; j >= 0; j--) {
-                // 将以零为开始的格雷编码用异或转化成以 start 开始的格雷编码
-                list.add(((1 << i) | (list.get(j) ^ start)) ^ start);
-            }
+        for (int i = 0; i < m; i++) {
+            // 将以零为开始的格雷编码逐个异或转化成以 start 开始的格雷编码
+            res[i] = i ^ (i >> 1) ^ start;
         }
-        return list;
+        return new AbstractList<Integer>() {
+            @Override
+            public Integer get(int index) {
+                return res[index];
+            }
+
+            @Override
+            public int size() {
+                return res.length;
+            }
+        };
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
