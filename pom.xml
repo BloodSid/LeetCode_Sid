@@ -34,6 +34,7 @@
         <module>leetcodeEditor</module>
         <module>leetcode</module>
         <module>nowcoder</module>
+        <module>codeforces</module>
     </modules>
 
     <properties>

@@ -29,6 +29,7 @@
         <module name="322.CoinChange" />
         <module name="HJ95_DoubleTORMB" />
         <module name="HJ28_Prime" />
+        <module name="codeforces" />
         <module name="leetcodeEditor" />
         <module name="3.LongestSubstringWithoutRepeatingCharacters" />
         <module name="887.SuperEggDrop" />
