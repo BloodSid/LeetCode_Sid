@@ -40,34 +40,23 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public String printBin(double num) {
-        int b = 1_000_000;
-        int a = (int) (b * num);
-        // 约分
-        int gcd = gcd(a, b);
-        a /= gcd;
-        b /= gcd;
-        // 约分后的分母必须是2的幂
-        if (Integer.bitCount(b) != 1) {
-            return "ERROR";
+        long l = Double.doubleToLongBits(num);
+        // 1个符号位，11个指数位，52个尾数位，题目中都是正数，符号位都是0
+        long significand = l << 12 >>> 12;
+        // 尾数位最前有个 1
+        significand |= 1L << 52;
+        long exponent = (l >> 52) - 1023;
+        // 指数位 -1 表示小数点后0个零，-2表示小数点后1个零
+        StringBuilder sb = new StringBuilder("0.");
+        for (int i = 0; i < -exponent - 1; i++) {
+            sb.append('0');
         }
-        // 分母的是2的几次幂，小数就有几位
-        int fraction = 1;
-        while (1 << fraction != b) fraction++;
-        StringBuilder sb = new StringBuilder(Integer.toBinaryString(a));
-        while (sb.length() < fraction) {
-            sb.insert(0, '0');
-        }
-        return "0." + sb;
-    }
-
-    int gcd(int a, int b) {
-        // gcd(a, b) = gcd(b, a mod b)
-        while (b != 0) {
-            int t = a % b;
-            a = b;
-            b = t;
-        }
-        return a;
+        sb.append(Long.toBinaryString(significand));
+        int end = sb.lastIndexOf("1");
+        String ans = sb.substring(0, end + 1);
+        // 根据题意，如果这个数字可以精确表示，结果必然不会很长
+        if (ans.length() > 32) return "ERROR";
+        return ans;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
