@@ -51,20 +51,13 @@ static
 class Solution {
     public int minimumDeletions(String s) {
         char[] ch = s.toCharArray();
-        int n = ch.length;
-        int[] pa = new int[n + 1];
-        int[] pb = new int[n + 1];
-        for (int i = 0, ta = 0, tb = 0; i < ch.length; i++) {
-            if (ch[i] == 'a') ta++;
-            else tb++;
-            pa[i + 1] = ta;
-            pb[i + 1] = tb;
+        // 分别表示以a结尾或者以b结尾的最少删除次数
+        int dpa = 0, dpb = 0;
+        for (char c : ch) {
+            dpa = dpa + c - 'a';
+            dpb = Math.min(dpa, dpb + 'b' - c);
         }
-        int min = n;
-        for (int i = 0; i <= n; i++) {
-            min = Math.min(min, pb[i] + pa[n] - pa[i]);
-        }
-        return min;
+        return Math.min(dpa, dpb);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
