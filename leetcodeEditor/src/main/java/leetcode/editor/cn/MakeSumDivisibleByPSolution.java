@@ -54,9 +54,7 @@ package leetcode.editor.cn;
 // 👍 135 👎 0
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * 使数组和能被 P 整除
@@ -71,46 +69,24 @@ static
 class Solution {
     public int minSubarray(int[] nums, int p) {
         int n = nums.length;
-        long[] pre = new long[n + 1], suf = new long[n + 1];
+        long[] pre = new long[n + 1];
         // pre[i] = sum(nums[0, i))
         for (int i = 0; i < n; i++) {
             pre[i + 1] = pre[i] + nums[i];
         }
-        // suf[i] = sum(nums[i, n))
-        for (int i = n - 1; i >= 0; i--) {
-            suf[i] = suf[i + 1] + nums[i];
-        }
-        // 按模分组存储后缀和的下标
-        HashMap<Integer, List<Integer>> sufMap = new HashMap<>();
-        for (int i = 0; i <= n; i++) {
-            int r = (int) (suf[i] % p);
-            sufMap.putIfAbsent(r, new ArrayList<>());
-            sufMap.get(r).add(i);
-        }
         if (pre[n] % p == 0) return 0;
+        int d = (int) (pre[n] % p);
         int min = n;
-        for (int i = 0; i < n; i++) {
-            int a = (int) (pre[i] % p);
-            int b = (p - a) % p;
-            // 没有满足要求的后缀
-            if (!sufMap.containsKey(b)) continue;
-            List<Integer> idx = sufMap.get(b);
-            // 二分在 idx 中找第一个严格大于 i 的值
-            int l = 0, r = idx.size() - 1;
-            while (l <= r) {
-                int mid = l + r >> 1;
-                if (idx.get(mid) > i) {
-                    r = mid - 1;
-                } else {
-                    l = mid + 1;
-                }
+        // 按模存储前缀和的下标
+        HashMap<Integer, Integer> preMap = new HashMap<>();
+        for (int i = 0; i <= n; i++) {
+            int r = (int) (pre[i] % p);
+            int pr = (r - d + p) % p;
+            if (preMap.containsKey(pr)) {
+                min = Math.min(min, i - preMap.get(pr));
             }
-            if (l != idx.size()) {
-                int j = idx.get(l);
-                min = Math.min(min, j - i);
-            }
+            preMap.put(r, i);
         }
-        // 删除子数组后，剩余一个前缀一个后缀，枚举前缀找可以让数组和被整除的最长后缀
         return min != n ? min : -1;
     }
 }
