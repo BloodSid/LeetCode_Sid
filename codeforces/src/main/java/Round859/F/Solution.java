@@ -28,7 +28,7 @@ public class Solution {
             int i2 = sc.nextInt();
             int j2 = sc.nextInt();
             String D = sc.next();
-            // d[0] 上下， d[1] 左右
+            // 初始方向，d[0] 上下， d[1] 左右
             int[] d = DIRS.get(D).clone();
             HashSet<String> set = new HashSet<>();
             int cnt = 0;
@@ -48,15 +48,15 @@ public class Solution {
                 j += r * d[1];
                 cnt++;
                 // 如果出现重复点，则中断
-                if (!set.add(i + " " + j + D)) {
+                if (!set.add(i + " " + j + " " + d[0] + d[1])) {
                     flag = false;
                     break;
                 }
                 // 拐弯
-                if (i == 1 || i == m) {
+                if (i == 1 && d[0] == -1 || i == m && d[0] == 1) {
                     d[0] = -d[0];
                 }
-                if (j == 1 || j == n) {
+                if (j == 1 && d[1] == -1 || j == n && d[1] == 1) {
                     d[1] = -d[1];
                 }
             }
