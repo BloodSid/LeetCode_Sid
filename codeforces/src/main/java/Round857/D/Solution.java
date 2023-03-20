@@ -12,6 +12,7 @@ public class Solution {
     private static Integer[] idx;
 
     public static void main(String[] args) {
+        // correct this solution
         Scanner sc = new Scanner(System.in);
         int N = sc.nextInt();
         for (int cases = 0; cases < N; cases++) {
