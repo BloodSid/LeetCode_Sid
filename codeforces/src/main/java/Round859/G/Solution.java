@@ -3,7 +3,6 @@ package Round859.G;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 /**
  * @author IronSid
@@ -18,38 +17,51 @@ public class Solution {
             int[] a = new int[n];
             String line = br.readLine();
             int p = 0;
-            int left = 0;
+            int start = 0;
             for (int i = 0; i < line.length(); i++) {
                 if (line.charAt(i) == ' ') {
-                    a[p++] = Integer.parseInt(line.substring(left, i));
-                    left = i + 1;
+                    a[p++] = Integer.parseInt(line.substring(start, i));
+                    start = i + 1;
                 }
             }
-            a[p] = Integer.parseInt(line.substring(left));
-            Arrays.sort(a);
+            a[p] = Integer.parseInt(line.substring(start));
+            // Arrays.sort() 会超时
+            sort(a);
+            // 假设已经有序列 c1, c2...ck 那么这个序列的各个子序列的和，一定可以表示出[1, sum(c1, c2...ck)] 内的所有数字
             boolean flag = true;
-            boolean[] h = new boolean[5001];
-            int max = 1;
-            h[1] = true;
-            for (int i = 1; i < n; i++) {
-                if (!h[a[i]]) {
+            long sum = a[0];
+            for (int i = 1; i < a.length; i++) {
+                if (sum < a[i]) {
                     flag = false;
                     break;
                 }
-                for (int j = 1; j <= max; j++) {
-                    if (h[j]) {
-                        if (j + a[i] <= 5000) {
-                            h[j + a[i]] = true;
-                        }
-                    }
-                }
-                max = Math.max(max, max + a[i]);
+                sum += a[i];
             }
-            if (a.length == 1 && a[0] != 1) flag = false;
+            if (a[0] != 1) flag = false;
             if (flag) {
                 System.out.println("YES");
             } else {
                 System.out.println("NO");
+            }
+        }
+    }
+
+    static void sort(int[] a) {
+        int max = 0;
+        for (int i = 0; i < a.length; i++) {
+            max = Math.max(max, a[i]);
+        }
+        int[] f = new int[max + 1];
+        for (int i : a) {
+            f[i]++;
+        }
+        int p = 0;
+        for (int i = 1; i <= max; ) {
+            if (f[i] > 0) {
+                f[i]--;
+                a[p++] = i;
+            } else {
+                i++;
             }
         }
     }
