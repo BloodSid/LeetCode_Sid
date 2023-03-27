@@ -52,37 +52,26 @@ class Solution {
                 }
             }
         }
-        StringBuilder lcs = new StringBuilder();
-        for (int i = m - 1, j = n - 1; i >= 0 && j >= 0; ) {
+        StringBuilder sb = new StringBuilder();
+        int i = m - 1, j = n - 1;
+        for (; i >= 0 && j >= 0; ) {
             if (c1[i] == c2[j]) {
-                lcs.append(c1[i]);
+                sb.append(c1[i]);
                 i--;
                 j--;
             } else {
                 if (dp[i + 1][j + 1] == dp[i][j + 1]) {
+                    sb.append(c1[i]);
                     i--;
                 } else {
+                    sb.append(c2[j]);
                     j--;
                 }
             }
         }
-        lcs.reverse();
-        StringBuilder sb = new StringBuilder();
-        int i0 = -1, j0 = -1;
-        for (int i1 = 0, j1 = 0, k = 0; k < lcs.length(); k++) {
-            char c = lcs.charAt(k);
-            while (c1[i1] != c) i1++;
-            while (c2[j1] != c) j1++;
-            sb.append(c1, i0 + 1, i1 - i0 - 1);
-            i0 = i1;
-            sb.append(c2, j0 + 1, j1 - j0 - 1);
-            j0 = j1;
-            sb.append(c);
-            i1++;
-            j1++;
-        }
-        sb.append(c1, i0 + 1, c1.length - 1 - i0);
-        sb.append(c2, j0 + 1, c2.length - 1 - j0);
+        while (i >= 0) sb.append(c1[i--]);
+        while (j >= 0) sb.append(c2[j--]);
+        sb.reverse();
         return sb.toString();
     }
 }
