@@ -60,8 +60,6 @@ package leetcode.editor.cn;
 // 👍 56 👎 0
 
 
-import java.util.*;
-
 /**
  * 统计只差一个字符的子串数目
  *
@@ -74,31 +72,34 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int countSubstrings(String s, String t) {
-        int n = t.length();
-        HashMap<String, Integer> map = new HashMap<>();
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j <= n; j++) {
-                String sub = t.substring(i, j);
-                map.put(sub, map.getOrDefault(sub, 0) + 1);
+        char[] a = s.toCharArray();
+        char[] b = t.toCharArray();
+        int m = a.length;
+        int n = b.length;
+        // 计算公共子序列
+        int[][] l = new int[m + 1][n + 1], r = new int[m + 1][n + 1];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                l[i + 1][j + 1] = a[i] == b[j] ? l[i][j] + 1 : 0;
             }
         }
-        int cnt = 0;
-        n = s.length();
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j <= n; j++) {
-                String sub = s.substring(i, j);
-                for (int k = 0; k < sub.length(); k++) {
-                    char cur = sub.charAt(k);
-                    for (char c = 'a'; c <= 'z'; c++) {
-                        if (cur == c) continue;
-                        cnt += map.getOrDefault(sub.substring(0, k) + c + sub.substring(k + 1), 0);
-                    }
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                r[i][j] = a[i] == b[j] ? r[i + 1][j + 1] + 1 : 0;
+            }
+        }
+        int res = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (a[i] != b[j]) {
+                    res += (l[i][j] + 1) * (r[i + 1][j + 1] + 1);
                 }
             }
         }
-        return cnt;
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
+// // i = 0 j = 0 1 i = 0 j = 2 2 i = 1 j = 1 3 i = 1 j = 3 4 i = 2 j = 0 5 i = 2 j = 2 6
