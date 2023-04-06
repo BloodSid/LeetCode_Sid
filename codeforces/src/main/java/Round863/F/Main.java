@@ -1,5 +1,8 @@
 package Round863.F;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -58,7 +61,8 @@ public class Main {
             while (true) {
                 // 判断副环
                 int subLen = 0;
-                for (int sub = cur; ; ) {
+                int sub;
+                for (sub = cur; ; ) {
                     int t = sub;
                     List<Integer> list = map[sub];
                     for (Integer next : list) {
@@ -72,7 +76,8 @@ public class Main {
                         break;
                     }
                 }
-                flag = flag && subLen == k - 1;
+                // 检查副环长度，检查副环的起点和终点是主环上的同一点
+                flag = flag && subLen == k - 1 && map[sub].contains(cur);
                 // 找主环上的下一个
                 int t = cur;
                 List<Integer> list = map[cur];
@@ -101,5 +106,37 @@ public class Main {
     private static void addEdge(int v, int u, List<Integer>[] map) {
         if (map[v] == null) map[v] = new ArrayList<>();
         map[v].add(u);
+    }
+}
+
+class Test {
+    public static void main(String[] args) throws IOException {
+        String input = "1\n" +
+                "\n" +
+                "16 20\n" +
+                "1 2\n" +
+                "2 3\n" +
+                "3 4\n" +
+                "4 1\n" +
+                "1 5\n" +
+                "5 6\n" +
+                "6 7\n" +
+                "7 2\n" +
+                "2 8\n" +
+                "8 9\n" +
+                "9 10\n" +
+                "10 3\n" +
+                "3 11\n" +
+                "11 12\n" +
+                "12 13\n" +
+                "13 4\n" +
+                "4 14\n" +
+                "14 15\n" +
+                "15 16\n" +
+                "16 1";
+        InputStream is = new ByteArrayInputStream(input.getBytes());
+        System.setIn(is);
+        Main.main(null);
+
     }
 }
