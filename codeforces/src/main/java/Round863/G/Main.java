@@ -27,19 +27,24 @@ public class Main {
             return;
         }
         int m = n / k * k;
+        HashMap<Integer, Integer> colors = new HashMap<>();
+        int[] idx = {0};
+        for (int color : c) {
+            colors.computeIfAbsent(color, t -> idx[0]++);
+        }
         // f(i, j) 颜色为i，长度为j的符合要求的子序列
-        long[][] f = new long[n + 1][m + 1];
+        long[][] f = new long[colors.size()][m + 1];
         // maxP 结尾颜色为j的path的最大长度
-        int[] max = new int[n + 1];
+        int[] max = new int[colors.size()];
         int maxP = 0;
         // sum[j] 长度为j的子序列
         long[] sum = new long[m + 1];
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < f.length; i++) {
             f[i][0] = 1;
         }
         sum[0] = 1;
         for (int t = 0; t < n; t++) {
-            int cur = c[t];
+            int cur = colors.get(c[t]);
             for (int j = Math.min(maxP + 1, m); j >= 2; j--) {
                 if (j % k == 1) {
                     f[cur][j] = (f[cur][j] + sum[j - 1]) % MOD;
