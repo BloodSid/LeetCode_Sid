@@ -15,7 +15,8 @@ public class Main {
         // leg 长的最小值大概在 sqrt(a + b) 附近
         int min = Integer.MAX_VALUE;
         int s = (int) Math.sqrt(a + b);
-        for (int i = Math.max(1, s - 10); i < s + 10; i++) {
+        int d = 1000;
+        for (int i = Math.max(1, s - d); i < s + d; i++) {
             min = Math.min(min, f(a, b, i));
         }
         return min;
