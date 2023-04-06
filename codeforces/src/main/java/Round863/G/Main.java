@@ -29,16 +29,18 @@ public class Main {
         int m = n / k * k;
         // f(i, j) 颜色为i，长度为j的符合要求的子序列
         long[][] f = new long[n + 1][m + 1];
+        // maxP 结尾颜色为j的path的最大长度
+        int[] max = new int[n + 1];
+        int maxP = 0;
         // sum[j] 长度为j的子序列
         long[] sum = new long[m + 1];
         for (int i = 1; i <= n; i++) {
             f[i][0] = 1;
         }
         sum[0] = 1;
-        int maxP = 0;
         for (int t = 0; t < n; t++) {
             int cur = c[t];
-            for (int j = m; j >= 2; j--) {
+            for (int j = Math.min(maxP + 1, m); j >= 2; j--) {
                 if (j % k == 1) {
                     f[cur][j] = (f[cur][j] + sum[j - 1]) % MOD;
                     sum[j] = (sum[j] + sum[j - 1]) % MOD;
@@ -46,15 +48,17 @@ public class Main {
                     f[cur][j] = (f[cur][j] + f[cur][j - 1]) % MOD;
                     sum[j] = (sum[j] + f[cur][j - 1]) % MOD;
                 }
-                if (j % k == 0 && f[cur][j] > 0) maxP = Math.max(maxP, j);
             }
+            // 更新p的最大长度
+            max[cur] = Math.max(max[cur], maxP - maxP % k) + 1;
+            maxP = Math.max(maxP, max[cur]);
             f[cur][1]++;
             sum[1]++;
         }
         if (maxP == 0) {
             System.out.println(1);
         } else {
-            System.out.println(sum[maxP] % MOD);
+            System.out.println(sum[maxP - maxP % k] % MOD);
         }
     }
 }
