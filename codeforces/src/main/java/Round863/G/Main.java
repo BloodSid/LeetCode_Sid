@@ -1,5 +1,8 @@
 package Round863.G;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class Main {
@@ -18,7 +21,12 @@ public class Main {
         for (int i = 0; i < c.length; i++) {
             c[i] = sc.nextInt();
         }
+        if (k == 1) {
+            System.out.println(1);
+            return;
+        }
         int m = n / k * k;
+        // f(i, j) 颜色为i，长度为j的符合要求的子序列
         long[][] f = new long[n + 1][m + 1];
         for (int i = 1; i <= n; i++) {
             f[i][0] = 1;
@@ -49,5 +57,17 @@ public class Main {
         } else {
             System.out.println(res % MOD);
         }
+    }
+}
+
+class Test {
+    public static void main(String[] args) throws IOException {
+        String input = "1\n" +
+                "6 1\n" +
+                "3 3 3 2 6 5";
+        InputStream is = new ByteArrayInputStream(input.getBytes());
+        System.setIn(is);
+        Main.main(null);
+
     }
 }
