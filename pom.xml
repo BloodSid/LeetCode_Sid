@@ -35,6 +35,7 @@
         <module>leetcode</module>
         <module>nowcoder</module>
         <module>codeforces</module>
+        <module>lanqiao</module>
     </modules>
 
     <properties>

@@ -36,6 +36,7 @@
         <module name="LinkedList" />
         <module name="1162.AsFarFromLandAsPossible" />
         <module name="916.WordSubsets" />
+        <module name="lanqiao" />
         <module name="HJ44_Sudoku" />
         <module name="NextPermutation" />
         <module name="HJ98_SimpleVendingSystem" />
