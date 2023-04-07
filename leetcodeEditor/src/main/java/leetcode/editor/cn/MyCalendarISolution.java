@@ -12,6 +12,7 @@ import java.util.*;
 public class MyCalendarISolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class MyCalendar {
+    // TODO 线段树
 
     private final TreeMap<Integer, Integer> map;
 

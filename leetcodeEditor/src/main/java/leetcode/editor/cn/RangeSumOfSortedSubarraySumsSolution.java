@@ -63,6 +63,7 @@ class Solution {
 
 
     public int rangeSum(int[] nums, int n, int left, int right) {
+        // TODO 二分搜索做法
         int m = n * (n + 1) / 2;
         int[] p = new int[n + 1];
         for (int i = 0, t = 0; i < n; i++) {

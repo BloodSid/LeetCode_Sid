@@ -1,18 +1,17 @@
 package leetcode.editor.cn;
 
 /**
- * 水壶问题
+ * 柱状图中最大的矩形
  *
  * @author IronSid
  * @version 1.0
- * @since 2022-03-14 16:18:39 
+ * @since 2022-01-28 23:12:58 
  */
-public class WaterAndJugProblemSolution {
+public class LargestRectangleInHistogramSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public boolean canMeasureWater(int jug1Capacity, int jug2Capacity, int targetCapacity) {
-        // TODO 试试dfs
-        return false;
+    public int largestRectangleArea(int[] heights) {
+return 0;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

@@ -1,18 +1,17 @@
 package leetcode.editor.cn;
 
 /**
- * 水壶问题
+ * 通配符匹配
  *
  * @author IronSid
  * @version 1.0
- * @since 2022-03-14 16:18:39 
+ * @since 2022-01-28 23:12:48 
  */
-public class WaterAndJugProblemSolution {
+public class WildcardMatchingSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public boolean canMeasureWater(int jug1Capacity, int jug2Capacity, int targetCapacity) {
-        // TODO 试试dfs
-        return false;
+    public boolean isMatch(String s, String p) {
+return false;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

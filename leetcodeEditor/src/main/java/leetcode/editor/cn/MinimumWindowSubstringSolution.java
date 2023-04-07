@@ -1,18 +1,17 @@
 package leetcode.editor.cn;
 
 /**
- * 水壶问题
+ * 最小覆盖子串
  *
  * @author IronSid
  * @version 1.0
- * @since 2022-03-14 16:18:39 
+ * @since 2022-01-28 23:12:55 
  */
-public class WaterAndJugProblemSolution {
+public class MinimumWindowSubstringSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public boolean canMeasureWater(int jug1Capacity, int jug2Capacity, int targetCapacity) {
-        // TODO 试试dfs
-        return false;
+    public String minWindow(String s, String t) {
+return null;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

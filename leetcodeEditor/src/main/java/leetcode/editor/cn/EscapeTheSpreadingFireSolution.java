@@ -1,18 +1,17 @@
 package leetcode.editor.cn;
 
 /**
- * 水壶问题
+ * 逃离火灾
  *
  * @author IronSid
  * @version 1.0
- * @since 2022-03-14 16:18:39 
+ * @since 2022-05-01 12:53:39 
  */
-public class WaterAndJugProblemSolution {
+public class EscapeTheSpreadingFireSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public boolean canMeasureWater(int jug1Capacity, int jug2Capacity, int targetCapacity) {
-        // TODO 试试dfs
-        return false;
+    public int maximumMinutes(int[][] grid) {
+return 0;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)

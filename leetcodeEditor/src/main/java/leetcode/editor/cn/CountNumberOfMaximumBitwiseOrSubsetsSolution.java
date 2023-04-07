@@ -10,6 +10,7 @@ package leetcode.editor.cn;
 public class CountNumberOfMaximumBitwiseOrSubsetsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    // TODO 试试别的解法
     public int countMaxOrSubsets(int[] nums) {
         int max = 0;
         for (int num : nums) {

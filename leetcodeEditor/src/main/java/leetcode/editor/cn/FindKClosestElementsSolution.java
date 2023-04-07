@@ -51,6 +51,7 @@ public class FindKClosestElementsSolution {
 // import java.util.*;
 class Solution {
     public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        // TODO 三分查找
         int n = arr.length;
         int l = 0, r = n - k;
         while (l < r) {

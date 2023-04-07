@@ -7,7 +7,7 @@ import java.util.*;
  *
  * @author IronSid
  * @version 1.0
- * @since 2022-03-15 21:34:38 
+ * @since 2022-03-15 21:34:38
  */
 public class MinimumGeneticMutationSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -39,6 +39,7 @@ class Solution {
                 if (base != cur) {
                     String next = s.substring(0, i) + base + s.substring(i + 1);
                     if (set.contains(next)) {
+                        // TODO 这里没有确保是最小的分支
                         int temp = dfs(next);
                         if (temp != -1) {
                             return temp + 1;

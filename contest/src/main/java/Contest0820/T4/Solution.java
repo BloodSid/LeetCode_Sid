@@ -9,6 +9,7 @@ import java.util.TreeSet;
  */
 public class Solution {
     public long[] maximumSegmentSum(int[] nums, int[] removeQueries) {
+        // TODO 并查集
         int n = nums.length;
         long[] pre = new long[n + 1];
         long t = 0;
