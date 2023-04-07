@@ -62,7 +62,7 @@ import java.util.*;
  *
  * @author IronSid
  * @version 1.0
- * @since 2023-04-07 10:09:57 
+ * @since 2023-04-07 10:09:57
  */
 public class MovingStonesUntilConsecutiveIiSolution {
 static
@@ -86,12 +86,10 @@ class Solution {
             int gap = n - (j - i);
             // 特判 2 3 4 5 8 的情况， gap 为一但是必须需要两步
             if (gap == 1 && stones[j - 1] - stones[i] == n - 2) {
-                if ((i == 0 && stones[n - 1] - stones[n - 2] >= 3) || (i == 1 && stones[1] - stones[0] >= 3)) {
-                    min = Math.min(min, 2);
-                    continue;
-                }
+                min = Math.min(min, 2);
+            } else {
+                min = Math.min(min, gap);
             }
-            min = Math.min(min, gap);
             if (j == n) break;
         }
         return new int[]{min, max};
