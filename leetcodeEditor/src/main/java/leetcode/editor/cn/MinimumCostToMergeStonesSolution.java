@@ -61,41 +61,30 @@ public class MinimumCostToMergeStonesSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-
-    private int[] pre;
-    private int[][][] f;
-    int k;
-
     public int mergeStones(int[] stones, int k) {
         int n = stones.length;
-        this.k = k;
         if ((n - 1) % (k - 1) != 0) return -1;
-        pre = new int[n + 1];
+        int[] pre = new int[n + 1];
         for (int i = 0, t = 0; i < n; i++) {
             t += stones[i];
             pre[i + 1] = t;
         }
-        f = new int[n][n][k + 1];
-        // 最后一次合并
-        return dfs(0, n - 1, 1);
-    }
-
-    int dfs(int l, int r, int p) {
-        // 递归出口
-        if (l == r) return 0;
-        if (f[l][r][p] != 0) return f[l][r][p];
-        int res = 0;
-        if (p == 1) {
-            res = dfs(l, r, k) + pre[r + 1] - pre[l];
-        } else {
-            res = Integer.MAX_VALUE;
-            for (int i = l; i <= r && r - i >= p - 1; i += k - 1) {
-                res = Math.min(res, dfs(l, i, 1) + dfs(i + 1, r, p - 1));
+        int[][] f = new int[n][n];
+        for (int i = n - 2; i >= 0; i--) {
+            for (int j = i + 1; j < n; j++) {
+                int res = Integer.MAX_VALUE;
+                for (int m = i; m < j; m += k - 1) {
+                    res = Math.min(res, f[i][m] + f[m + 1][j]);
+                }
+                if ((j - i) % (k - 1) == 0) {
+                    res += pre[j + 1] - pre[i];
+                }
+                f[i][j] = res;
             }
         }
-        f[l][r][p] = res;
-        return res;
+        return f[0][n - 1];
     }
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
