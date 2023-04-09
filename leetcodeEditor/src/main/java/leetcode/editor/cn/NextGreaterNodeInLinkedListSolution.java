@@ -60,13 +60,16 @@ class Solution {
     public int[] nextLargerNodes(ListNode head) {
         List<Integer> list = new ArrayList<>();
         // {i, v} 单调栈，栈顶最小
-        Deque<int[]> stack = new ArrayDeque<>();
+        Deque<Integer> stack = new ArrayDeque<>();
         int i = 0;
-        for (ListNode cur = head; cur != null; cur = cur.next, i++, list.add(0)) {
-            while (!stack.isEmpty() && stack.peek()[1] < cur.val) {
-                list.set(stack.pop()[0], cur.val);
+        for (ListNode cur = head; cur != null; list.add(cur.val), cur = cur.next, i++) {
+            while (!stack.isEmpty() && list.get(stack.peek()) < cur.val) {
+                list.set(stack.pop(), cur.val);
             }
-            stack.push(new int[]{i, cur.val});
+            stack.push(i);
+        }
+        while (!stack.isEmpty()) {
+            list.set(stack.pop(), 0);
         }
         int[] res = new int[list.size()];
         for (int p = 0; p < res.length; p++) res[p] = list.get(p);
