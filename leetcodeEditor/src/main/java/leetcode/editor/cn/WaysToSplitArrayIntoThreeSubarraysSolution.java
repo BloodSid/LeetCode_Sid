@@ -51,9 +51,10 @@ package leetcode.editor.cn;
  *
  * @author IronSid
  * @version 1.0
- * @since 2022-08-08 21:33:43 
+ * @since 2022-08-08 21:33:43
  */
 public class WaysToSplitArrayIntoThreeSubarraysSolution {
+static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
 
@@ -68,12 +69,12 @@ class Solution {
             p[i + 1] = t;
         }
         long res = 0;
-        // 双指针
-        for (int i = 1, j = 2, k = 2; i < n - 1 && p[i] * 3 <= p[n]; i++) {
+        // 双指针，注意 k 的初始值需要比 j 小 1
+        for (int i = 1, j = 2, k = 1; i < n - 1 && p[i] * 3 <= p[n]; i++) {
             int left = p[i];
             // 两个分割点必须保持前后顺序
             j = Math.max(i + 1, j);
-            while (j < n - 1 && p[j] - p[i] < left) j++;
+            while (j < n && p[j] - p[i] < left) j++;
             while (k < n - 1 && p[k + 1] - p[i] <= p[n] - p[k + 1]) k++;
             // line 21 : 不能使用 if (k < j) break; 提前结束循环
             res += k - j + 1;
@@ -82,5 +83,47 @@ class Solution {
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
+
+// 对拍
+static class Solution2 {
+
+    public static final int MOD = (int) (1e9 + 7);
+
+    public int waysToSplit(int[] nums) {
+        int n = nums.length;
+        // 前缀和
+        int[] p = new int[n + 1];
+        for (int i = 0, t = 0; i < n; i++) {
+            t += nums[i];
+            p[i + 1] = t;
+        }
+        long res = 0;
+        int tot = p[n];
+        for (int i = 1; i < n - 1 && p[i] * 3 <= tot; i++) {
+            int left = p[i];
+            // 二分搜索求下限
+            int l = i + 1, r = n - 1;
+            while (l <= r) {
+                int mid = l + r >> 1;
+                if (p[mid] - left < left) l = mid + 1;
+                else r = mid - 1;
+            }
+            int j = l;
+            // 二分搜索求上限
+            l = i + 1;
+            r = n - 1;
+            while (l <= r) {
+                int mid = l + r >> 1;
+                if (p[mid] - left <= tot - p[mid]) l = mid + 1;
+                else r = mid - 1;
+            }
+            int k = r;
+            // 累加到结果中
+            res += k - j + 1;
+        }
+        return (int) (res % MOD);
+    }
+
+}
 
 }
