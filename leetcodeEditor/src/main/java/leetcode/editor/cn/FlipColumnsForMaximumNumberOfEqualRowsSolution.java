@@ -47,6 +47,9 @@ package leetcode.editor.cn;
 // 👍 65 👎 0
 
 
+import java.util.Arrays;
+import java.util.HashMap;
+
 /**
  * 按列翻转得到最大值等行数
  *
@@ -59,26 +62,37 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int maxEqualRowsAfterFlips(int[][] matrix) {
+        // long 类型
+        int width = 64;
+        int mask = width - 1;
+        int offset = 6;
         int m = matrix.length, n = matrix[0].length;
-        // 枚举行，计算在把某行变为相等的翻转方法下，矩阵有多少行的所有值都相等
-        int max = 1;
-        for (int k = 0; k < m; k++) {
-            // f[j] 为0不反转，为1反转
-            int[] f = matrix[k];
-            int cnt = 1;
-            for (int i = 0; i < m; i++) {
-                if (i == k) continue;
-                int j = 1;
-                int start = matrix[i][0] ^ f[0];
-                for (; j < n; j++) {
-                    if ((matrix[i][j] ^ f[j]) != start) {
-                        break;
-                    }
-                }
-                // 所有的值都一致
-                if (j == n) cnt++;
+        // 需要k个long存放
+        int k = (n + 64 - 1) >> offset;
+        long[][] bits = new long[m][k];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                bits[i][j >> offset] |= (long) matrix[i][j] << (j & mask);
             }
-            max = Math.max(max, cnt);
+            // 若一行以1起，则翻转整行
+            if (matrix[i][0] == 1) {
+                for (int j = 0; j < k; j++) {
+                    bits[i][j] = ~bits[i][j];
+                }
+                // 多余的 bits
+                int tail = (64 - n & mask) & mask;
+                bits[i][k - 1] = bits[i][k - 1] << tail >>> tail;
+            }
+
+        }
+
+        HashMap<String, Integer> map = new HashMap<>();
+        int max = 0;
+        for (long[] bs : bits) {
+            String s = Arrays.toString(bs);
+            int v = map.getOrDefault(s, 0) + 1;
+            max = Math.max(max, v);
+            map.put(s, v);
         }
         return max;
     }
