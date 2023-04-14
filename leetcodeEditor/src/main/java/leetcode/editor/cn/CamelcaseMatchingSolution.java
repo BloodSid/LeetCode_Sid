@@ -62,6 +62,7 @@ import java.util.*;
 public class CamelcaseMatchingSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
+//import java.util.*;
 
 class Solution {
     public List<Boolean> camelMatch(String[] queries, String pattern) {
@@ -73,8 +74,8 @@ class Solution {
             char[] c = query.toCharArray();
             boolean flag = true;
             int i = 0, j = 0;
-            for (; i < c.length && j < p.length; i++) {
-                if (c[i] == p[j]) {
+            for (; i < c.length; i++) {
+                if (j < p.length && c[i] == p[j]) {
                     j++;
                 } else if (c[i] >= 'A' && c[i] <= 'Z') {
                     // 大写字母必须匹配到
@@ -84,14 +85,6 @@ class Solution {
             }
             // Pattern 的字母必须全部匹配
             flag &= j == p.length;
-            for (; flag && i < c.length; i++) {
-                // 未匹配的部分也不能有大写字母
-                if (c[i] >= 'A' && c[i] <= 'Z') {
-                    // 大写字母必须匹配到
-                    flag = false;
-                    break;
-                }
-            }
             list[pi++] = flag;
         }
 
