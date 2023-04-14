@@ -80,29 +80,20 @@ class Solution {
         }
         int[] color = new int[n];
         for (int i = 0; i < n; i++) {
-            dfs(i, color);
+            boolean[] neighbor = new boolean[5];
+            for (Integer next : map[i]) {
+                neighbor[color[next]] = true;
+            }
+            // 根据邻居已经上色的情况决定自己的上色
+            for (int j = 1; j <= 4; j++) {
+                if (!neighbor[j]) {
+                    color[i] = j;
+                    break;
+                }
+            }
         }
         return color;
     }
-
-    private void dfs(int node, int[] color) {
-        if (color[node] != 0) return;
-        boolean[] neibor = new boolean[5];
-        for (Integer next : map[node]) {
-            neibor[color[next]] = true;
-        }
-        // 根据邻居已经上色的情况决定自己的上色
-        for (int i = 1; i <= 4; i++) {
-            if (!neibor[i]) {
-                color[node] = i;
-                break;
-            }
-        }
-        for (Integer next : map[node]) {
-            dfs(next, color);
-        }
-    }
-
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
