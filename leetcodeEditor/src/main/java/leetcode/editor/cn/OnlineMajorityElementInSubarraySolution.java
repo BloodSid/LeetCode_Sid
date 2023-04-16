@@ -45,6 +45,11 @@ package leetcode.editor.cn;
 // 👍 103 👎 0
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
 /**
  * 子数组中占绝大多数的元素
  *
@@ -58,29 +63,42 @@ static
 class MajorityChecker {
 
     private final int[] arr;
+    private final HashMap<Integer, List<Integer>> idx;
+    private Random random = new Random();
 
     public MajorityChecker(int[] arr) {
         this.arr = arr;
+        idx = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            idx.computeIfAbsent(arr[i], k -> new ArrayList<>()).add(i);
+        }
     }
     
     public int query(int left, int right, int threshold) {
-        int element = 0;
-        int cnt = 0;
-        for (int i = left; i <= right; i++) {
-            if (cnt == 0) {
-                element = arr[i];
-                cnt++;
-            } else if (arr[i] == element) {
-                cnt++;
-            } else {
-                cnt--;
+        // 若存在这样的元素，则选到该元素的概率
+        double p = 1.0 * threshold / (right - left + 1);
+        // q 表示之前的若干次循环没有选到该元素的概率
+        for (double q = 1; q > 1e-3; q *= 1 - p) {
+            int element = arr[left + random.nextInt(right - left + 1)];
+            List<Integer> id = idx.get(element);
+            if (upperBound(id, right) - upperBound(id, left - 1) >= threshold) {
+                return element;
             }
         }
-        cnt = 0;
-        for (int i = left; i <= right; i++) {
-            if (arr[i] == element) cnt++;
+        return -1;
+    }
+
+    int upperBound(List<Integer> list, int target) {
+        int l = 0, r = list.size() - 1;
+        while (l <= r) {
+            int mid = l + r >> 1;
+            if (list.get(mid) <= target) {
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
         }
-        return cnt >= threshold ? element : -1;
+        return r;
     }
 }
 
