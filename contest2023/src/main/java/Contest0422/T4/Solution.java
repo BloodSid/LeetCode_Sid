@@ -15,27 +15,20 @@ public class Solution {
     private int[][] trans;
     private int m;
     private int n;
-    private int sx;
-    private int sy;
     private int tx;
     private int ty;
     private char[][] g;
     private boolean[][] vis;
-    private int[][] res;
-    private int[][] dist;
 
     public int challengeOfTheKeeper(String[] maze) {
-        for (String s : maze) {
-            System.out.println(s);
-        }
         m = maze.length;
         n = maze[0].length();
         g = new char[m][];
         for (int i = 0; i < m; i++) {
             g[i] = maze[i]. toCharArray();
         }
-        sx = 0;
-        sy = 0;
+        int sx = 0;
+        int sy = 0;
         tx = 0;
         ty = 0;
         for (int i = 0; i < m; i++) {
@@ -51,7 +44,7 @@ public class Solution {
         }
         vis = new boolean[m][n];
         Deque<int[]> q = new ArrayDeque<>();
-        dist = new int[m][n];
+        int[][] dist = new int[m][n];
         for (int[] ints : dist) {
             Arrays.fill(ints, INF);
         }
@@ -88,32 +81,40 @@ public class Solution {
                 trans[i][j] = max;
             }
         }
-
         if (dist[sx][sy] == INF) return -1;
-        // 找一条终点是最大值，且最大值最小的路径
-        vis = new boolean[m][n];
-        res = new int[m][n];
-        vis[sx][sy] = true;
-        int min = dfs(tx, ty);
+        // 二分路径求路径上最大值的最小值
+        int l = 0, r = INF;
+        while (l <= r) {
+            int mid = l + r >> 1;
+            vis = new boolean[m][n];
+            boolean flag = dfs(sx, sy, mid);
+            if (flag) {
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+        int min = l;
         return min < INF ? min : -1;
     }
 
-    int dfs(int x, int y) {
-        if (vis[x][y]) {
-            return res[x][y];
-        }
+    boolean dfs(int x, int y, int max) {
         vis[x][y] = true;
-        int re = INF;
+        if (x == tx && y == ty) {
+            return true;
+        }
+        if (trans[x][y] > max) {
+            return false;
+        }
         for (int[] dir : DIRS) {
             int nx = x + dir[0], ny = y + dir[1];
-            if (nx >= 0 && nx < m && ny >= 0 && ny < n && g[nx][ny] != '#' && dist[nx][ny] > dist[x][y]) {
-                re = Math.min(re, dfs(nx, ny));
+            if (nx >= 0 && nx < m && ny >= 0 && ny < n && g[nx][ny] != '#' && !vis[nx][ny]) {
+                if (dfs(nx, ny, max)) {
+                    return true;
+                }
             }
         }
-
-        re = Math.max(re, trans[x][y]);
-        res[x][y] = re;
-        return re;
+        return false;
     }
 
 }
