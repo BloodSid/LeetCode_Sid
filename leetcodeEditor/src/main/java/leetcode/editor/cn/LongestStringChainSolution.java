@@ -83,14 +83,10 @@ class Solution {
         if (map.containsKey(word)) return map.get(word);
         int max = 0;
         int n = word.length();
-        for (int i = 0; i <= n; i++) {
-            String pre = word.substring(0, i);
-            String suc = word.substring(i);
-            for (char c = 'a'; c <= 'z'; c++) {
-                String next = pre + c + suc;
-                if (set.contains(next)) {
-                    max = Math.max(max, dfs(next));
-                }
+        for (int i = 0; i < n; i++) {
+            String next = word.substring(0, i) + word.substring(i + 1);
+            if (set.contains(next)) {
+                max = Math.max(max, dfs(next));
             }
         }
         map.put(word, max + 1);
