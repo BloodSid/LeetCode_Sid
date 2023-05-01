@@ -41,7 +41,6 @@ public class Main {
             f.merge(cnt[i], 1, Integer::sum);
         }
         notLoop = new boolean[n];
-        List<Integer> list = new ArrayList<>();
         Deque<Integer> q = new ArrayDeque<>();
         for (int i = 0; i < n; i++) {
             if (cnt[i] == 1) {
@@ -52,7 +51,6 @@ public class Main {
         // 拓扑排序去掉必不在环上的点
         while (!q.isEmpty()) {
             int poll = q.poll();
-            list.add(poll);
             for (Integer next : map[poll]) {
                 if (notLoop[next]) continue;
                 cnt[next]--;
@@ -64,27 +62,24 @@ public class Main {
         }
         // 题目的要求可以转化成找到一个环，上面有一个节点的度大于等于4
         int res = 0;
+        List<Integer> path = null;
+        flag:
         for (; res < n; res++) {
             if (!notLoop[res] && map[res].size() >= 4) {
-                break;
+                for (Integer next : map[res]) {
+                    path = new ArrayList<>();
+                    boolean[] vis = new boolean[n];
+                    if (dfs(res, next, res, path, vis)) {
+                        break flag;
+                    }
+                }
             }
         }
-        if (res == n) {
+        if (res == n || path == null || path.isEmpty()) {
             sc.println("NO");
             return;
         }
-        List<Integer> path = new ArrayList<>();
         // 找到环
-        for (Integer to : map[res]) {
-            boolean[] vis = new boolean[n];
-            if (dfs(res, to, res, path, vis)) {
-                break;
-            }
-        }
-        if (path.isEmpty()) {
-            sc.println("NO");
-            return;
-        }
         sc.println("YES");
         // 利用题意缩小环
         List<Integer> extra = map[res].subList(0, 4);
