@@ -61,11 +61,20 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean isValid(String s) {
-        int i;
-        while ((i = s.indexOf("abc")) >= 0) {
-            s = s.substring(0, i) + s.substring(i + 3);
+        char[] stack = new char[s.length()];
+        int p = 0;
+        for (char c : s.toCharArray()) {
+            if (c != 'c') {
+                stack[p++] = c;
+            } else {
+                if (p >= 2 && stack[p - 2] == 'a' && stack[p - 1] == 'b') {
+                    p = p - 2;
+                } else {
+                    stack[p++] = c;
+                }
+            }
         }
-        return s.length() == 0;
+        return p == 0;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
