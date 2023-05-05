@@ -35,6 +35,12 @@ public class Main {
             r = new BufferedReader(new InputStreamReader(i));
         }
 
+        // 用字符串做输入，标准输出
+        public Kattio(String bytes) {
+            super(System.out);
+            r = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes.getBytes())));
+        }
+
         // 文件 IO
         public Kattio(String intput, String output) throws IOException {
             super(output);
