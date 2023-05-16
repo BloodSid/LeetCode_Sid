@@ -79,21 +79,18 @@ class Solution {
         // 用 pre 记录非空格的上一个字符
         char pre = 0;
         char[] ch = s.toCharArray();
-        for (int i = 0; i < ch.length; ) {
+        for (int i = 0; i < ch.length; i++) {
             char c = ch[i];
             if (c == ' ') {
                 // 跳过空格
-                i++;
                 continue;
             }
             if (c == '(') {
                 ops.push('(');
-                i++;
             } else if (c == ')') {
                 // 逢右括号计算到左括号为止
                 while (!ops.isEmpty() && ops.peek() != '(') calc();
                 ops.pop();
-                i++;
             } else if (c >= '0' && c <= '9') {
                 // 数字
                 int num = c & 15;
@@ -102,7 +99,7 @@ class Solution {
                     if (ch[j] < '0' || ch[j] > '9') break;
                     num = num * 10 + (ch[j] & 15);
                 }
-                i = j;
+                i = j - 1;
                 nums.push(num);
             } else {
                 // 防止括号内第一个数是负数
@@ -110,7 +107,6 @@ class Solution {
                 // 操作符入栈前，把栈顶优先级相等或更高的先计算掉
                 while (!ops.isEmpty() && priority[ops.peek()] >= priority[c]) calc();
                 ops.push(c);
-                i++;
             }
             pre = c;
         }
