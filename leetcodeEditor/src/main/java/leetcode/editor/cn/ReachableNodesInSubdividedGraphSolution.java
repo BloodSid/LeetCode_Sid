@@ -94,6 +94,7 @@ class Solution {
             int x = poll[0]; int d = poll[1];
             // 若 d 大于上限提前结束
             if (d > maxMoves) break;
+            // 这里必须用 > 而不是 >=
             if (d > dist[x]) continue;
             for (int[] ne : map[x]) {
                 int y = ne[0];
