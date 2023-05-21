@@ -6,10 +6,18 @@ package Contest0521.T1;
  */
 public class Solution {
     public int minLength(String s) {
-        while (s.contains("AB") || s.contains("CD")) {
-            s = s.replace("AB", "");
-            s = s.replace("CD", "");
+        char[] res = new char[s.length()];
+        int p = 0;
+        // 栈
+        for (char c : s.toCharArray()) {
+            char top = p != 0 ? res[p - 1] : 0;
+            if (c == 'B' && top == 'A' || c == 'D' && top == 'C') {
+                // 出栈
+                p--;
+            } else {
+                res[p++] = c;
+            }
         }
-        return s.length();
+        return p;
     }
 }
