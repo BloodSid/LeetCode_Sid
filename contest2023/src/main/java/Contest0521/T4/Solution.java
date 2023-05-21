@@ -10,46 +10,37 @@ public class Solution {
 
     public static final int INF = (int) (1e9 + 7);
     private int[][] edges;
-    private HashMap<Integer, HashMap<Integer, Integer>> map;
 
     public int[][] modifiedGraphEdges(int n, int[][] edges, int source, int destination, int target) {
         this.edges = edges;
-        map = new HashMap<>();
+        HashMap<Integer, HashMap<Integer, Integer>> mp1 = new HashMap<>();
+        HashMap<Integer, HashMap<Integer, Integer>> mp2 = new HashMap<>();
         for (int i = 0; i < n; i++) {
-            map.put(i, new HashMap<>());
+            mp1.put(i, new HashMap<>());
+            mp2.put(i, new HashMap<>());
         }
-        // -1 的边不建图
-        int i = 0;
-        for (int[] ed : edges) {
-            int a = ed[0], b = ed[1], w = ed[2];
-            if (w == -1) {
-                ed[2] = INF;
-                i++;
-                continue;
+        for (int i = 0; i < edges.length; i++) {
+            int[] e = edges[i];
+            if (e[2] == -1) {
+                e[2] = INF;
+            } else {
+                // -1 的边不建图1
+                mp1.get(e[0]).put(e[1], i);
+                mp1.get(e[1]).put(e[0], i);
             }
-            map.get(a).put(b, i);
-            map.get(b).put(a, i);
-            i++;
+            mp2.get(e[0]).put(e[1], i);
+            mp2.get(e[1]).put(e[0], i);
         }
         // 最短路的距离，和上一个点的边的下标
         int[] dist = new int[n], e = new int[n];
-        dijkstra(dist, e, source, destination);
+        dijkstra(dist, e, source, destination, mp1);
         // 终点可达且路径长度小于 target 则无法构成结果
         if (dist[destination] != INF) {
             if (dist[destination] < target) return new int[][]{};
             if (dist[destination] == target) return edges;
         }
         // -1 的边建图，并在计算过程中取最小值1。若结果小于等于target
-        i = 0;
-        for (int[] ed : edges) {
-            int a = ed[0], b = ed[1], w = ed[2];
-            if (w == INF) {
-                map.get(a).put(b, i);
-                map.get(b).put(a, i);
-            }
-            i++;
-        }
-        dijkstra(dist, e, source, destination);
+        dijkstra(dist, e, source, destination, mp2);
         // 若最短路路径大于 target 则无法修改得到目标
         if (dist[destination] != INF && dist[destination] > target) return new int[][]{};
         // 根据最短路的结果修改原图
@@ -60,19 +51,22 @@ public class Solution {
             int[] edge = edges[ei];
             cur = cur ^ edge[0] ^ edge[1];
         }
-        int tt = target - dist[destination];
         for (int i1 = 0; i1 < list.size(); i1++) {
             int ei = list.get(i1);
-            if (i1 == 0) {
-                edges[ei][2] = 1 + tt;
-            } else {
-                edges[ei][2] = 1;
+            // 改一次边，判断一次最短路
+            edges[ei][2] = 1;
+            mp1.get(edges[ei][0]).put(edges[ei][1], ei);
+            mp1.get(edges[ei][1]).put(edges[ei][0], ei);
+            dijkstra(dist, e, source, destination, mp1);
+            if (dist[destination] <= target) {
+                edges[ei][2] += target - dist[destination];
+                break;
             }
         }
         return edges;
     }
 
-    void dijkstra(int[] dist, int[] e, int source, int destination) {
+    void dijkstra(int[] dist, int[] e, int source, int destination, HashMap<Integer, HashMap<Integer, Integer>> map) {
         Arrays.fill(dist, INF);
         Arrays.fill(e, -1);
         dist[source] = 0;
