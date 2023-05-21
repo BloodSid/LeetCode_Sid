@@ -71,12 +71,13 @@ public class Solution {
         Arrays.fill(e, -1);
         dist[source] = 0;
         // {i, d, ei}
-        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
+        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> dist[o1[0]] != dist[o2[0]] ? dist[o1[0]] - dist[o2[0]] : o1[0] - o2[1]);
         pq.offer(new int[]{source, 0, -1});
+        int[][] node = new int[dist.length][];
+        node[source] = pq.peek();
         while (!pq.isEmpty()) {
             int[] p = pq.poll();
-            int cur = p[0], d = p[1], ei = p[2];
-            if (d > dist[cur]) continue;
+            int cur = p[0], ei = p[2];
             // 更新上一个节点
             e[cur] = ei;
             // 找到终点
@@ -84,10 +85,17 @@ public class Solution {
             for (Map.Entry<Integer, Integer> et : map.get(cur).entrySet()) {
                 int next = et.getKey(), nei = et.getValue();
                 // 将无限长的边取最小值
-                int nd = d + (edges[nei][2] == INF ? 1 : edges[nei][2]);
-                if (dist[next] > nd) {
+                int nd = dist[cur] + (edges[nei][2] == INF ? 1 : edges[nei][2]);
+                if (nd < dist[next]) {
                     dist[next] = nd;
-                    pq.offer(new int[]{next, nd, nei});
+                    if (node[next] != null) {
+                        // 如果next已经在二叉堆中,先删除
+                        pq.remove(node[next]);
+                        node[next][2] = nei;
+                    } else {
+                        node[next] = new int[]{next, 0, nei};
+                    }
+                    pq.offer(node[next]);
                 }
             }
         }
