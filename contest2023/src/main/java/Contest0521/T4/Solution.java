@@ -10,92 +10,72 @@ public class Solution {
 
     public static final int INF = (int) (1e9 + 7);
     private int[][] edges;
+    private int source, destination, target;
+    private int[][] dists;
 
     public int[][] modifiedGraphEdges(int n, int[][] edges, int source, int destination, int target) {
         this.edges = edges;
-        HashMap<Integer, HashMap<Integer, Integer>> mp1 = new HashMap<>();
-        HashMap<Integer, HashMap<Integer, Integer>> mp2 = new HashMap<>();
+        this.source = source;
+        this.destination = destination;
+        this.target = target;
+        // {v, ei}
+        List<int[]>[] map = new List[n];
         for (int i = 0; i < n; i++) {
-            mp1.put(i, new HashMap<>());
-            mp2.put(i, new HashMap<>());
+            map[i] = new ArrayList<>();
         }
         for (int i = 0; i < edges.length; i++) {
             int[] e = edges[i];
-            if (e[2] == -1) {
-                e[2] = INF;
-            } else {
-                // -1 的边不建图1
-                mp1.get(e[0]).put(e[1], i);
-                mp1.get(e[1]).put(e[0], i);
-            }
-            mp2.get(e[0]).put(e[1], i);
-            mp2.get(e[1]).put(e[0], i);
+            map[e[0]].add(new int[]{e[1], i});
+            map[e[1]].add(new int[]{e[0], i});
         }
-        // 最短路的距离，和上一个点的边的下标
-        int[] dist = new int[n], e = new int[n];
-        dijkstra(dist, e, source, destination, mp1);
-        // 终点可达且路径长度小于 target 则无法构成结果
-        if (dist[destination] != INF) {
-            if (dist[destination] < target) return new int[][]{};
-            if (dist[destination] == target) return edges;
-        }
-        // -1 的边建图，并在计算过程中取最小值1。若结果小于等于target
-        dijkstra(dist, e, source, destination, mp2);
+        dists = new int[2][n];
+        // -1 的边建图，并在计算过程中取最小值1
+        dijkstra(0, map);
         // 若最短路路径大于 target 则无法修改得到目标
-        if (dist[destination] != INF && dist[destination] > target) return new int[][]{};
+        if (dists[0][destination] > target) return new int[][]{};
         // 根据最短路的结果修改原图
-        List<Integer> list = new ArrayList<>();
-        for (int cur = destination; cur != source; ) {
-            int ei = e[cur];
-            if (edges[ei][2] == INF) list.add(ei);
-            int[] edge = edges[ei];
-            cur = cur ^ edge[0] ^ edge[1];
-        }
-        for (int i1 = 0; i1 < list.size(); i1++) {
-            int ei = list.get(i1);
-            // 改一次边，判断一次最短路
-            edges[ei][2] = 1;
-            mp1.get(edges[ei][0]).put(edges[ei][1], ei);
-            mp1.get(edges[ei][1]).put(edges[ei][0], ei);
-            dijkstra(dist, e, source, destination, mp1);
-            if (dist[destination] <= target) {
-                edges[ei][2] += target - dist[destination];
-                break;
-            }
+        dijkstra(1, map);
+        // 若修改后的图最短路小于 target 则无法修改得到目标，这种情况见于本来的不包括-1的图的最短路就已经小于target
+        if (dists[1][destination] < target) return new int[][]{};
+        // 未修改的边赋很大的值
+        for (int[] edge : edges) {
+            if (edge[2] == -1) edge[2] = INF;
         }
         return edges;
     }
 
-    void dijkstra(int[] dist, int[] e, int source, int destination, HashMap<Integer, HashMap<Integer, Integer>> map) {
+    void dijkstra(int di, List<int[]>[] map) {
+        int[] dist = dists[di];
         Arrays.fill(dist, INF);
-        Arrays.fill(e, -1);
         dist[source] = 0;
-        // {i, d, ei}
-        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> dist[o1[0]] != dist[o2[0]] ? dist[o1[0]] - dist[o2[0]] : o1[0] - o2[1]);
-        pq.offer(new int[]{source, 0, -1});
-        int[][] node = new int[dist.length][];
-        node[source] = pq.peek();
+        // {i, d}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
+        pq.offer(new int[]{source, 0});
         while (!pq.isEmpty()) {
             int[] p = pq.poll();
-            int cur = p[0], ei = p[2];
-            // 更新上一个节点
-            e[cur] = ei;
+            int cur = p[0], d = p[1];
+            if (d > dist[cur]) continue;
+            dist[cur] = d;
             // 找到终点
             if (cur == destination) return;
-            for (Map.Entry<Integer, Integer> et : map.get(cur).entrySet()) {
-                int next = et.getKey(), nei = et.getValue();
-                // 将无限长的边取最小值
-                int nd = dist[cur] + (edges[nei][2] == INF ? 1 : edges[nei][2]);
-                if (nd < dist[next]) {
-                    dist[next] = nd;
-                    if (node[next] != null) {
-                        // 如果next已经在二叉堆中,先删除
-                        pq.remove(node[next]);
-                        node[next][2] = nei;
-                    } else {
-                        node[next] = new int[]{next, 0, nei};
+            for (int[] t : map[cur]) {
+                int next = t[0], ei = t[1];
+                int nd;
+                if (di == 0) {
+                    // 第一遍最短路把-1边取最小值1进行计算
+                    nd = d + (edges[ei][2] == -1 ? 1 : edges[ei][2]);
+                } else {
+                    // 第二遍最短路中根据 d1,u + w + (d0,e - d0,v) = target 确定-1边的边权w，其中u，v是边的两个顶点，e是终点
+                    if (edges[ei][2] == -1) {
+                        int w = target - dists[1][cur] - dists[0][destination] + dists[0][next];
+                        // 只能改大，且最小值为1
+                        edges[ei][2] = Math.max(edges[ei][2],  Math.max(w, 1));
                     }
-                    pq.offer(node[next]);
+                    nd = d + edges[ei][2];
+                }
+                if (dist[next] > nd) {
+                    dist[next] = nd;
+                    pq.offer(new int[]{next, nd});
                 }
             }
         }
