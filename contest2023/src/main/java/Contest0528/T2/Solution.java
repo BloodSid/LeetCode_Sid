@@ -10,27 +10,18 @@ public class Solution {
     public int[][] differenceOfDistinctValues(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        int[][] tl = new int[m][n], br = new int[m][n];
-        for (int k = 0; k < m + n - 1; k++) {
-            int i = Math.max(0, k - n + 1), j = Math.max(0, n - k - 1);
-            HashSet<Integer> set = new HashSet<>();
-            for (; i < m && j < n; i++, j++) {
-                tl[i][j] = set.size();
-                set.add(grid[i][j]);
-            }
-        }
-        for (int k = 0; k < m + n - 1; k++) {
-            HashSet<Integer> set = new HashSet<>();
-            int i = Math.min(m - 1, k), j = Math.min(n - 1, m + n - 2 - k);
-            for (; i >= 0 && j >= 0; i--, j--) {
-                br[i][j] = set.size();
-                set.add(grid[i][j]);
-            }
-        }
         int[][] ans = new int[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                ans[i][j] = Math.abs(tl[i][j] - br[i][j]);
+                HashSet<Integer> s1 = new HashSet<>();
+                for (int i1 = i - 1, j1 = j - 1; i1 >= 0 && j1 >= 0; i1--, j1--) {
+                    s1.add(grid[i1][j1]);
+                }
+                HashSet<Integer> s2 = new HashSet<>();
+                for (int i1 = i + 1, j1 = j + 1; i1 < m && j1 < n; i1++, j1++) {
+                    s2.add(grid[i1][j1]);
+                }
+                ans[i][j] = Math.abs(s1.size() - s2.size());
             }
         }
         return ans;
