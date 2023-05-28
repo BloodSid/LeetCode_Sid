@@ -48,6 +48,9 @@ package leetcode.editor.cn;
 // 👍 136 👎 0
 
 
+import java.util.Arrays;
+import java.util.TreeSet;
+
 /**
  * 有序矩阵中的第 k 个最小数组和
  *
@@ -59,43 +62,29 @@ public class FindTheKthSmallestSumOfAMatrixWithSortedRowsSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    private int[][] mat;
-    private int m;
-    private int n;
-
     public int kthSmallest(int[][] mat, int k) {
-        this.mat = mat;
-        m = mat.length;
-        n = mat[0].length;
-        int l = 0, r = 0;
+        int m = mat.length;
+        int n = mat[0].length;
+        // 存储每一行的指针与当前取法的数组和
+        TreeSet<int[]> pq = new TreeSet<>((a, b) ->
+                a[m] != b[m] ? a[m] - b[m] : Arrays.toString(a).compareTo(Arrays.toString(b)));
+        int[] start = new int[m + 1];
         for (int i = 0; i < m; i++) {
-            l += mat[i][0];
-            r += mat[i][n - 1];
+            start[m] += mat[i][0];
         }
-        // 对答案进行二分
-        while (l <= r) {
-            int mid = l + r >> 1;
-            if (countLower(0, 0, mid) >= k) {
-                r = mid - 1;
-            } else {
-                l = mid + 1;
-            }
-        }
-        return r;
-    }
-
-    // 计算mat中每一行选一个元素构成的数组中，数组和小于 target 的数组有多少
-    int countLower(int i, int sum, int target) {
-        // 递归终点
-        if (i == m) {
-            return 1;
-        }
+        pq.add(start);
         int ans = 0;
-        // 每一行选一个
-        for (int j = 0; j < n; j++) {
-            // 剪枝
-            if (mat[i][j] >= target - sum) break;
-            ans += countLower(i + 1, sum + mat[i][j], target);
+        for (int t = 0; t < k; t++) {
+            int[] p = pq.pollFirst();
+            ans = p[m];
+            // 枚举恰有一行的指针加一的取法
+            for (int i = 0; i < m; i++) {
+                if (p[i] == n - 1) continue;
+                int[] next = p.clone();
+                next[m] += mat[i][next[i] + 1] - mat[i][next[i]];
+                next[i]++;
+                pq.add(next);
+            }
         }
         return ans;
     }
