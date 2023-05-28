@@ -85,6 +85,10 @@ class Solution {
                 next[i]++;
                 pq.add(next);
             }
+            // 去除太大的数组和（可能不严谨，对于两个相等的数组和不能确定去除的是哪个，去除任意一个都有可能会遗漏一些取法）
+            for (int size = pq.size(); size > k; size--) {
+                pq.pollLast();
+            }
         }
         return ans;
     }
