@@ -1,7 +1,7 @@
 package Round875.D;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /**
@@ -25,19 +25,24 @@ public class Main {
         int[] a = new int[n], b = new int[n];
         for (int i = 0; i < n; i++) a[i] = sc.nextInt();
         for (int i = 0; i < n; i++) b[i] = sc.nextInt();
-        int minBi = n + 1, maxBi = 0;
-        HashMap<String, Integer> map = new HashMap<>();
+        Integer[] idx = new Integer[n];
+        for (int i = 0; i < n; i++) idx[i] = i;
+        Arrays.sort(idx, (o1, o2) -> a[o1] - a[o2]);
+        // 枚举 ai 的值域
         long ans = 0;
-        for (int j = 0; j < n; j++) {
-            // 计算 ai 的范围
-            int low = Math.max(1, (b[j] + minBi + a[j] - 1) / a[j]), high = Math.min(n, (b[j] + maxBi) / a[j]);
-            for (int ai = low; ai <= high; ai++) {
-                int bi = ai * a[j] - b[j];
-                ans += map.getOrDefault(ai + " " + bi, 0);
+        for (int ai = 1; ai * ai <= 2 * n; ai++) {
+            // 统计a的值等于ai的数对中b的频率
+            int[] cnt = new int[n + 1];
+            for (Integer j : idx) {
+                // 满足等式的b的值为v
+                int v = ai * a[j] - b[j];
+                if (v >= 1 && v <= n) {
+                    ans += cnt[v];
+                }
+                if (a[j] == ai) {
+                    cnt[b[j]]++;
+                }
             }
-            map.merge(a[j] + " " + b[j], 1, Integer::sum);
-            maxBi = Math.max(maxBi, b[j]);
-            minBi = Math.min(minBi, b[j]);
         }
         sc.println(ans);
     }
