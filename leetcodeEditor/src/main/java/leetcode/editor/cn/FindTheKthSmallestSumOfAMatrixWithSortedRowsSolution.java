@@ -48,6 +48,9 @@ package leetcode.editor.cn;
 // 👍 136 👎 0
 
 
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
 /**
  * 有序矩阵中的第 k 个最小数组和
  *
@@ -59,48 +62,36 @@ public class FindTheKthSmallestSumOfAMatrixWithSortedRowsSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    private int[][] mat;
-    private int m, n, k;
-    private int cnt;
-
     public int kthSmallest(int[][] mat, int k) {
-        this.mat = mat;
-        m = mat.length;
-        n = mat[0].length;
-        this.k = k;
-        int min = 0, r = 0;
-        for (int i = 0; i < m; i++) {
-            min += mat[i][0];
-            r += mat[i][n - 1];
+        int[] res = mat[0];
+        for (int i = 1; i < mat.length; i++) {
+            res = kSmallestPairs(res, mat[i], k);
         }
-        int l = min;
-        // 对答案进行二分
-        while (l <= r) {
-            int mid = l + r >> 1;
-            cnt = 0;
-            // 这样搜索，相当于未递归到的行都已经先取了第一个元素，所以一旦之后的行都取最小也不能小于目标值，就立马剪枝了
-            if (dfs(0, mid - min)) {
-                r = mid - 1;
-            } else {
-                l = mid + 1;
-            }
-        }
-        return l;
+        return res[k - 1];
     }
 
-    // 计算是否可以找到k个小于等于target的数组
-    boolean dfs(int i, int target) {
-        if (i == m) {
-            cnt++;
-            return cnt >= k;
+    // 373. 查找和最小的 K 对数字
+    public int[] kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        int len1 = nums1.length, len2 = nums2.length;
+        int size = (int) Math.min((long) len1 * len2, k);
+        int[] ans = new int[size];
+        // {i1, i2, sum}
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> (a[2] - b[2]));
+        pq.offer(new int[]{0, 0, nums1[0] + nums2[0]});
+        for (int i = 0; i < size; i++) {
+            int[] p = pq.poll();
+            int i1 = p[0], i2 = p[1];
+            ans[i] = p[2];
+            // 通过规定顺序避免重复访问
+            if (i1 == 0 && i2 < len2 - 1) {
+                pq.offer(new int[]{i1, i2 + 1, nums1[i1] + nums2[i2 + 1]});
+            }
+            if (i1 < len1 - 1) {
+                pq.offer(new int[]{i1 + 1, i2, nums1[i1 + 1] + nums2[i2]});
+            }
         }
-        for (int x : mat[i]) {
-            // 后面的元素更大，剪枝
-            if (x - mat[i][0] > target) break;
-            // 凡是进入的分支，一定可以一直搜索到 i=m 的终点。计算过程可以看作在一棵高m，有k个叶子节点的搜索树上遍历，时间复杂度O(mk)
-            if (dfs(i + 1, target - x + mat[i][0])) return true;
-        }
-        return false;
+        System.out.println("ans = " + Arrays.toString(ans));
+        return ans;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
