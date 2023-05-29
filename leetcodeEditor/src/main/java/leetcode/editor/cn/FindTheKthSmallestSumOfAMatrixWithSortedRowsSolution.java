@@ -48,10 +48,6 @@ package leetcode.editor.cn;
 // 👍 136 👎 0
 
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 /**
  * 有序矩阵中的第 k 个最小数组和
  *
@@ -63,21 +59,48 @@ public class FindTheKthSmallestSumOfAMatrixWithSortedRowsSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+    private int[][] mat;
+    private int m, n, k;
+    private int cnt;
+
     public int kthSmallest(int[][] mat, int k) {
-        List<Integer> list = new ArrayList<>();
-        list.add(0);
-        for (int[] line : mat) {
-            List<Integer> next = new ArrayList<>();
-            for (int i : line) {
-                for (int j : list) {
-                    next.add(i + j);
-                }
-            }
-            next.sort(Comparator.naturalOrder());
-            // 只保留最小的k个
-            list = next.subList(0, Math.min(k, next.size()));
+        this.mat = mat;
+        m = mat.length;
+        n = mat[0].length;
+        this.k = k;
+        int min = 0, r = 0;
+        for (int i = 0; i < m; i++) {
+            min += mat[i][0];
+            r += mat[i][n - 1];
         }
-        return list.get(k - 1);
+        int l = min;
+        // 对答案进行二分
+        while (l <= r) {
+            int mid = l + r >> 1;
+            cnt = 0;
+            // 这样搜索，相当于未递归到的行都已经先取了第一个元素，所以一旦之后的行都取最小也不能小于目标值，就立马剪枝了
+            if (dfs(0, mid - min)) {
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    }
+
+    // 计算是否可以找到k个小于等于target的数组
+    boolean dfs(int i, int target) {
+        if (i == m) {
+            cnt++;
+            return cnt >= k;
+        }
+        for (int x : mat[i]) {
+            // 后面的元素更大，剪枝
+            if (x - mat[i][0] > target) break;
+            // 凡是进入的分支，一定可以一直搜索到 i=m 的终点。计算过程可以看作在一棵高m，有k个叶子节点的搜索树上遍历，时间复杂度O(mk)
+            if (dfs(i + 1, target - x + mat[i][0])) return true;
+        }
+        return false;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
