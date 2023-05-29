@@ -48,8 +48,9 @@ package leetcode.editor.cn;
 // 👍 136 👎 0
 
 
-import java.util.Arrays;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * 有序矩阵中的第 k 个最小数组和
@@ -63,34 +64,20 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int kthSmallest(int[][] mat, int k) {
-        int m = mat.length;
-        int n = mat[0].length;
-        // 存储每一行的指针与当前取法的数组和
-        TreeSet<int[]> pq = new TreeSet<>((a, b) ->
-                a[m] != b[m] ? a[m] - b[m] : Arrays.toString(a).compareTo(Arrays.toString(b)));
-        int[] start = new int[m + 1];
-        for (int i = 0; i < m; i++) {
-            start[m] += mat[i][0];
-        }
-        pq.add(start);
-        int ans = 0;
-        for (int t = 0; t < k; t++) {
-            int[] p = pq.pollFirst();
-            ans = p[m];
-            // 枚举恰有一行的指针加一的取法
-            for (int i = 0; i < m; i++) {
-                if (p[i] == n - 1) continue;
-                int[] next = p.clone();
-                next[m] += mat[i][next[i] + 1] - mat[i][next[i]];
-                next[i]++;
-                pq.add(next);
+        List<Integer> list = new ArrayList<>();
+        list.add(0);
+        for (int[] line : mat) {
+            List<Integer> next = new ArrayList<>();
+            for (int i : line) {
+                for (int j : list) {
+                    next.add(i + j);
+                }
             }
-            // 去除太大的数组和（可能不严谨，对于两个相等的数组和不能确定去除的是哪个，去除任意一个都有可能会遗漏一些取法）
-            for (int size = pq.size(); size > k; size--) {
-                pq.pollLast();
-            }
+            next.sort(Comparator.naturalOrder());
+            // 只保留最小的k个
+            list = next.subList(0, Math.min(k, next.size()));
         }
-        return ans;
+        return list.get(k - 1);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
