@@ -73,32 +73,20 @@ class Solution {
                 r = mid - 1;
             }
         }
-        return l;
+        return r;
     }
 
     // 在递增数组a中计算相邻元素之差大于等于d的最长子序列
     private int maxBox(int[] a, int d) {
-        int n = a.length;
-        int max = 0;
-        int[] dp = new int[n + 1];
-        for (int i = 0; i < n; i++) {
-            dp[i + 1] = dp[lowerBound(a, a[i] - d)] + 1;
-            max = Math.max(max, dp[i + 1]);
-        }
-        return max;
-    }
-
-    int lowerBound(int[] a, int t) {
-        int l = 0, r = a.length - 1;
-        while (l <= r) {
-            int mid = l + r >>> 1;
-            if (a[mid] >= t) {
-                r = mid - 1;
-            } else {
-                l = mid + 1;
+        // 贪心
+        int cnt = 1;
+        for (int i = 1, pre = a[0]; i < a.length; i++) {
+            if (a[i] >= pre + d) {
+                cnt++;
+                pre = a[i];
             }
         }
-        return l;
+        return cnt;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
