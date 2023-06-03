@@ -51,9 +51,8 @@ public class Main {
                     t++;
                 }
             }
-            StringBuilder sb = new StringBuilder();
-            p.forEach(o -> sb.append(o).append(' '));
-            sc.println(sb);
+            p.forEach(o -> {sc.print(o); sc.print(' ');});
+            sc.println();
         }
     }
 
