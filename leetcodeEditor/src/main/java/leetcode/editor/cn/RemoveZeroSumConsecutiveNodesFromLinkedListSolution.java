@@ -42,6 +42,8 @@ package leetcode.editor.cn;
 
 import linkedList.ListNode;
 
+import java.util.HashMap;
+
 /**
  * 从链表中删去总和值为零的连续节点
  *
@@ -54,19 +56,18 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public ListNode removeZeroSumSublists(ListNode head) {
-        ListNode preHead = new ListNode(-1, head);
-        for (ListNode cur = head, pre = preHead; cur != null; cur = cur.next) {
-            int sum = 0;
-            for (ListNode t = cur; t != null; t = t.next) {
-                sum += t.val;
-                if (sum == 0) {
-                    pre.next = t.next;
-                    // 删除后一段后，这个位置新的节点仍有可能被删除
-                    cur = pre;
-                    break;
-                }
-            }
-            pre = cur;
+        ListNode preHead = new ListNode(0, head);
+        // 用哈希表保存前缀和对应的最后一个节点，前缀和相等的节点之间的链表可以删除
+        HashMap<Integer, ListNode> vis = new HashMap<>();
+        int t = 0;
+        for (ListNode cur = preHead; cur != null; cur = cur.next) {
+            t += cur.val;
+            vis.put(t, cur);
+        }
+        t = 0;
+        for (ListNode cur = preHead; cur != null; cur = cur.next) {
+            t += cur.val;
+            cur.next = vis.get(t).next;
         }
         return preHead.next;
     }
