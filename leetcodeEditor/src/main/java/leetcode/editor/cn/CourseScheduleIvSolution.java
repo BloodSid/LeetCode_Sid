@@ -88,15 +88,30 @@ static
 class Solution {
     public List<Boolean> checkIfPrerequisite(int n, int[][] prerequisites, int[][] queries) {
         boolean[][] map = new boolean[n][n];
+        int[] inCnt = new int[n];
         for (int[] p : prerequisites) {
             int from = p[0], to = p[1];
+            inCnt[to]++;
             map[from][to] = true;
         }
-        // 多源最短路
-        for (int k = 0; k < n; k++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    map[i][j] = map[i][j] || map[i][k] && map[k][j];
+        // 拓扑排序
+        Queue<Integer> q = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            if (inCnt[i] == 0) q.offer(i);
+        }
+        while (!q.isEmpty()) {
+            int p = q.poll();
+            for (int next = 0; next < n; next++) {
+                if (map[p][next]) {
+                    for (int pre = 0; pre < n; pre++) {
+                        if (map[pre][p]) {
+                            map[pre][next] = true;
+                        }
+                    }
+                    inCnt[next]--;
+                    if (inCnt[next] == 0) {
+                        q.offer(next);
+                    }
                 }
             }
         }
