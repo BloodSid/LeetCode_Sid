@@ -65,21 +65,15 @@ class Solution {
         Arrays.sort(courses, (a, b) -> a[1] - b[1]);
         // 记录选用了的课的完成时间
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
-        // 时间
+        // 完成所有选中课程的时间
         int end = 0;
         for (int[] c : courses) {
             int d = c[0], l = c[1];
-            if (end + d > l) {
-                if (!pq.isEmpty() && pq.peek() > d) {
-                    // 反悔之前的一个课程，用时间更短的这个和它替换
-                    int p = pq.poll();
-                    end = end + d - p;
-                    pq.offer(d);
-                }
-            } else {
-                end += d;
-                pq.offer(d);
-            }
+            end += d;
+            pq.offer(d);
+            // 反悔，把刚选的课程舍去或者把时间更长的课程舍去，
+            // l(i-1) <= l(i), end 在这次选择前是小于等于 l(i-1) 的，所以舍去一个课程之后必满足 end <= l(i), 是符合条件的选法
+            if (end > l) end -= pq.poll();
         }
         return pq.size();
     }
