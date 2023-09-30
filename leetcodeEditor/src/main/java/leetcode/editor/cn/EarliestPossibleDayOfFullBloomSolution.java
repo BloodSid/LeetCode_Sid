@@ -77,8 +77,8 @@ class Solution {
         for (int i = 0; i < n; i++) {
             idx[i] = i;
         }
-        // 生长时间长的先种，种植时间长的后种
-        Arrays.sort(idx, (a, b) -> growTime[b] != growTime[a] ? growTime[b] - growTime[a] : plantTime[a] - plantTime[b]);
+        // 生长时间长的先种
+        Arrays.sort(idx, (a, b) -> growTime[b] - growTime[a]);
         int max = 0;
         int pt = 0;
         for (Integer i : idx) {
