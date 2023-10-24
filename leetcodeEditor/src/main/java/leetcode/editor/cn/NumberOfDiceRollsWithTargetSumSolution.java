@@ -44,8 +44,6 @@ package leetcode.editor.cn;
 // 👍 234 👎 0
 
 
-import java.util.*;
-
 /**
  * 掷骰子等于目标和的方法数
  *
@@ -59,32 +57,20 @@ static
 class Solution {
 
     public static final int M = (int) (1e9 + 7);
-    private int k;
-    private int target;
-    private HashMap<Integer, Integer> cache;
 
     public int numRollsToTarget(int n, int k, int target) {
-        this.k = k;
-        this.target = target;
-        cache = new HashMap<>();
-        return dfs(n, target);
-    }
-
-    // a 次数， b 目标值
-    int dfs(int a, int b) {
-        if (a == 1) {
-            return b >= 1 && b <= k ? 1 : 0;
-        }
-        return cache.computeIfAbsent(a * target + b - 1, key -> {
-            int ta = key / target;
-            int tb = key % target + 1;
-            // 枚举第ta次大小不同的情况
-            long sum = 0;
-            for (int i = 1; i <= k; i++) {
-                sum += dfs(ta - 1, tb - i);
+        int[][] dp = new int[n + 1][target + 1];
+        dp[0][0] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= target; j++) {
+                long sum = 0;
+                for (int ki = 1; ki <= k; ki++) {
+                    if (j - ki >= 0) sum += dp[i - 1][j - ki];
+                }
+                dp[i][j] = (int) (sum % M);
             }
-            return (int) (sum % M);
-        });
+        }
+        return dp[n][target];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
