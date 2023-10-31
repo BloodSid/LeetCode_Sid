@@ -105,9 +105,10 @@ class Solution {
         // 从基因值1的节点开始，逐个向上遍历结点
         boolean[] vis = new boolean[n];
         HashSet<Integer> gene = new HashSet<>();
+        // 若错把re的赋值写在下面循环内部，则造成时间复杂度变成O(n^2)
+        int re = 1;
         for (; node != -1; node = parents[node]) {
             dfs(node, vis, gene);
-            int re = 1;
             while (re <= n && gene.contains(re)) re++;
             res[node] = re;
         }
