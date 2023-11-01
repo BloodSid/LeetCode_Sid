@@ -44,12 +44,14 @@ package leetcode.editor.cn;
 // 👍 234 👎 0
 
 
+import java.util.*;
+
 /**
  * 掷骰子等于目标和的方法数
  *
  * @author IronSid
  * @version 1.0
- * @since 2023-10-24 17:14:48 
+ * @since 2023-10-24 17:14:48
  */
 public class NumberOfDiceRollsWithTargetSumSolution {
 static
@@ -57,20 +59,36 @@ static
 class Solution {
 
     public static final int M = (int) (1e9 + 7);
+    private int k;
+    private int target;
+    private HashMap<Integer, Integer> cache;
 
     public int numRollsToTarget(int n, int k, int target) {
-        int[][] dp = new int[n + 1][target + 1];
-        dp[0][0] = 1;
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= target; j++) {
-                long sum = 0;
-                for (int ki = 1; ki <= k; ki++) {
-                    if (j - ki >= 0) sum += dp[i - 1][j - ki];
-                }
-                dp[i][j] = (int) (sum % M);
-            }
+        this.k = k;
+        this.target = target;
+        cache = new HashMap<>();
+        return dfs(n, target);
+    }
+
+    // a 次数， b 目标值
+    int dfs(int a, int b) {
+        if (a == 1) {
+            return b >= 1 && b <= k ? 1 : 0;
         }
-        return dp[n][target];
+        // 必须有这一步剪枝，否则会 StackOverFlow
+        if (b < a || b > a * k) return 0;
+        int key = a * target + b - 1;
+        if (cache.containsKey(key)) return cache.get(key);
+        int ta = key / target;
+        int tb = key % target + 1;
+        // 枚举第ta次大小不同的情况
+        long sum = 0;
+        for (int i = 1; i <= k; i++) {
+            sum += dfs(ta - 1, tb - i);
+        }
+        int value = (int) (sum % M);
+        cache.put(key, value);
+        return value;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
