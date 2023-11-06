@@ -13,27 +13,24 @@ public class MaximumProductOfWordLengthsSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int maxProduct(String[] words) {
-        int[][] cnt = new int[words.length][26];
-        for (int i = 0; i < words.length; i++) {
-            for (int i1 = 0; i1 < words[i].length(); i1++) {
-                cnt[i][words[i].charAt(i1) - 'a']++;
+        // 用26bit表示词频
+        HashMap<Integer, Integer> f = new HashMap<>();
+        for (String word : words) {
+            int bits = 0;
+            for (char c : word.toCharArray()) {
+                bits |= 1 << (c & 31);
+            }
+            // 记录词频对应的最大长度
+            f.merge(bits, word.length(), Math::max);
+        }
+        int max = 0;
+        Integer[] b = f.keySet().toArray(new Integer[0]);
+        for (int i = 0; i < b.length; i++) {
+            for (int j = i + 1; j < b.length; j++) {
+                if ((b[i] & b[j]) == 0) max = Math.max(max, f.get(b[i]) * f.get(b[j]));
             }
         }
-        int maxProduct = 0;
-        for (int i = 0; i < words.length; i++) {
-            for (int j = i + 1; j < words.length; j++) {
-                int k = 0;
-                for (; k < 26; k++) {
-                    if (cnt[i][k] != 0 && cnt[j][k] != 0) {
-                        break;
-                    }
-                }
-                if (k == 26) {
-                    maxProduct = Math.max(maxProduct, words[i].length() * words[j].length());
-                }
-            }
-        }
-        return maxProduct;
+        return max;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
