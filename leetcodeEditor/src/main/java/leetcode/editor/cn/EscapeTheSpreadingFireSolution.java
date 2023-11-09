@@ -69,8 +69,7 @@ package leetcode.editor.cn;
 
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * 逃离火灾
@@ -85,70 +84,70 @@ static
 class Solution {
 
     public static final int[][] DIRS = new int[][]{{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    public static final int INF = (int) (1e9 + 7);
     private int m;
     private int n;
 
     public int maximumMinutes(int[][] grid) {
-        List<int[]> fire = new ArrayList<>();
+        ArrayDeque<int[]> q = new ArrayDeque<>();
         m = grid.length;
         n = grid[0].length;
+        // g[x][y] 0 表示一开始着火，正数表示着火时间，-2 表示墙, INF 表示空地
+        int[][] g = new int[m][n];
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1) fire.add(new int[]{i, j});
+                if (grid[i][j] == 1) {
+                    q.offer(new int[]{i, j});
+                    g[i][j] = 0;
+                }
+                else if (grid[i][j] == 2) g[i][j] = -2;
+                else if (grid[i][j] == 0) g[i][j] = INF;
             }
         }
-        // g[t,x,y] 时间为t时，x,y 格子的状态
-        List<int[][]> g = new ArrayList<>();
-        g.add(grid);
-        ArrayDeque<int[]> q = new ArrayDeque<>(fire);
         // 预处理时间-燃烧点图
-        while (!q.isEmpty()) {
-            int[][] gi = g.get(g.size() - 1);
-            int[][] ngi = new int[m][];
-            for (int i = 0; i < m; i++) ngi[i] = gi[i].clone();
-            for (int size = q.size(); size > 0; size--) {
+        int time = 1;
+        for (; !q.isEmpty(); time++) {
+            for (int sz = q.size(); sz > 0; sz--) {
                 int[] p = q.poll();
                 int x = p[0], y = p[1];
                 for (int[] dir : DIRS) {
                     int nx = x + dir[0], ny = y + dir[1];
                     if (nx < 0 || ny < 0 || nx >= m || ny >= n) continue;
-                    if (ngi[nx][ny] == 0) {
-                        ngi[nx][ny] = 1;
+                    if (g[nx][ny] == INF) {
+                        g[nx][ny] = time;
                         q.offer(new int[]{nx, ny});
                     }
                 }
-
             }
-            g.add(ngi);
         }
-        int l = 0, r = g.size();
+        for (int i = 0; i < g.length; i++) {
+            System.out.println(Arrays.toString(g[i]));
+        }
+        int l = 0, r = time;
         // 二分停留时间，然后进行bfs
         while (l <= r) {
             int mid = l + r >> 1;
             q = new ArrayDeque<>();
             q.offer(new int[]{0, 0});
             boolean[][] vis = new boolean[m][n];
-            int t = mid + 1;
             boolean safe = false;
             loop:
-            for (; !q.isEmpty(); t++)
+            for (int t = mid + 1; !q.isEmpty(); t++)
                 for (int sz = q.size(); sz > 0; sz--) {
                     int[] p = q.poll();
                     int x = p[0], y = p[1];
-                    // 在超过 len(g) 的时间后，火不再蔓延
-                    int[][] gi = g.get(Math.min(t, g.size() - 1));
                     // 判断下一时刻周围有哪些格子可走
                     for (int[] dir : DIRS) {
                         int nx = x + dir[0], ny = y + dir[1];
                         if (nx < 0 || ny < 0 || nx >= m || ny >= n) continue;
                         if (vis[nx][ny]) continue;
                         // 到达安全屋后，火马上到了安全屋，视为能够安全到达安全屋。虽然下一时刻安全屋可以着火，但是当前必须不能着火
-                        if (nx == m - 1 && ny == n - 1 && g.get(Math.min(t - 1, g.size() - 1))[nx][ny] == 0) {
+                        if (nx == m - 1 && ny == n - 1 && g[nx][ny] >= t) {
                             safe = true;
                             break loop;
                         }
                         // 下一时刻不着火的格子可走
-                        if (gi[nx][ny] == 0) {
+                        if (g[nx][ny] > t) {
                             vis[nx][ny] = true;
                             q.offer(new int[]{nx, ny});
                         }
@@ -160,7 +159,7 @@ class Solution {
                 r = mid - 1;
             }
         }
-        return r < g.size() ? r : (int) 1e9;
+        return r < time ? r : (int) 1e9;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
