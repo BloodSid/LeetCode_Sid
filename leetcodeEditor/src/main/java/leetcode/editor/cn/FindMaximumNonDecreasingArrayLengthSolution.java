@@ -52,8 +52,6 @@ package leetcode.editor.cn;
 // 👍 8 👎 0
 
 
-import java.util.Arrays;
-
 /**
  * 找到最大非递减数组的长度
  *
@@ -67,30 +65,34 @@ static
 class Solution {
     public int findMaximumLength(int[] nums) {
         int n = nums.length;
-        long[] sum = new long[n + 1];
-        for (int i = 0; i < n; i++) sum[i + 1] = sum[i] + nums[i];
+        long[] s = new long[n + 1];
+        for (int i = 0; i < n; i++) s[i + 1] = s[i] + nums[i];
+        // f[i] 表示操作nums[0:i]所得到的最长非递减数组的长度。f 是单调递增的，找到最大的j就找到最大的f[j]
         int[] f = new int[n + 1];
-        int[] pre = new int[n + 2];
-        int j = 0;
+        // last[i] 表示在 f[i]尽量大的前提下，nums[0:i]操作后的最后一个数的最小值
+        long[] last = new long[n + 1];
+        // 设j是i的转移来源，则满足条件 s[i] - s[j] >= last[j]，变形得 s[i] >= last[j] + s[j]
+        // 用单调队列来维护 last[j] + s[j] 保证队列中 j 和 last[j] + s[j] 都是单调增的
+        int[] q = new int[n + 1];
+        // 队列初始化长度1
+        int head = 0, tail = 0;
         for (int i = 1; i <= n; i++) {
-            // pre[i] 可能因为没有直接转移到的状态所以此时是0，这时采用pre[i-1] 的值。j 是单调增的。
-            j = Math.max(j, pre[i]);
-            // 贪心，从最近的前一个元素转移过来，因为 f 是单调增的，所以必然取得最大值
-            f[i] = f[j] + 1;
-            // 找到 k, 使得不等式成立且k 最小 sum[i] - sum[j] <= sum[k] - sum[i]
-            int l = i + 1, r = n;
-            while (l <= r) {
-                int mid = l + r >> 1;
-                if (sum[mid] < sum[i] * 2 - sum[j]) {
-                    l = mid + 1;
-                } else {
-                    r = mid - 1;
-                }
+            // 去掉队首无用数据（计算转移时直接取队尾）：如果队首第二个元素满足不等式，说明第一个元素可以去掉
+            while (head < tail && s[q[head + 1]] + last[q[head + 1]] <= s[i]) {
+                head++;
             }
-            int k = l;
-            pre[k] = i;
+            // 计算转移
+            f[i] = f[q[head]] + 1;
+            last[i] = s[i] - s[q[head]];
+            // 去掉队尾无用数据。设有两个转移来源 j1 < j2, 且 s[j1]+last[j1]>=s[j2]+last[j2],
+            // 如果能从 f[j1] 转移到 f[i] 那么从 f[j2] 也能，且 f[j2] >= f[j1], j1 可以不再考虑，即队列尾部大于当前元素的去除
+            while (head <= tail && s[q[tail]] + last[q[tail]]  >= s[i] + last[i]) {
+                tail--;
+            }
+            q[++tail] = i;
         }
         return f[n];
+
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
