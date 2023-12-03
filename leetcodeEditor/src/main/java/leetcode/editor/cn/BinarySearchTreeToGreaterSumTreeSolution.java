@@ -58,27 +58,18 @@ public class BinarySearchTreeToGreaterSumTreeSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-
-    private int sum;
-
     public TreeNode bstToGst(TreeNode root) {
-        sum = dfs1(root);
-        dfs2(root);
+        dfs2(root, 0);
         return root;
     }
 
-    void dfs2(TreeNode node) {
-        if (node == null) return;
-        dfs2(node.left);
-        int v = node.val;
+    int dfs2(TreeNode node, int sum) {
+        if (node == null) return sum;
+        sum = dfs2(node.right, sum);
+        sum += node.val;
         node.val = sum;
-        sum -= v;
-        dfs2(node.right);
-    }
-
-    int dfs1(TreeNode node) {
-        if (node == null) return 0;
-        return node.val + dfs1(node.left) + dfs1(node.right);
+        sum = dfs2(node.left, sum);
+        return sum;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
