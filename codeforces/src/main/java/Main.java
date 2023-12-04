@@ -36,9 +36,9 @@ public class Main {
         }
 
         // 用字符串做输入，标准输出
-        public Kattio(String bytes) {
+        public Kattio(String s) {
             super(System.out);
-            r = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes.getBytes())));
+            r = new BufferedReader(new StringReader(s));
         }
 
         // 文件 IO
