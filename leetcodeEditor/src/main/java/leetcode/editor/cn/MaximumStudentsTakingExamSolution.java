@@ -59,6 +59,8 @@ package leetcode.editor.cn;
 // 👍 174 👎 0
 
 
+import java.util.Arrays;
+
 /**
  * 参加考试的最大学生数
  *
@@ -70,43 +72,58 @@ public class MaximumStudentsTakingExamSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public static final int[][] DIRS = new int[][]{{-1, -1}, {0, -1}, {-1, 1}, {1, 1}};
-    private char[][] seats;
-    private int max;
     private int m;
     private int n;
+    private int[][] memo;
+    private int[] a;
 
     public int maxStudents(char[][] seats) {
-        this.seats = seats;
         m = seats.length;
         n = seats[0].length;
-        max = 0;
-        // 回溯
-        dfs(0, 0);
-        return max;
+        // 每排的可用椅子的下标集合
+        a = new int[m];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (seats[i][j] == '.') a[i] |= 1 << j;
+            }
+        }
+
+        // 记忆化搜索
+        memo = new int[m][1 << n];
+        for (int[] ints : memo) {
+            // 初始化
+            Arrays.fill(ints, -1);
+        }
+        // dfs(i,j) 表示第 i 排的可用座位状态为 j 的情况下，前 i 排的最大学生数
+        return dfs(m - 1, a[m - 1]);
     }
 
-    void dfs(int p, int cnt) {
-        if (p == n * m) {
-            max = Math.max(max, cnt);
-            return;
+    int dfs(int i, int j) {
+        if (memo[i][j] != -1) {
+            // 计算过
+            return memo[i][j];
         }
-        int x = p / n, y = p % n;
-        // 跳过该座位
-        dfs(p + 1, cnt);
-        //
-        if (seats[x][y] == '.') {
-            // 空座位且可以坐
-            for (int[] d : DIRS) {
-                int nx = x + d[0];
-                int ny = y + d[1];
-                if (nx >= 0 && ny >= 0 && nx < m && ny < n && seats[nx][ny] == 's') return;
+        if (i == 0) {
+            // 递归边界
+            if (j == 0) return 0;
+            // 贪心地取可用座位的最边上一个，并把它边上的座位也用掉（如果有）
+            int lb = j & -j;
+            // lb * 3 = lb | lb << 1
+            return dfs(i, j & ~(lb * 3)) + 1;
+        }
+        // 第 i 排空着
+        int res = dfs(i - 1, a[i - 1]);
+        // 枚举j的子集
+        for (int s = j; s > 0; s = (s - 1) & j) {
+            // s 没有连续的 1
+            if ((s & (s >> 1)) == 0) {
+                // 根据s确定前一行可坐的位置，并去掉坏掉的位置
+                int t = a[i - 1] & ~(s << 1 | s >> 1);
+                res = Math.max(res, dfs(i - 1, t) + Integer.bitCount(s));
             }
-            seats[x][y] = 's';
-            dfs(p + 1, cnt + 1);
-            // 回溯
-            seats[x][y] = '.';
         }
+        // 记忆化
+        return memo[i][j] = res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
