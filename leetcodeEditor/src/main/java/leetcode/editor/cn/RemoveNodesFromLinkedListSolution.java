@@ -54,17 +54,30 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public ListNode removeNodes(ListNode head) {
-        if (head.next == null) {
-            return head;
+        // 反转后移除左侧有更大节点的节点
+        head = reverseList(head);
+        ListNode cur = head;
+        while (cur.next != null) {
+            if (cur.val > cur.next.val) {
+                // 删除下一个节点
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
+            }
         }
-        // 返回的链表头一定是最大的
-        ListNode next = removeNodes(head.next);
-        if (next.val > head.val) {
-            // 删除 head;
-            return next;
+        // 返回前再次反转
+        return reverseList(head);
+    }
+
+    ListNode reverseList(ListNode head) {
+        ListNode pre = null, cur = head;
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
         }
-        head.next = next;
-        return head;
+        return pre;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
