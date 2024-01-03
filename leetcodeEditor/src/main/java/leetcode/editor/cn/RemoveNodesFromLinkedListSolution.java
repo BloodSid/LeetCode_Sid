@@ -42,9 +42,6 @@ package leetcode.editor.cn;
 
 import linkedList.ListNode;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 /**
  * 从链表中移除节点
  *
@@ -57,15 +54,17 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public ListNode removeNodes(ListNode head) {
-        Deque<ListNode> stack = new ArrayDeque<>();
-        for (ListNode cur = head; cur != null; cur = cur.next) {
-            while (!stack.isEmpty() && stack.peek().val < cur.val) {
-                stack.pop();
-            }
-            if (!stack.isEmpty()) stack.peek().next = cur;
-            stack.push(cur);
+        if (head.next == null) {
+            return head;
         }
-        return stack.peekLast();
+        // 返回的链表头一定是最大的
+        ListNode next = removeNodes(head.next);
+        if (next.val > head.val) {
+            // 删除 head;
+            return next;
+        }
+        head.next = next;
+        return head;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
