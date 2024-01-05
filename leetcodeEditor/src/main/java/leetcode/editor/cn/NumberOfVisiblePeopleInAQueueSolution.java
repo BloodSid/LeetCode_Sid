@@ -46,8 +46,8 @@ package leetcode.editor.cn;
 // 👍 129 👎 0
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * 队列中可以看到的人数
@@ -62,26 +62,19 @@ static
 class Solution {
     public int[] canSeePersonsCount(int[] heights) {
         // 单调栈
-        List<Integer> stack = new ArrayList<>();
+        Deque<Integer> stack = new ArrayDeque<>();
         int n = heights.length;
         int[] res = new int[n];
         for (int i = n - 1; i >= 0; i--) {
-            // 在单调递减栈中找最后一个比h[i]高的人
-            int l = 0, r = stack.size() - 1;
-            while (l <= r) {
-                int mid = l + r >>> 1;
-                if (heights[stack.get(mid)] > heights[i]) {
-                    l = mid + 1;
-                } else {
-                    r = mid - 1;
-                }
+            while (!stack.isEmpty() && heights[stack.peek()] < heights[i]) {
+                stack.pop();
+                res[i]++;
             }
-            // 最后一个比 h[i] 高的人满足条件，栈中比 h[i] 低的人也满足条件。若没有比h[i]高的人，结果要减一
-            res[i] = stack.size() - Math.max(0, r);
-            while (!stack.isEmpty() && heights[stack.get(stack.size() - 1)] < heights[i]) {
-                stack.remove(stack.size() - 1);
+            // 栈中第一个高于 h[i] 的人也可以看到
+            if (!stack.isEmpty()) {
+                res[i]++;
             }
-            stack.add(i);
+            stack.push(i);
         }
         return res;
     }
