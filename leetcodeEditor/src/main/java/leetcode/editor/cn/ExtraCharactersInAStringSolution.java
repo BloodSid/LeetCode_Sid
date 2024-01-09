@@ -37,6 +37,8 @@ package leetcode.editor.cn;
 // 👍 59 👎 0
 
 
+import java.util.Arrays;
+
 /**
  * 字符串中的额外字符
  *
@@ -51,30 +53,36 @@ class Solution {
 
     private int n;
     private String[] dictionary;
-    private int res;
+    private int[] dp;
 
     public int minExtraChar(String s, String[] dictionary) {
         n = s.length();
         this.dictionary = dictionary;
-        res = n;
-        dfs(s, 0, 0);
-        return res;
+        // dp[i] 表示 s[i,n) 的最小额外字符数
+        dp = new int[n];
+        Arrays.fill(dp, -1);
+        dfs(s, 0);
+        return dp[0];
     }
 
-    void dfs(String s, int i, int extra) {
+    int dfs(String s, int i) {
         if (i == n) {
-            // 递归终点，更新结果
-            res = Math.min(res, extra);
-            return;
+            // 递归终点空字符串
+            return 0;
         }
-        // 枚举字典中的字符串是否匹配
-        for (String s1 : dictionary) {
-            if (s.startsWith(s1, i)) {
-                dfs(s, i + s1.length(), extra);
+        if (dp[i] != -1) {
+            return dp[i];
+        }
+        // 当前字符不匹配
+        int res = dfs(s, i + 1) + 1;
+        // 遍历所有单词，判断是否匹配
+        for (String word : dictionary) {
+            if (s.startsWith(word, i)) {
+                // 若匹配，则更新额外字符数的最小值
+                res = Math.min(res, dfs(s, i + word.length()));
             }
         }
-        // 不用当前字符
-        dfs(s, i + 1, extra + 1);
+        return dp[i] = res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
