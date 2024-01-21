@@ -36,6 +36,7 @@
         <module>nowcoder</module>
         <module>codeforces</module>
         <module>lanqiao</module>
+        <module>contest2024</module>
     </modules>
 
     <properties>

@@ -16,6 +16,7 @@
         <module name="273.IntegerToEnglishWords" />
         <module name="54.SpiralMatrix" />
         <module name="5.LongestPalindromicSubstring" />
+        <module name="contest2024" />
         <module name="contest2023" />
         <module name="36.ValidSudoku" />
         <module name="Sort" />
