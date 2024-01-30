@@ -81,40 +81,50 @@ class Solution {
 
     // 权重范围
     private static final int W = 26;
-    private int N;
-    private int[][] fa;
-    private int[] dep;
     private int[][] pre;
-    private HashMap<Integer, Integer>[] map;
+    private List<int[]>[] map;
+    private List<int[]>[] q;
+    private int[] p;
+    private int[] lca;
+    private int[] vis;
 
     public int[] minOperationsQueries(int n, int[][] edges, int[][] queries) {
+        int m = queries.length;
         // 初始化图
-        map = new HashMap[n + 1];
-        for (int i = 1; i <= n; i++) {
-            map[i] = new HashMap<>();
-        }
-        // n 的二进制长度
-        N = 32 - Integer.numberOfLeadingZeros(n);
+        map = new List[n + 1];
+        q = new List[n + 1];
+        for (int i = 1; i <= n; i++) map[i] = new ArrayList<>();
+        for (int i = 1; i <= n; i++) q[i] = new ArrayList<>();
         for (int[] edge : edges) {
             // 为了使用lca模板，边对齐到以1开始。权重对齐到以0开始
             int u = edge[0] + 1, v = edge[1] + 1, w = edge[2] - 1;
-            map[v].put(u, w);
-            map[u].put(v, w);
+            map[v].add(new int[]{u, w});
+            map[u].add(new int[]{v, w});
         }
-        // 预处理每个节点的深度和权重频数前缀和
-        dep = new int[n + 1];
+        for (int i = 0; i < m; i++) {
+            // 存储查询边在结果中的下标i
+            int x = queries[i][0] + 1, y = queries[i][1] + 1;
+            q[x].add(new int[]{y, i});
+            q[y].add(new int[]{x, i});
+        }
+        // 并查集
+        p = new int[n + 1];
+        // 权重频数前缀和
         pre = new int[n + 1][];
-        fa = new int[n + 1][N];
-        initTree(1, 0, 0);
-        int m = queries.length;
+        dfs(1,0, 0);
+        lca = new int[m];
+        vis = new int[n + 1];
+        // 离线 tarjan 算法找 lca
+        tarjan(1);
+        // 计算结果
         int[] res = new int[m];
         for (int i = 0; i < m; i++) {
             int a = queries[i][0] + 1, b = queries[i][1] + 1;
-            int lca = lca(a, b);
+            int lc = lca[i];
             // 计算 a -> lca -> b 的频数
             int max = 0, sum = 0;
-            for (int ci = 0; ci < W; ci++) {
-                int f = pre[a][ci] + pre[b][ci] - 2 * pre[lca][ci];
+            for (int j = 0; j < W; j++) {
+                int f = pre[a][j] + pre[b][j] - 2 * pre[lc][j];
                 sum += f;
                 max = Math.max(max, f);
             }
@@ -124,54 +134,45 @@ class Solution {
         return res;
     }
 
-    // 初始化
-    void initTree(int cur, int prt, int depth) {
-        fa[cur][0] = prt;
-        dep[cur] = depth;
+    private void dfs(int cur, int prt, int weight) {
         if (prt == 0) {
-            // 根节点
             pre[cur] = new int[W];
         } else {
-            // 普通节点，统计该边
             pre[cur] = pre[prt].clone();
-            pre[cur][map[prt].get(cur)]++;
+            pre[cur][weight]++;
         }
-        // 第 2^i 的祖先节点是第 2^(i-1) 的祖先节点的 第 2^(i-1) 的祖先节点
-        for (int i = 1; i < N; i++) {
-            fa[cur][i] = fa[fa[cur][i - 1]][i - 1];
-        }
-        // 遍历子节点
-        for (Integer nxt : map[cur].keySet()) {
+        for (int[] a : map[cur]) {
+            int nxt = a[0], w = a[1];
             if (nxt == prt) continue;
-            initTree(nxt, cur, depth + 1);
+            dfs(nxt, cur, w);
         }
     }
 
-    // 倍增 lca
-    int lca(int x, int y) {
-        // 令 y 比 x 深
-        if (dep[x] > dep[y]) {
-            int t = x;
-            x = y;
-            y = t;
+    private void tarjan(int cur) {
+        // 遍历到某个结点的时候，认为这个结点的根结点就是它本身
+        p[cur] = cur;
+        vis[cur] = 1;
+        for (int[] a : map[cur]) {
+            int nxt = a[0];
+            if (vis[nxt] != 0) continue;
+            tarjan(nxt);
+            // nxt 为根节点的子树全部遍历完毕了以后，再将nxt的根节点设置为cur, 相当于把该子树合并到cur
+            p[nxt] = cur;
         }
-        // 令 y 和 x 在一个深度
-        int tmp = dep[y] - dep[x];
-        for (int j = 0; tmp != 0; j++, tmp >>= 1) {
-            if ((tmp & 1) == 1) {
-                y = fa[y][j];
+        for (int[] a : q[cur]) {
+            int y = a[0], i = a[1];
+            // 如果另一个节点已经访问过了，则更新查询边的 LCA 结果
+            if (vis[y] == 1) {
+                lca[i] = find(y);
             }
         }
-        // 如果这个时候 x = y 那么x 或 y 就是公共祖先
-        if (x == y) return x;
-        // 否则，找到第一个不是它们祖先的两个点
-        for (int j = N - 1; j >= 0; j--) {
-            if (fa[x][j] != fa[y][j]) {
-                x = fa[x][j];
-                y = fa[y][j];
-            }
+    }
+
+    int find(int x) {
+        if (x != p[x]) {
+            p[x] = find(p[x]);
         }
-        return fa[x][0];
+        return p[x];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
