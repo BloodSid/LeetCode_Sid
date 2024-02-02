@@ -64,7 +64,8 @@ package leetcode.editor.cn;
 // 👍 114 👎 0
 
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 石子游戏 VI
@@ -79,12 +80,8 @@ static
 class Solution {
     public int stoneGameVI(int[] a, int[] b) {
         int n = a.length;
-        Integer[] idx = new Integer[n];
-        for(int i = 0; i < n; i++) {
-            idx[i] = i;
-        }
         // a 获得 a[i], 让 b 失去 b[i], 等价于 a 获得 a[i] + b[i]; 根据这个和对所有位置逆序排序
-        Arrays.sort(idx, (i1, i2) -> a[i2] + b[i2] - a[i1] - b[i1]);
+        int[] idx = sort(a, b, 200);
         // 记录得分差
         int diff = 0;
         for (int i = 0; i < n; i++) {
@@ -98,6 +95,31 @@ class Solution {
         }
         return Integer.signum(diff);
     }
+
+    // 桶排序，ai+bi的大小逆序
+    private int[] sort(int[] a, int[] b, int N) {
+        int n = a.length;
+        List<Integer>[] bucket = new List[N + 1];
+        for (int i = 0; i <= N; i++) {
+            bucket[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < n; i++) {
+            bucket[a[i] + b[i]].add(i);
+        }
+        int[] idx = new int[n];
+        int j = 0;
+        for (int i = N; i >= 0; i--) {
+            for (Integer id : bucket[i]) {
+                idx[j++] = id;
+            }
+            if (j == n) {
+                break;
+            }
+        }
+        return idx;
+    }
+
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
