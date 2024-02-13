@@ -73,60 +73,37 @@ public class VerticalOrderTraversalOfABinaryTreeSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    List<List<Integer>> result = new ArrayList<>();
-    /**
-     * val对应下标的节点列数
-     */
-    int[] column = new int[1001];
-    /**
-     * val对应下标的节点行数
-     */
-    int[] line = new int[1001];
+
+    // 根据列号记录元素
+    HashMap<Integer, List<TreeNode>> cols = new HashMap<>();
+    // 存储节点的行号
+    HashMap<TreeNode, Integer> rowIdx = new HashMap<>();
 
     public List<List<Integer>> verticalTraversal(TreeNode root) {
-        if (root == null) {
-            return result;
-        }
-
-        ArrayList<Integer> values = new ArrayList<>();
-
-        Queue<TreeNode> queue = new LinkedList<>();
-        //root的行列都是0
-        queue.offer(root);
-
-        while (!queue.isEmpty()) {
-            TreeNode cur = queue.poll();
-            values.add(cur.val);
-            if (cur.left != null) {
-                queue.offer(cur.left);
-                column[cur.left.val] = column[cur.val] - 1;
-                line[cur.left.val] = line[cur.val] + 1;
+        dfs(root, 0, 0);
+        List<List<Integer>> res = new ArrayList<>();
+        Integer[] colIdx = cols.keySet().toArray(new Integer[0]);
+        Arrays.sort(colIdx);
+        for (Integer idx : colIdx) {
+            List<TreeNode> nodes = cols.get(idx);
+            nodes.sort((a,b) -> rowIdx.get(a) != rowIdx.get(b) ? rowIdx.get(a) - rowIdx.get(b) : a.val - b.val);
+            List<Integer> list = new ArrayList<>();
+            for (TreeNode node : nodes) {
+                list.add(node.val);
             }
-            if (cur.right != null) {
-                queue.offer(cur.right);
-                column[cur.right.val] = column[cur.val] + 1;
-                line[cur.right.val] = line[cur.val] + 1;
-            }
+            res.add(list);
         }
+        return res;
+    }
 
-        int minColumn = 0, maxColumn = 0;
-        for (Integer v : values) {
-            minColumn = Math.min(minColumn, column[v]);
-            maxColumn = Math.max(maxColumn, column[v]);
+    void dfs(TreeNode node, int row, int col) {
+        if (node == null) {
+            return;
         }
-        //创建数组
-        for (int i = minColumn; i <= maxColumn; i++) {
-            result.add(new ArrayList<Integer>());
-        }
-        //把元素加入对应数组
-        for (Integer v : values) {
-            result.get(column[v] - minColumn).add(v);
-        }
-        //排序
-        for (List<Integer> list : result) {
-            Collections.sort(list, (o1, o2) -> line[o1] == line[o2] ? o1 - o2 : line[o1] - line[o2]);
-        }
-        return result;
+        rowIdx.put(node, row);
+        cols.computeIfAbsent(col, k -> new ArrayList<>()).add(node);
+        dfs(node.left, row + 1, col - 1);
+        dfs(node.right, row + 1, col + 1);
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
