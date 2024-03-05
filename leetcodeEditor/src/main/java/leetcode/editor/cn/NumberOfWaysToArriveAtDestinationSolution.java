@@ -61,38 +61,51 @@ static
 class Solution {
 
     public static final int M = (int) (1e9 + 7);
+    public static final long INF = Long.MAX_VALUE / 2;
 
     public int countPaths(int n, int[][] roads) {
-        // 只有一个节点
-        if (n == 1) {
-            return 1;
-        }
-
-        long[][] f = new long[n][n];
-        long[][] w = new long[n][n];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(f[i], Long.MAX_VALUE / 2);
-        }
         // 建图
+        long[][] g = new long[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(g[i], INF);
+        }
         for (int[] road : roads) {
             int u = road[0], v = road[1], weight = road[2];
-            f[u][v] = f[v][u] = weight;
-            w[u][v] = w[v][u] = 1;
+            g[u][v] = g[v][u] = weight;
         }
-        for (int k = 0; k < n; k++) {
+
+        long[] dis = new long[n];
+        Arrays.fill(dis, INF);
+        dis[0] = 0;
+        // f[i]表示到达i的步数
+        long[] f = new long[n];
+        f[0] = 1;
+        boolean[] done = new boolean[n];
+        while (true) {
+            int x = -1;
+            // 取 dis[i] 的最小值
             for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    long sum = f[i][k] + f[k][j];
-                    if (sum < f[i][j]) {
-                        f[i][j] = sum;
-                        w[i][j] = w[i][k] * w[k][j] % M;
-                    } else if (sum == f[i][j]) {
-                        w[i][j] = (w[i][j] + w[i][k] * w[k][j]) % M;
-                    }
+                if (!done[i] && (x < 0 || dis[i] < dis[x])) {
+                    x = i;
+                }
+            }
+            if (x == n - 1) {
+                // 不可能找到比 dis[n-1] 更短，或者一样短的最短路了（注意本题边权都是正数）
+                return (int) f[n - 1];
+            }
+            // // 最短路长度已确定（无法变得更小）
+            done[x] = true;
+            for (int y = 0; y < n; y++) {
+                // 更新 x 的邻居的最短路
+                long newDis = dis[x] + g[x][y];
+                if (newDis < dis[y]) {
+                    dis[y] = newDis;
+                    f[y] = f[x];
+                } else if (newDis == dis[y]) {
+                    f[y] = (f[y] + f[x]) % M;
                 }
             }
         }
-        return (int) w[0][n - 1];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
