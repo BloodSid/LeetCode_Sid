@@ -57,7 +57,6 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public long maxArrayValue(int[] nums) {
-        long max = 0;
         long sum = 0;
         for (int i = nums.length - 1; i >= 0; i--) {
             if (sum >= nums[i]) {
@@ -67,9 +66,8 @@ class Solution {
                 // 不能操作
                 sum = nums[i];
             }
-            max = Math.max(max, sum);
         }
-        return max;
+        return sum;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
