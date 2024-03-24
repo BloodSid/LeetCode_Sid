@@ -39,6 +39,8 @@ package leetcode.editor.cn;
 // 👍 1973 👎 0
 
 
+import java.util.Arrays;
+
 /**
  * 零钱兑换
  *
@@ -51,18 +53,19 @@ public class CoinChangeSolution {
 class Solution {
     public int coinChange(int[] coins, int amount) {
         if (amount == 0) return 0;
+        Arrays.sort(coins);
         int[] dp = new int[amount + 1];
-        int n = coins.length;
-        for (int i = 0; i < n; i++) {
-            int cur = coins[i];
-            if (cur <= amount) dp[cur] = 1;
-            for (int j = 1; j <= amount - cur; j++) {
-                // 没有组合能组成该金额 j, 则跳过
-                if (dp[j] == 0) continue;
-                dp[j + cur] = dp[j + cur] == 0 ? dp[j] + 1 : Math.min(dp[j + cur], dp[j] + 1);
+        int inf = amount + 1;
+        Arrays.fill(dp, inf);
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            // 从小到大遍历 coin
+            for (int coin : coins) {
+                if (coin > i) break;
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
             }
         }
-        if (dp[amount] == 0) return -1;
+        if (dp[amount] == inf) return -1;
         return dp[amount];
     }
 }
