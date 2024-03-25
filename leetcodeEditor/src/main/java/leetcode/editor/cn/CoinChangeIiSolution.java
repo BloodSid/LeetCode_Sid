@@ -59,7 +59,7 @@ package leetcode.editor.cn;
  * @since 2022-06-09 23:53:34 
  * @version 1.0
  */
-public class CoinChange2Solution {
+public class CoinChangeIiSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int change(int amount, int[] coins) {
