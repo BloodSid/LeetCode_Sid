@@ -89,20 +89,20 @@ class Solution {
             List<Integer> list = new ArrayList<>();
             res.add(list);
             Arrays.fill(vis, false);
-            dfs(i, i, vis, list);
-            Collections.sort(list);
+            dfs(i, vis, list);
+            vis[i] = false;
+            for (int j = 0; j < n; j++) {
+                if (vis[j]) list.add(j);
+            }
         }
         return res;
     }
 
-    private void dfs(int cur, int start, boolean[] vis, List<Integer> list) {
+    private void dfs(int cur, boolean[] vis, List<Integer> list) {
         vis[cur] = true;
-        if (cur != start) {
-            list.add(cur);
-        }
         for (Integer nxt : map[cur]) {
             if (vis[nxt]) continue;
-            dfs(nxt, start, vis, list);
+            dfs(nxt, vis, list);
         }
     }
 }
