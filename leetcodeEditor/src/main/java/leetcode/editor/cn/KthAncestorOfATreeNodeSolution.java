@@ -72,7 +72,7 @@ class TreeAncestor {
         // n 的二进制长度
         N = 32 - Integer.numberOfLeadingZeros(n);
         // 倍增数组
-        fa = new int[n + 1][N];
+        fa = new int[N][n + 1];
         // 建图
         map = new List[n];
         for (int i = 0; i < n; i++) {
@@ -90,10 +90,10 @@ class TreeAncestor {
     private void initTree(int idx) {
         // 节点下标对齐到1
         int cur = idx + 1, prt = parent[idx] + 1;
-        fa[cur][0] = prt;
+        fa[0][cur] = prt;
         for (int i = 1; i < N; i++) {
             // 第 2^i 的祖先节点是第 2^(i-1) 的祖先节点的 第 2^(i-1) 的祖先节点
-            fa[cur][i] = fa[fa[cur][i - 1]][i - 1];
+            fa[i][cur] = fa[i - 1][fa[i - 1][cur]];
         }
         for (int nxt : map[idx]) {
             initTree(nxt);
@@ -108,7 +108,7 @@ class TreeAncestor {
         // 利用倍增数组找 node 的第k个祖先
         for (int j = 0; k != 0; j++, k >>= 1) {
             if ((k & 1) == 1) {
-                node = fa[node][j];
+                node = fa[j][node];
             }
         }
         if (node == 0) {
