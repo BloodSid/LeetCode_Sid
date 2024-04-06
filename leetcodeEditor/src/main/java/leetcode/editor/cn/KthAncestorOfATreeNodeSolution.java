@@ -48,9 +48,6 @@ package leetcode.editor.cn;
 // 👍 179 👎 0
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 树节点的第 K 个祖先
  *
@@ -65,43 +62,25 @@ class TreeAncestor {
 
     private final int N;
     private final int[][] fa;
-    private final int[] parent;
-    private final List<Integer>[] map;
 
     public TreeAncestor(int n, int[] parent) {
         // n 的二进制长度
         N = 32 - Integer.numberOfLeadingZeros(n);
         // 倍增数组
         fa = new int[N][n + 1];
-        // 建图
-        map = new List[n];
+        // 初始化
         for (int i = 0; i < n; i++) {
-            map[i] = new ArrayList<>();
+            int cur = i + 1, prt = parent[i] + 1;
+            fa[0][cur] = prt;
         }
-        for (int i = 0; i < n; i++) {
-            if (parent[i] != -1) {
-                map[parent[i]].add(i);
-            }
-        }
-        this.parent = parent;
-        initTree(0);
-    }
-
-    private void initTree(int idx) {
-        // 节点下标对齐到1
-        int cur = idx + 1, prt = parent[idx] + 1;
-        fa[0][cur] = prt;
         for (int i = 1; i < N; i++) {
             // 第 2^i 的祖先节点是第 2^(i-1) 的祖先节点的 第 2^(i-1) 的祖先节点
-            fa[i][cur] = fa[i - 1][fa[i - 1][cur]];
-        }
-        for (int nxt : map[idx]) {
-            initTree(nxt);
+            for (int cur = 1; cur <= n; cur++) {
+                fa[i][cur] = fa[i - 1][fa[i - 1][cur]];
+            }
         }
     }
 
-
-    
     public int getKthAncestor(int node, int k) {
         // 下标对齐
         node++;
@@ -111,11 +90,7 @@ class TreeAncestor {
                 node = fa[j][node];
             }
         }
-        if (node == 0) {
-            // 不存在
-            return -1;
-        }
-        // 下标对齐到0
+        // 下标对齐到0；若node为0，则表示没有对应祖先元素，返回-1
         return node - 1;
     }
 }
