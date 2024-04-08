@@ -68,20 +68,20 @@ class Solution {
     public int minOperations(int[] nums) {
         int n = nums.length;
         Arrays.sort(nums);
+        int m = 1;
+        // 原地去重
+        for (int i = 1; i < n; i++) {
+            if (nums[i] != nums[i - 1]) {
+                nums[m++] = nums[i];
+            }
+        }
         int maxWidth = 0;
-        HashMap<Integer, Integer> f = new HashMap<>();
-        // 滑动窗口
-        for (int i = 0, j = 0; i < n; i++) {
-            while (j < n && nums[j] - nums[i] <= n - 1) {
-                f.merge(nums[j], 1, Integer::sum);
+        // 滑动窗口。逆向思维考虑不修改的元素。
+        for (int i = 0, j = 0; i < m; i++) {
+            while (j < m && nums[j] - nums[i] <= n - 1) {
                 j++;
             }
-            maxWidth = Math.max(maxWidth, f.size());
-            f.merge(nums[i], -1, (a, b) -> {
-                int res = a + b;
-                if (res == 0) return null;
-                else return res;
-            });
+            maxWidth = Math.max(maxWidth, j - i);
         }
         return n - maxWidth;
     }
