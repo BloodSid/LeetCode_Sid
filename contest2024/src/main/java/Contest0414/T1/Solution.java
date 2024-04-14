@@ -6,27 +6,14 @@ package Contest0414.T1;
  */
 public class Solution {
     public String findLatestTime(String s) {
-        char[] ch = s.toCharArray();
-        if (ch[3] == '?') {
-            ch[3] = '5';
-        }
-        if (ch[4] == '?') {
-            ch[4] = '9';
-        }
-        if (ch[0] == '?') {
-            if ("01?".indexOf(ch[1]) >= 0) {
-                ch[0] = '1';
-            } else {
-                ch[0] = '0';
+        for (int hh = 11; hh >= 0; hh--) {
+            for (int mm = 59; mm >= 0; mm--) {
+                String time = String.format("%02d:%02d", hh, mm);
+                if (time.matches(s.replace('?', '.'))) {
+                    return time;
+                }
             }
         }
-        if (ch[1] == '?') {
-            if (ch[0] == '1') {
-                ch[1] = '1';
-            }  else {
-                ch[1] = '9';
-            }
-        }
-        return new String(ch);
+        return null;
     }
 }
