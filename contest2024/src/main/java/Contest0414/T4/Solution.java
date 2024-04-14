@@ -13,14 +13,19 @@ public class Solution {
     private int[] nums;
     private int m;
     private int[] v;
-    private HashMap<String, Integer> cache;
+    private HashMap<Integer, Integer>[][] cache;
 
     public int minimumValueSum(int[] nums, int[] v) {
         n = nums.length;
         this.nums = nums;
         m = v.length;
         this.v = v;
-        cache = new HashMap<>();
+        cache = new HashMap[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                cache[i][j] = new HashMap<>();
+            }
+        }
         int res = dp(0, 0, -1);
         return res != INF ? res : -1;
     }
@@ -35,8 +40,7 @@ public class Solution {
         if (j == m) {
             return INF;
         }
-        String tuple = i + " " + j + " " + and;
-        Integer val = cache.get(tuple);
+        Integer val = cache[i][j].get(and);
         if (val != null) return val;
         and &= nums[i];
         // and只能越来越小，剪枝
@@ -45,7 +49,7 @@ public class Solution {
         }
         int res = dp(i + 1, j, and);
         if (and == v[j]) res = Math.min(res, dp(i + 1, j + 1, -1) + nums[i]);
-        cache.put(tuple, res);
+        cache[i][j].put(and, res);
         return res;
     }
 }
