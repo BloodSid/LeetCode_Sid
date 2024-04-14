@@ -42,6 +42,8 @@ package leetcode.editor.cn;
 // 👍 342 👎 0
 
 
+import java.util.Arrays;
+
 /**
  * 设计哈希集合
  *
@@ -54,55 +56,24 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class MyHashSet {
 
-    private final int m;
-    private final Node[] data;
-    class Node {
-        int val;
-        Node next;
-        Node(int val) {
-            this.val = val;
-        }
-    }
+    // key的范围
+    public static final int U = (int) 1e6;
+    public static final long[] bitmap = new long[(U + 1 - 1) / 64 + 1];
 
     public MyHashSet() {
-        // 1e4 次调用，装载因子0.75，设计用 13337 做模
-        m = 13337;
-        data = new Node[m];
+        Arrays.fill(bitmap, 0);
     }
 
-
-    
     public void add(int key) {
-        int offset = key % m;
-        if (!has(data[offset], key)) {
-            Node t = data[offset];
-            data[offset] = new Node(key);
-            data[offset].next = t;
-        }
+        bitmap[key >> 6] |= 1L << (key & 63);
     }
     
     public void remove(int key) {
-        Node pre = new Node(-1);
-        int offset = key % m;
-        pre.next = data[offset];
-        for (Node cur = pre; cur.next != null; cur = cur.next) {
-            if (cur.next.val == key) {
-                cur.next = cur.next.next;
-                break;
-            }
-        }
-        data[offset] = pre.next;
+        bitmap[key >> 6] &= ~(1L << (key & 63));
     }
     
     public boolean contains(int key) {
-        return has(data[key % m], key);
-    }
-
-    private boolean has(Node head, int val) {
-        for (; head != null; head = head.next) {
-            if (head.val == val) return true;
-        }
-        return false;
+        return ((bitmap[key >> 6] >> (key & 63)) & 1) == 1;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
