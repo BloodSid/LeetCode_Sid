@@ -1,8 +1,6 @@
 package Contest0414.T4;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Deque;
+import java.util.HashMap;
 
 /**
  * @author IronSid
@@ -11,91 +9,43 @@ import java.util.Deque;
 public class Solution {
 
     public static final int INF = (int) (1e9+7);
-    private int[][] p;
-    private int M;
+    private int n;
+    private int[] nums;
+    private int m;
+    private int[] v;
+    private HashMap<String, Integer> cache;
 
     public int minimumValueSum(int[] nums, int[] v) {
-        int n = nums.length;
-        int m = v.length;
-        M = 32 - Integer.numberOfLeadingZeros((int) 1e5);
-        p = new int[n+1][M];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < M; j++) {
-                p[i+1][j] = p[i][j] + (1 & (~nums[i] >> j));
-            }
-        }
-        // dp(i,j)表示前i个元素划分得到v[0,j]的最小“值”之和
-        int[][] dp = new int[n + 1][m];
-        for (int[] row : dp) {
-            Arrays.fill(row, INF);
-        }
-        // 单调队列-增，{sum子数组值之和，idx最后一个元素的下标}
-        Deque<int[]>[] q = new Deque[m];
-        for (int i = 0; i < m; i++) {
-            q[i] = new ArrayDeque<>();
-        }
-        // 全1
-        int add = -1;
-        for (int i = 1; i <= n; i++) {
-            add &= nums[i - 1];
-            for (int j = m - 1; j >= 0; j--) {
-                if (j == 0) {
-                    if (add == v[0]) {
-                        dp[i][0] = nums[i - 1];
-                    }
-                } else {
-                    int k = v[j];
-                    if ((nums[i - 1] & k) == k) {
-                        // 可以贴在上一个数组的后面
-                        if (dp[i - 1][j] != INF) {
-                            dp[i][j] = Math.min(dp[i][j], (dp[i - 1][j] + nums[i - 1] - nums[i - 2]));
-                        }
-                    }
-                    // 不贴在上一个数组的后面，二分找这个子数组最远和最近的起点范围
-                    int l = lowerBound(k, i - 1);
-                    int r = lowerBound(k + 1, i - 1) - 1;
-                    if (r < l) continue; // 没有合法的起点
-                    // 从队首排除不合法的转移
-                    while (!q[j - 1].isEmpty() && q[j - 1].peekFirst()[1] + 1 < l) {
-                        q[j - 1].pollFirst();
-                    }
-                    if (!q[j - 1].isEmpty() && q[j - 1].peekFirst()[1] + 1 <= r) {
-                        dp[i][j] = Math.min(dp[i][j], q[j - 1].peekFirst()[0] + nums[i - 1]);
-                    }
-                }
-                // 更新单调队列
-                if (dp[i][j] < INF) {
-                    while (!q[j].isEmpty() && q[j].peekLast()[0] > dp[i][j]) {
-                        q[j].pollLast();
-                    }
-                    q[j].offerLast(new int[]{dp[i][j], i - 1});
-                }
-            }
-        }
-        return dp[n][m-1] < INF ? dp[n][m-1] : -1;
+        n = nums.length;
+        this.nums = nums;
+        m = v.length;
+        this.v = v;
+        cache = new HashMap<>();
+        int res = dp(0, 0, -1);
+        return res != INF ? res : -1;
     }
 
-    // target表示与运算目标值，end表示范围的上界，返回第一个与运算值大于等于target 的start下标
-    int lowerBound(int target, int end) {
-        int l = 0, r = end;
-        while (l <= r) {
-            int mid = l + r >> 1;
-            if (addRange(mid, end) >= target) {
-                r = mid - 1;
-            } else {
-                l = mid + 1;
-            }
+    // 表示 nums[i] 之后的所有元素进行划分，当前划分到v[j]，且最后一组的的与运算值为 and 时的最小”值“
+    // 该做法成立的原因：一端固定的情况下，子数组只能有O(logU)个不同的AND结果，那么时间复杂度是O(nmlogU)，不超时
+    int dp(int i, int j, int and) {
+        if (i == n) {
+            if (j == m) return 0;
+            else return INF;
         }
-        return l;
-    }
-
-    int addRange(int l, int r) {
-        int res = 0;
-        for (int i = 0; i < M; i++) {
-            if (p[r+1][i] - p[l][i] == 0) {
-                res |= 1 << i;
-            }
+        if (j == m) {
+            return INF;
         }
+        String tuple = i + " " + j + " " + and;
+        Integer val = cache.get(tuple);
+        if (val != null) return val;
+        and &= nums[i];
+        // and只能越来越小，剪枝
+        if (and < v[j]) {
+            return INF;
+        }
+        int res = dp(i + 1, j, and);
+        if (and == v[j]) res = Math.min(res, dp(i + 1, j + 1, -1) + nums[i]);
+        cache.put(tuple, res);
         return res;
     }
 }
