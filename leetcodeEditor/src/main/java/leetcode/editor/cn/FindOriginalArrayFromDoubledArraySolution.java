@@ -44,7 +44,7 @@ package leetcode.editor.cn;
 // 👍 65 👎 0
 
 
-import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * 从双倍数组中还原原数组
@@ -59,35 +59,46 @@ static
 class Solution {
 
     static int[] empty = new int[]{};
-    static int M = (int) 1e5;
-    static int[] f = new int[M + 1];
 
     public int[] findOriginalArray(int[] changed) {
         int n = changed.length;
         if (n % 2 != 0) return empty;
+        HashMap<Integer, Integer> f = new HashMap<>();
         for (int i : changed) {
-            f[i]++;
+            f.merge(i, 1, Integer::sum);
         }
+
+        // 单独处理0
+        int zero = f.getOrDefault(0, 0);
+        if (zero % 2 == 1) return empty;
+        f.remove(0);
         int[] res = new int[n / 2];
-        int ri = 0;
-        for (int i = 0; i <= M; i++) {
-            if (f[i] > 0) {
-                if (i * 2 <= M && f[i] <= f[i * 2]) {
-                    // 特殊处理：i=0时，i=i*2
-                    if (i == 0) f[i] /= 2;
-                    for (int t = 0; t < f[i]; t++) {
-                        res[ri++] = i;
-                    }
-                    f[i * 2] -= f[i];
-                    f[i] = 0;
-                } else {
-                    Arrays.fill(f, i, M + 1, 0);
+        // 放入zero 个0
+        int ri = zero / 2;
+
+        for (int x : f.keySet()) {
+            // 如果 x/2 在 f 中，跳过
+            if (x % 2 == 0 && f.getOrDefault(x / 2, 0) > 0) {
+                continue;
+            }
+            // 把 x, 2x, 4x, 8x, ... 全部配对
+            while (f.containsKey(x)) {
+                int fx = f.get(x), f2x = f.getOrDefault(2 * x, 0);
+                if (fx > f2x) {
                     return empty;
                 }
+                for (int i = 0; i < fx; i++) {
+                    res[ri++] = x;
+                }
+                if (fx < f2x) {
+                    f.put(x * 2, f2x - fx);
+                    x *= 2;
+                } else {
+                    x *= 4;
+                }
             }
-            if (ri == n / 2) return res;
         }
-        return empty;
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
