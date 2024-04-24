@@ -14,6 +14,7 @@ public class Solution {
 
     public int amountOfTime(TreeNode root, int start) {
         map = new HashMap<>();
+        //  先建图
         dfs(root);
         // 广度优先搜索
         int depth = 0;
