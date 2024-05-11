@@ -30,7 +30,9 @@ public class Solution {
         if (memo[i][j] != 0) return memo[i][j];
         int res = Integer.MAX_VALUE;
         for (int k = i; k < j; k++) {
-            res = Math.min(res, dp(i, k) + dp(k + 1, j));
+            if (isBalanced(k + 1, j)) {
+                res = Math.min(res, dp(i, k) + 1);
+            }
         }
         return memo[i][j] = res;
     }
