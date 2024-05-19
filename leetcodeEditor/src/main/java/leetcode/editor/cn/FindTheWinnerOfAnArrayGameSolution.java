@@ -52,8 +52,6 @@ package leetcode.editor.cn;
 // 👍 80 👎 0
 
 
-import java.util.*;
-
 /**
  * 找出数组游戏的赢家
  *
@@ -67,34 +65,16 @@ static
 class Solution {
     public int getWinner(int[] arr, int k) {
         int n = arr.length;
-        if (k >= n) {int mx = 0;
-            for (int i = 0; i < n; i++) {
-                mx = Math.max(mx, arr[i]);
+        int mx = arr[0];
+        int win = 0;
+        for (int i = 1; i < n && win < k; i++) {
+            if (arr[i] > mx) {
+                mx = arr[i];
+                win = 0;
             }
-            return mx;
+            win++;
         }
-        Deque<Integer> q = new ArrayDeque<>();
-        int a = arr[0];
-        int j = 0;
-        for (int i = 1; ; i++) {
-            int b;
-            if (i < n) {
-                b = arr[i];
-            } else {
-                b = q.poll();
-            }
-            if (a > b) {
-                j++;
-                q.offer(b);
-            } else {
-                j = 1;
-                q.offer(a);
-                a = b;
-            }
-            if (j == k) {
-                return a;
-            }
-        }
+        return mx;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
