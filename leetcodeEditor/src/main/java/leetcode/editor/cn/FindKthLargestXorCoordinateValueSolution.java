@@ -63,18 +63,22 @@ class Solution {
     public int kthLargestValue(int[][] matrix, int k) {
         int m = matrix.length, n = matrix[0].length;
         int[][] p = new int[m + 1][n + 1];
-        List<Integer> list = new ArrayList<>();
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
         for (int i = 0; i < m; i++) {
             int pp = 0;
             for (int j = 0; j < n; j++) {
                 pp ^= matrix[i][j];
                 int v = p[i][j + 1] ^ pp;
-                list.add(v);
                 p[i + 1][j + 1] = v;
+                if (pq.size() < k) {
+                    pq.offer(v);
+                } else if (pq.peek() <  v) {
+                    pq.poll();
+                    pq.offer(v);
+                }
             }
         }
-        Collections.sort(list);
-        return list.get(n * m - k);
+        return pq.peek();
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
