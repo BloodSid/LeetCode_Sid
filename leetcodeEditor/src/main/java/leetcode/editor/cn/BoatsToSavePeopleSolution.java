@@ -54,6 +54,7 @@ class Solution {
         int small = 0;
         int big = people.length - 1;
         int cnt = 0;
+        // 双指针
         while (small < big) {
             if (people[small] + people[big] <= limit) {
                 small++;
