@@ -58,62 +58,48 @@ import java.util.*;
  * @since 2021-09-04 23:48:36
  */
 public class RottingOrangesSolution {
+static
+//leetcode submit region begin(Prohibit modification and deletion)
+class Solution {
 
-    //leetcode submit region begin(Prohibit modification and deletion)
-    class Solution {
-        public int orangesRotting(int[][] grid) {
-            int fresh = 0;
-            Queue<int[]> queue = new ArrayDeque<>();
-            for (int i = 0; i < grid.length; i++) {
-                for (int j = 0; j < grid[0].length; j++) {
-                    if (grid[i][j] == 2) {
-                        queue.offer(new int[]{i, j});
-                    } else if (grid[i][j] == 1) {
-                        fresh++;
-                    }
+    public static final int[][] DIRS = new int[][]{{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+    public int orangesRotting(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        Deque<int[]> q = new ArrayDeque<>();
+        int fresh = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 2) {
+                    q.offer(new int[]{i, j});
+                } else if (grid[i][j] == 1) {
+                    fresh++;
                 }
             }
-            if(fresh == 0){
-                return 0;
-            }
-            int days = -1;
-            while (!queue.isEmpty()) {
-                int len = queue.size();
-                for (int i = 0; i < len; i++) {
-                    int[] pos = queue.poll();
-                    List<int[]> nexts = getNext(pos, grid.length, grid[0].length);
-                    for (int[] next : nexts) {
-                        if (grid[next[0]][next[1]] == 1) {
-                            queue.offer(next);
-                            grid[next[0]][next[1]] = 2;
-                            fresh--;
-                        }
-                    }
-                }
-                days++;
-            }
-            if (fresh > 0) {
-                return -1;
-            }
-            return days;
         }
-
-        int[][] offsets = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-
-        List<int[]> getNext(int[] pos, int m, int n) {
-            List<int[]> res = new ArrayList<>();
-            for (int[] offset : offsets) {
-                int[] next = new int[2];
-                for (int i = 0; i < 2; i++) {
-                    next[i] = pos[i] + offset[i];
-                }
-                if (next[0] >= 0 && next[0] < m && next[1] >= 0 && next[1] < n) {
-                    res.add(next);
+        int days = 0;
+        while (true) {
+            for (int len = q.size(); len > 0; len--) {
+                int[] p = q.poll();
+                int x = p[0], y = p[1];
+                for (int[] d : DIRS) {
+                    int nx = d[0] + x, ny = d[1] + y;
+                    if (nx < 0 || ny < 0 || nx >= m || ny >= n) {
+                        continue;
+                    }
+                    if (grid[nx][ny] != 1) continue;
+                    grid[nx][ny] = 2;
+                    q.offer(new int[]{nx, ny});
+                    fresh--;
                 }
             }
-            return res;
+            if (q.isEmpty()) break;
+            days++;
         }
+        if (fresh != 0) return -1;
+        return days;
     }
+}
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
