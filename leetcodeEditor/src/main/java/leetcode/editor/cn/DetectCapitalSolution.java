@@ -1,7 +1,5 @@
 package leetcode.editor.cn;
 
-import java.util.*;
-
 /**
  * 检测大写字母
  *
@@ -13,14 +11,18 @@ public class DetectCapitalSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean detectCapitalUse(String word) {
-        if (word.length() < 2) {
+        int n = word.length();
+        if (n < 2) {
             return true;
         }
-        if (Character.isUpperCase(word.charAt(1)) && Character.isLowerCase(word.charAt(0))) {
+        char[] ch = word.toCharArray();
+        // 前两个字母可以是大大、大小、小小、不能是小大
+        if ((ch[0] & ~ch[1] & 32) != 0) {
             return false;
         }
-        for (int i = 2; i < word.length(); i++) {
-            if (Character.isUpperCase(word.charAt(1)) ^ Character.isUpperCase(word.charAt(i))) {
+        // 后续字母必须与第二个字母形式相同
+        for (int i = 2; i < n; i++) {
+            if ((ch[1] & 32) != (ch[i] & 32)) {
                 return false;
             }
         }
