@@ -49,15 +49,36 @@ import binaryTree.TreeNode;
 public class SubtreeOfAnotherTreeSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+
+    public static final int P = 179;
+    public static final int Q = 31;
+    public static final int MOD = 100003;
+    private int sub;
+    private boolean isSubtree;
+
     public boolean isSubtree(TreeNode root, TreeNode subRoot) {
-        if (root == null) return false;
-        if (isIdentical(root, subRoot)) return true;
-        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
+        // 初始化为在第一次dfs中必不会相等的值
+        sub = MOD;
+        isSubtree = false;
+        sub = treeHash(subRoot)[0];
+        if (sub == treeHash(root)[0]) {
+            return true;
+        }
+        return isSubtree;
     }
 
-    boolean isIdentical(TreeNode n1, TreeNode n2) {
-        if (n1 == null || n2 == null) return n1 == null && n2 == null;
-        return n1.val == n2.val && isIdentical(n1.left, n2.left) && isIdentical(n1.right, n2.right);
+    // 返回值 {hash，size}
+    int[] treeHash(TreeNode node) {
+        if (node == null) {
+            // null 的哈希值不能是任何节点的值
+            return new int[]{10001, 0};
+        }
+        int[] l = treeHash(node.left), r = treeHash(node.right);
+        if (l[0] == sub || r[0] == sub) {
+            isSubtree = true;
+        }
+        // size 计算时加一，避免空指针时乘0
+        return new int[]{(node.val + P * l[0] * (l[1] + 1) + Q * r[0] * (r[1] + 1)) % MOD, 1 + l[1] + r[1]};
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
