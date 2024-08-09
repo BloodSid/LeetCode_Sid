@@ -61,42 +61,21 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int minimumAddedInteger(int[] nums1, int[] nums2) {
-        int N = 1000;
-        int[] f1 = new int[N + 1];
-        int[] f2 = new int[N + 1];
         Arrays.sort(nums1);
         Arrays.sort(nums2);
-        for (int i : nums2) {
-            f2[i]++;
-        }
         int n = nums2.length;
-        for (int i = n + 1; i > 2; i--) {
-            f1[nums1[i]]++;
-        }
+        // 倒着枚举nums[2-0], nums[i]越大x越小，第一个就是答案
         for (int i = 2; i >= 0; i--) {
             int x = nums2[0] - nums1[i];
-            f1[nums1[i]]++;
-            if (contains(offset(f1, x), f2)) {
-                return x;
+            // 检查 {nums1[i:]+1} 是否拥有子序列 nums2
+            for (int j = i, k = 0; j < n + 2; j++) {
+                if (nums1[j] + x == nums2[k]) {
+                    k++;
+                    if (k == n) return x;
+                }
             }
         }
-        return 0;
-    }
-
-    private int[] offset(int[] f1, int x) {
-        int n = f1.length;
-        int[] clone = new int[n];
-        for (int i = Math.min(n - 1, n + x - 1); i >= Math.max(x, 0); i--) {
-            clone[i] = f1[i - x];
-        }
-        return clone;
-    }
-
-    private boolean contains(int[] set, int[] subSet) {
-        for (int i = 0; i < set.length; i++) {
-            if (subSet[i] > set[i]) return false;
-        }
-        return true;
+        return nums2[0] - nums1[0];
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
