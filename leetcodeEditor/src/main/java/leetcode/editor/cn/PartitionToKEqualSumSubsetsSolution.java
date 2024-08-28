@@ -28,7 +28,7 @@ package leetcode.editor.cn;
 // 👍 660 👎 0
 
 
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * 划分为k个相等的子集
@@ -42,39 +42,38 @@ public class PartitionToKEqualSumSubsetsSolution {
 class Solution {
 
     private int partSum;
+    int n;
+    int[] nums;
 
     public boolean canPartitionKSubsets(int[] nums, int k) {
         Arrays.sort(nums);
-        List<Integer> list = new ArrayList<>();
+        n = nums.length;
+        this.nums = nums;
         int tot = 0;
         for (int num : nums) {
             tot += num;
-            list.add(num);
         }
         if (tot % k != 0) return false;
         partSum = tot / k;
-        return dfs(list, 0,  0, k);
+        return dfs(0, 0, n-1, k);
     }
 
-    boolean dfs(List<Integer> remain, int sum, int start, int partCnt) {
+    // vis 的第i位表示 nums[i] 是否已选择
+    boolean dfs(int vis, int sum, int start, int partCnt) {
         if (sum == partSum) {
             // 组成一个符合要求的子集，则归零并从头再找
             sum = 0;
             partCnt--;
-            start = 0;
+            start = n - 1;
             if (partCnt == 0) return true;
         }
-        int size = remain.size();
         // 接着对之后的元素进行搜索
-        for (int i = start; i < size; i++) {
-            if (i > start && remain.get(i) == remain.get(i - 1)) continue;
-            int cur = remain.get(i);
-            if (cur + sum > partSum) break;
-            sum += cur;
-            remain.remove(i);
-            if (dfs(remain, sum, i, partCnt)) return true;
-            remain.add(i, cur);
-            sum -= cur;
+        for (int i = start; i >= 0; i--) { // 顺序性剪枝
+            int cur = nums[i];
+            if (((vis >> i) & 1) == 1 || cur + sum > partSum) continue;  // 可行性剪枝
+            if (i < start && nums[i] == nums[i+1] && ((vis >> i+1) & 1) == 0) continue; // 跳过相同值
+            if (dfs(vis | 1 << i, sum + cur, i - 1, partCnt)) return true;
+            if (sum == 0) return false; // 可行性剪枝：因为每轮第一个都选剩下元素中最大的，如果这个元素没有办法分到某组中，那就没有合法分法
         }
         return false;
     }
