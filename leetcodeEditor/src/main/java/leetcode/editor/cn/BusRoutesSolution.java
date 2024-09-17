@@ -57,25 +57,28 @@ static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int numBusesToDestination(int[][] routes, int source, int target) {
-        // 记录站点对应的公交
-        HashMap<Integer, List<Integer>> stops = new HashMap<>();
-        for (int bus = 0; bus < routes.length; bus++) {
-            int[] route = routes[bus];
-            for (int r : route) {
-                stops.computeIfAbsent(r , k-> new ArrayList<>()).add(bus);
+        if (source == target) return 0;
+        HashMap<Integer, List<Integer>> map = new HashMap<>();
+        for (int b = 0; b < routes.length; b++) {
+            int[] route = routes[b];
+            for (int stop : route) {
+                // 低位bits表示车站，高位bits表示车次。为了避免左移后不变，b不得为0
+                int bus = (b + 1) << 20;
+                map.computeIfAbsent(stop, k -> new ArrayList<>()).add(bus);
+                map.computeIfAbsent(bus, k -> new ArrayList<>()).add(stop);
             }
         }
         Deque<Integer> q = new ArrayDeque<>();
         HashSet<Integer> vis = new HashSet<>();
         q.offer(source);
         vis.add(source);
-        int d = 0;
-        for (; !q.isEmpty(); d++) {
+        if (!map.containsKey(source) || !map.containsKey(target)) return -1;
+        for (int d = 0; !q.isEmpty(); d++) {
             for (int sz = q.size(); sz > 0; sz--) {
-                int poll = q.poll();
-                if (poll == target) return d;
-                for (Integer bus : stops.get(poll)) for (int next : routes[bus]) {
-                    if (vis.contains(next))  continue;
+                int cur = q.poll();
+                if (cur == target) return d / 2;
+                for (int next : map.get(cur)) {
+                    if (vis.contains(next)) continue;
                     vis.add(next);
                     q.offer(next);
                 }
