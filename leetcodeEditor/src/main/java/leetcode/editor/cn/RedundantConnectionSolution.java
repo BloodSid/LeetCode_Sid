@@ -43,8 +43,6 @@ package leetcode.editor.cn;
 // 👍 646 👎 0
 
 
-import java.util.*;
-
 /**
  * 冗余连接
  *
@@ -56,36 +54,38 @@ public class RedundantConnectionSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
+
+    private int[] p;
+
     public int[] findRedundantConnection(int[][] edges) {
         int n = edges.length;
-        Set<Integer>[] map = new Set[n + 1];
-        Arrays.setAll(map, k -> new HashSet<>());
+        p = new int[n+1];
+        for (int i = 1; i <= n; i++) {
+            p[i] = i;
+        }
+
         for (int[] edge : edges) {
             int u = edge[0], v = edge[1];
-            map[u].add(v);
-            map[v].add(u);
-        }
-        // 拓扑排序
-        Deque<Integer> q = new ArrayDeque<>();
-        for (int i = 1; i <= n; i++) {
-            // 度1的点入队
-            if (map[i].size() == 1) q.offer(i);
-        }
-        while (!q.isEmpty()) {
-            int p = q.poll();
-            for (Integer nxt : map[p]) {
-                map[nxt].remove(p);
-                if (map[nxt].size() == 1) q.offer(nxt);
+            if (find(u) == find(v)) {
+                // u,v已经联通，当前边正好闭合一个环
+                return edge;
             }
-        }
-        for (int i = edges.length - 1; i >= 0; i--) {
-            int u = edges[i][0], v = edges[i][1];
-            if (map[u].size() > 1 && map[v].size() > 1) {
-                // 两个点都在环上
-                return edges[i];
-            }
+            union(u, v);
         }
         return null;
+    }
+
+    int find(int x) {
+        if (p[x] != x) {
+            p[x] = find(p[x]);
+        }
+        return p[x];
+    }
+
+    void union(int x, int y) {
+        int rx = find(x);
+        int ry = find(y);
+        p[rx] = ry;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
