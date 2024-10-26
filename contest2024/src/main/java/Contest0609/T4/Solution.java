@@ -9,6 +9,17 @@ import java.util.Arrays;
  */
 public class Solution {
     public int maxTotalReward(int[] rewardValues) {
+        int m = 0;
+        // 贪心，最后一步选最大值。证明：如果存在其他答案选x更优，由于x<m,则可以换x为m而更优，矛盾。
+        for (int r : rewardValues) {
+            m = Math.max(m, r);
+        }
+        for (int r : rewardValues) {
+            if (r == m - 1) {
+                // m 之前最多取到 m-1，如果m-1存在则可以直接选择
+                return 2 * m - 1;
+            }
+        }
         Arrays.sort(rewardValues);
         int n = rewardValues.length;
         // bits的第i低位表示f[i], 即表示总 i 奖励是否可以取到，f[0] = 1
