@@ -76,10 +76,7 @@ class Solution {
     }
 
     int find(int x) {
-        if (p[x] != x) {
-            p[x] = find(p[x]);
-        }
-        return p[x];
+        return p[x] != x ? p[x] = find(p[x]) : x;
     }
 
     void union(int x, int y) {
