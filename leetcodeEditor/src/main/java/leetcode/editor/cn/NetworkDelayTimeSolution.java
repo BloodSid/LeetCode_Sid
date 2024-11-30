@@ -65,41 +65,40 @@ class Solution {
     public static final int INF = (int) 1e9;
 
     public int networkDelayTime(int[][] times, int n, int start) {
-        // 邻接表
-        List<int[]>[] map = new List[n + 1];
-        Arrays.setAll(map, k -> new ArrayList<>());
-        for (int[] time : times) {
-            int u = time[0], v = time[1], w = time[2];
-            map[u].add(new int[]{v, w});
-        }
-        int achievable = 0;
+        // 邻接矩阵
+        int[][] map = new int[n+1][n+1];
+        for (int[] r : map) Arrays.fill(r, INF);
+        for (int[] time : times) map[time[0]][time[1]] = time[2];
+
+        int max = 0; // 最远点
         // Dijkstra 算法
-        // 初始化
-        int[] dis = new int[n + 1];
+        int[] dis = new int[n + 1]; //  初始化
         Arrays.fill(dis, INF);
         dis[start] = 0;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
-        pq.offer(new int[]{start, 0});
-        int max = 0; // 最远点
-        while (!pq.isEmpty()) {
-            int[] p = pq.poll();
-            int x = p[0], d = p[1];
-            if (d > dis[x]) { // x 之前出堆过
-                continue;
-            }
-            // 每个可达的点只出队一次
-            achievable++;
-            // 最后一个出队为最远
-            max = d;
-            for (int[] t : map[x]) {
-                int y = t[0], w = t[1];
-                if (d + w < dis[y]) { // 入队，更新dis
-                    dis[y] = d + w;
-                    pq.offer(new int[]{y, d + w});
+        boolean[] vis = new boolean[n + 1];
+        for (; ; ) {
+            // 找离起始点最近且未处理的点
+            int x = -1;
+            for (int i = 1; i <= n; i++) {
+                if (!vis[i] && (x < 0 || dis[i] < dis[x])) {
+                    x = i;
                 }
             }
+            if (x < 0) {
+                break; // 所有的点都处理过
+            }
+            if (dis[x] == INF) {
+                return -1;
+            }
+            max = dis[x]; // 求出的最短路会越来越大
+            vis[x] = true; // 最短路长度已确定（无法变得更小）
+            for (int y = 1; y <= n; y++) {
+                // 邻接矩阵和邻接表不同细节：邻接表遍历到的边都是存在的，邻接矩阵遍历到的点可能是以INF表示的，实际不存在的边
+                // 注意，在确保dis[x]+map[x][y]的加法不会溢出时，也可以把这里的if判断省掉
+                if(map[x][y] != INF) dis[y] = Math.min(dis[y], dis[x] + map[x][y]); // 更新邻居的最短路
+            }
         }
-        return achievable < n ? -1 : max;
+        return max;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
