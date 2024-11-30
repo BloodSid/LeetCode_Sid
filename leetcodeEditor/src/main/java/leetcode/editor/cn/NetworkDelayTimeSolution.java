@@ -61,60 +61,45 @@ public class NetworkDelayTimeSolution {
 static
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int networkDelayTime(int[][] times, int n, int k) {
+
+    public static final int INF = (int) 1e9;
+
+    public int networkDelayTime(int[][] times, int n, int start) {
         // 邻接表
-        List<List<int[]>> points = new ArrayList<>();
-        points.add(new ArrayList<>());
-        for (int i = 0; i < n; i++) {
-            points.add(new ArrayList<>());
-        }
+        List<int[]>[] map = new List[n + 1];
+        Arrays.setAll(map, k -> new ArrayList<>());
         for (int[] time : times) {
-            points.get(time[0]).add(time);
+            int u = time[0], v = time[1], w = time[2];
+            map[u].add(new int[]{v, w});
         }
+        int achievable = 0;
         // Dijkstra 算法
         // 初始化
         int[] dis = new int[n + 1];
-        int POSITIVE_INFINITE = 200;
-        Arrays.fill(dis, POSITIVE_INFINITE);
-        boolean[] visit = new boolean[n + 1];
-        dis[k] = 0;
-        visit[k] = true;
-        Set<Integer> U = new HashSet<>();
-        for (int[] edge : points.get(k)) {
-            dis[edge[1]] = edge[2];
-            U.add(edge[1]);
-        }
-        while (U.size() > 0) {
-            // 在U中找最近的点p
-            int minDis = POSITIVE_INFINITE;
-            Integer closestPoint = 0;
-            for (Integer p : U) {
-                if (dis[p] < minDis) {
-                    closestPoint = p;
-                    minDis = dis[p];
+        Arrays.fill(dis, INF);
+        dis[start] = 0;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
+        pq.offer(new int[]{start, 0});
+        int max = 0; // 最远点
+        while (!pq.isEmpty()) {
+            int[] p = pq.poll();
+            int x = p[0], d = p[1];
+            if (d > dis[x]) { // x 之前出堆过
+                continue;
+            }
+            // 每个可达的点只出队一次
+            achievable++;
+            // 最后一个出队为最远
+            max = d;
+            for (int[] t : map[x]) {
+                int y = t[0], w = t[1];
+                if (d + w < dis[y]) { // 入队，更新dis
+                    dis[y] = d + w;
+                    pq.offer(new int[]{y, d + w});
                 }
             }
-            // 把点p的邻接的点的距离更新，未访问过的加入U
-            for (int[] edge : points.get(closestPoint)) {
-                dis[edge[1]] = Math.min(dis[edge[1]], dis[closestPoint] + edge[2]);
-                if (!visit[edge[1]]) {
-                    U.add(edge[1]);
-                }
-            }
-            // 点p处理完毕，从U中移除
-            U.remove(closestPoint);
-            visit[closestPoint] = true;
         }
-
-        // 找最远点
-        int max = 0;
-        for (int i = 1; i <= n; i++) {
-            if (dis[i] == POSITIVE_INFINITE) {
-                return -1;
-            }
-            max = Math.max(max, dis[i]);
-        }
-        return max;
+        return achievable < n ? -1 : max;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
