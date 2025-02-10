@@ -8,6 +8,7 @@ import java.util.*;
  * @author IronSid
  * @version 1.0
  * @since 2022-01-04 20:14:10
+ * 2025年2月11日用例更新
  */
 public class CatAndMouseSolution {
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -18,11 +19,13 @@ class Solution {
     int[][] graph;
     int N;
     int[][][] dp;
+    private int T;
 
     public int catMouseGame(int[][] graph) {
         this.graph = graph;
         this.N = graph.length;
-        this.dp = new int[N][N][2 * N * N];
+        T = 4 * N + 10;
+        this.dp = new int[N][N][T];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 Arrays.fill(dp[i][j], -1);
@@ -32,7 +35,7 @@ class Solution {
     }
 
     int getResult(int mouse, int cat, int turns) {
-        if (turns == 2 * N * N) {
+        if (turns == T) {
             return DRAW;
         }
         if (dp[mouse][cat][turns] == -1) {
