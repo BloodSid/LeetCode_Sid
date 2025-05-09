@@ -69,9 +69,7 @@ package leetcode.editor.cn;
 // 👍 23 👎 0
 
 
-import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * 统计平衡排列的数目
@@ -86,13 +84,17 @@ static
 public class Solution {
 
     public static final int M = (int) (1e9+7);
-    public static final BigInteger MOD = BigInteger.valueOf(M);
-    static long[] frac = new long[81];
-    static HashMap<Long, Long> set = new HashMap<>();
+    static final int MX = 41;
+    static long[] frac = new long[MX];
+    static long[] invFrac = new long[MX];
     static {
         frac[0] = frac[1] = 1;
-        for (int i = 2; i <= 80; i++) {
+        for (int i = 2; i <= 40; i++) {
             frac[i] = frac[i-1] * i % M;
+        }
+        invFrac[MX-1] = pow(frac[MX-1], M-2, M);
+        for (int i = MX - 2; i >= 0; i--) {
+            invFrac[i] = invFrac[i+1] * (i+1) % M;
         }
     }
 
@@ -136,16 +138,20 @@ public class Solution {
         // f[i] - c <= cnt2 且 f[i] <= cnt
         for (int c = Math.max(0, f[i]-cnt2); c <= Math.min(f[i], cnt) && c * i <= sum; c++) {
             long t = dfs(i + 1, sum - c * i, cnt - c);
-            res = (res + t * modInverse(frac[c]) % M * modInverse(frac[f[i]-c]) % M) % M;
+            res = (res + t * invFrac[c] % M * invFrac[f[i]-c] % M) % M;
         }
         return memo[i][sum][cnt] = (int) res;
     }
 
-    long modInverse(long n) {
-        if (set.containsKey(n)) return set.get(n);
-        long l = BigInteger.valueOf(n).modInverse(MOD).longValueExact();
-        set.put(n, l);
-        return l;
+    private static long pow(long x, int n, long mod) {
+        long res = 1;
+        for (; n > 0; n >>= 1) {
+            if ((n & 1)==1) {
+                res = res * x % mod;
+            }
+            x = x * x % mod;
+        }
+        return res;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
